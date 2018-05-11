@@ -85,7 +85,7 @@
                                     <Insets bottom="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Just testing only">
+                              <Label text="Just testing only.">
                                  <font>
                                     <Font name="Arial" size="18.0" />
                                  </font>
