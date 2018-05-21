@@ -6,7 +6,10 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -19,57 +22,103 @@
    <children>
       <StackPane fx:id="loginStackpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <ImageView pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../pictures/megumin_konosuba-1920x1200.jpg" />
+               </image>
+            </ImageView>
+            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                <children>
                   <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
                      <children>
                         <TextFlow maxHeight="-Infinity" prefHeight="0.0" prefWidth="1280.0" textAlignment="CENTER" HBox.hgrow="ALWAYS">
                            <children>
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Abstergo Security Suite" textAlignment="CENTER" wrappingWidth="180.43328857421875">
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Abstergo Security Suite" textAlignment="CENTER" wrappingWidth="180.43328857421875">
                                  <font>
-                                    <Font name="Arial Bold" size="64.0" />
+                                    <Font name="Bauhaus 93" size="72.0" />
                                  </font>
                               </Text>
                            </children>
                         </TextFlow>
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER">
+                  <VBox>
                      <children>
-                        <Label text="Username: ">
+                        <Label text="Username: " textFill="WHITE">
                            <font>
-                              <Font name="Arial" size="36.0" />
+                              <Font name="Calibri" size="24.0" />
                            </font>
                         </Label>
-                        <JFXTextField fx:id="usernameField" prefWidth="200.0" />
-                     </children>
-                  </HBox>
-                  <HBox alignment="CENTER">
-                     <children>
-                        <Label text="Password: ">
+                        <JFXTextField fx:id="usernameField" labelFloat="true" minHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
                            <font>
-                              <Font name="Arial" size="36.0" />
+                              <Font name="Calibri Bold" size="36.0" />
+                           </font>
+                        </JFXTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="200.0" right="200.0" />
+                     </VBox.margin>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Password: " textFill="WHITE">
+                           <font>
+                              <Font name="Calibri" size="24.0" />
                            </font>
                         </Label>
-                        <JFXPasswordField fx:id="passwordField" prefWidth="200.0" />
+                        <JFXPasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </JFXPasswordField>
+                        <TextFlow textAlignment="RIGHT">
+                           <children>
+                              <Label fx:id="signupLabel" onMouseClicked="#openSignup" text="Signup" textAlignment="RIGHT" textFill="#006aff" underline="true">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </TextFlow>
                      </children>
-                     <padding>
-                        <Insets bottom="50.0" top="20.0" />
-                     </padding>
-                  </HBox>
+                     <VBox.margin>
+                        <Insets left="200.0" right="200.0" top="50.0" />
+                     </VBox.margin>
+                  </VBox>
                   <HBox alignment="CENTER">
                      <children>
-                        <JFXButton fx:id="loginBtn" buttonType="RAISED" onAction="#validateLogin" ripplerFill="RED" style="-fx-background-color: Blue;" text="Login" textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="loginBtn" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#validateLogin" ripplerFill="RED" style="-fx-background-radius: 10px; -fx-background-color: #2F5597;" text="Login" textAlignment="CENTER" textFill="WHITE" HBox.hgrow="ALWAYS">
                            <font>
-                              <Font name="Arial" size="36.0" />
+                              <Font name="Arial" size="24.0" />
                            </font>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                            <HBox.margin>
-                              <Insets bottom="50.0" top="50.0" />
+                              <Insets />
                            </HBox.margin>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="50.0" top="50.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="200.0" right="200.0" />
+                     </padding>
                   </HBox>
                </children>
+               <StackPane.margin>
+                  <Insets bottom="50.0" top="50.0" />
+               </StackPane.margin>
             </VBox>
             <JFXDialog fx:id="loginDialog">
                <children>
@@ -77,7 +126,7 @@
                      <children>
                         <VBox>
                            <children>
-                              <Label text="You entered something...">
+                              <Label fx:id="dialogTitleText" text="You entered something...">
                                  <font>
                                     <Font name="Arial" size="18.0" />
                                  </font>
@@ -85,7 +134,7 @@
                                     <Insets bottom="20.0" />
                                  </VBox.margin>
                               </Label>
-                              <Label text="Just testing only.">
+                              <Label fx:id="dialogText" text="Just testing only.">
                                  <font>
                                     <Font name="Arial" size="18.0" />
                                  </font>

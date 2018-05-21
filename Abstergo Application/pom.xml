@@ -27,7 +27,17 @@
   	<dependency>
   		<groupId>com.jfoenix</groupId>
   		<artifactId>jfoenix</artifactId>
-  		<version>9.0.4</version>
+  		<version>8.0.4</version>
   	</dependency>
+  	<dependency>
+    	<groupId>org.dblock.log4jna</groupId>
+    	<artifactId>log4jna-api</artifactId>
+    	<version>2.0</version>
+  	</dependency>
+  	<dependency>
+	    <groupId>de.mkammerer</groupId>
+	    <artifactId>argon2-jvm</artifactId>
+	    <version>2.4</version>
+	</dependency>
   </dependencies>
 </project>
