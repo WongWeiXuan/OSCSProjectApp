@@ -87,20 +87,21 @@ public class LoginPageModel {
 		}
 	}
 
+	/*
 	public static void main(String[] args) {
 		String username = "Testing";
 		String password = "ABCabc123!@#";
 
 		LoginPageModel model = new LoginPageModel(username, password);
 		String hash = model.hashPassword();
+		String hashByte = hash.getBytes(); (97 Bytes)
 		System.out.println("Password hash: " + hash);
 		System.out.println("Is password correct? -> " + model.verifyPassword(hash));
-		/*
 		if (model.checkPasswordComplexity().isEmpty()) {
 			System.out.println("Password changed successfully.");
 		} else {
 			System.out.println(model.checkPasswordComplexity());
 		}
-		*/
 	}
+	*/
 }
