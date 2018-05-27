@@ -1,67 +1,84 @@
 package login;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 public class LoginPageModel {
-	private String username;
+	private String email;
 	private String password;
+	private byte[] salt;
 
 	protected LoginPageModel() {
-		username = null;
+		email = null;
 		password = null;
+		salt = null;
 	}
 
-	protected LoginPageModel(String username, String password) {
-		this.username = username;
+	public LoginPageModel(String email, String password) {
+		super();
+		this.email = email;
 		this.password = password;
 	}
+	
+	public LoginPageModel(String email, String password, byte[] salt) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.salt = salt;
+	}
 
-	protected String hashPassword() {
-		Argon2 argon2 = Argon2Factory.create();
-		// Parsing String to char[]
-		char[] passwordChar = password.toCharArray();
-		String hash = "";
-		try {
-			hash = argon2.hash(45, 65536, 1, passwordChar); // Hash password (Max 3 secs)
-			// int iterations = Argon2Helper.findIterations(argon2, 3000, 65536, 1);
-			// System.out.println("Optimal number of iterations: " + hash);
-		} finally {
-			// Wipe confidential data
-			argon2.wipeArray(passwordChar);
+	public void generateSalt() throws NoSuchAlgorithmException {
+		final SecureRandom SR = SecureRandom.getInstance("SHA1PRNG");
+		byte[] salt = new byte[128];
+		SR.nextBytes(salt);
+
+		this.salt = salt;
+	}
+
+	public byte[] encodeHashPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
+		if(salt == null) {
+			generateSalt();
 		}
+		char[] passwordChar = password.toCharArray();
+		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		byte[] hash = skf.generateSecret(spec).getEncoded();
+
 		return hash;
 	}
-	
-	protected boolean verifyPassword(String hash) {
-		Argon2 argon2 = Argon2Factory.create();
-		
-		if (argon2.verify(hash, password)) {
-			return true; // Hash matches password
-		} else {
-			return false; // Hash doesn't match password
+
+	protected boolean verifyPassword(byte[] hash) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		byte[] enteredHash = encodeHashPassword();
+		int diff = hash.length ^ enteredHash.length;
+		for(int i = 0; i < hash.length && i < enteredHash.length; i++) {
+			diff |= hash[i] ^ enteredHash[i];
 		}
+		
+		return diff == 0;
 	}
-	
+
 	protected boolean validateAccount() {
 		/*
-		 * //Calls DAO (Azure) for database 
-		 * retrievedPassword = LoginDAO.getPassword(username);
-		 * return verifyPassword(retrievedPassword);
+		 * //Calls DAO (Azure) for database retrievedPassword =
+		 * LoginDAO.getPassword(email); return verifyPassword(retrievedPassword);
 		 */
-		
+
 		return false;
 	}
 
-	private int getPasswordComplexity() {
-		if (password.length() < 8 && password.length() > 36) {
+	private static int getPasswordComplexity(String password) {
+		if (password.length() < 12) {
 			return 1;
 		}
 
 		if (password.contains(" ")) {
 			return 2;
 		} else {
-			String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])(?=\\S+$).{8,36}";
+			String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])(?=\\S+$).{12,}";
 			boolean whether = password.matches(regex);
 
 			if (!whether) {
@@ -72,35 +89,38 @@ public class LoginPageModel {
 		return 0;
 	}
 
-	protected String checkPasswordComplexity() {
-		switch (getPasswordComplexity()) {
+	public static String checkPasswordComplexity(String password) {
+		switch (getPasswordComplexity(password)) {
 		case 0:
-			return "";
+			return "Pass";
 		case 1:
-			return "Password must be 8 to 36 letters.";
+			return "Password must be at least 12 letters.";
 		case 2:
 			return "Password cannot contain spaces.";
 		case 3:
-			return "Password must contains at least one lowercase letter, uppercase letter, symbol and number.";
+			return "Password must contains at least one lowercase letter,\n uppercase letter,\n symbol and number.";
 		default:
 			return "Unexpected error.";
 		}
 	}
 
 	/*
-	public static void main(String[] args) {
-		String username = "Testing";
+	public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
+		String email = "Testing";
 		String password = "ABCabc123!@#";
 
-		LoginPageModel model = new LoginPageModel(username, password);
-		String hash = model.hashPassword();
-		String hashByte = hash.getBytes(); (97 Bytes)
-		System.out.println("Password hash: " + hash);
+		LoginPageModel model = new LoginPageModel(email, password);
+		
+		byte[] hash = model.encodeHashPassword();
+		System.out.println("Password hash: " + Base64.getEncoder().encodeToString(hash));
 		System.out.println("Is password correct? -> " + model.verifyPassword(hash));
-		if (model.checkPasswordComplexity().isEmpty()) {
+		
+		String result = LoginPageModel.checkPasswordComplexity(password);
+		
+		if ("Pass".equals(result)) {
 			System.out.println("Password changed successfully.");
 		} else {
-			System.out.println(model.checkPasswordComplexity());
+			System.out.println(result);
 		}
 	}
 	*/

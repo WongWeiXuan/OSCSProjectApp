@@ -1,8 +1,7 @@
-package login;
+package login.controller;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.Base64;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -13,12 +12,12 @@ import com.jfoenix.controls.JFXTextField;
 
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import login.LoginPageModel;
 
 public class LoginPageController {
 	@FXML
@@ -58,24 +58,18 @@ public class LoginPageController {
 	@FXML
 	void openSignup(MouseEvent event) throws IOException {
 		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("SignupPage.fxml"));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml"));
 		stage.setScene(new Scene(root));
-		stage.show();
 	}
 
 	@FXML
 	void validateLogin(ActionEvent event) throws InterruptedException {
+		final Stage STAGE = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		String username = usernameField.getText();
 		String password = passwordField.getText();
 
 		if (!username.isEmpty() && !password.isEmpty()) {
-			LoginPageModel login = new LoginPageModel(username, password);
-			String complexity = login.checkPasswordComplexity();
-			if (complexity.isEmpty()) {
-				dialogTitleText.setText("Password complexity checks: Pass");
-			} else {
-				dialogTitleText.setText("Password complexity checks: " + complexity);
-			}
+			final LoginPageModel LOGIN = new LoginPageModel(username, password);
 
 			backgroundService = new Service<Void>() {
 
@@ -85,7 +79,7 @@ public class LoginPageController {
 
 						@Override
 						protected Void call() throws Exception {
-							updateMessage("(R.I.P threading) Your hashed password is: " + login.hashPassword());
+							updateMessage("Your hashed password is: " + Base64.getEncoder().encodeToString(LOGIN.encodeHashPassword()));
 							return null;
 						}
 					};
@@ -94,10 +88,10 @@ public class LoginPageController {
 
 			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
-				@Override
 				public void handle(WorkerStateEvent event) {
 					dialogText.textProperty().unbind();
 					loginDialog.show();
+					STAGE.getScene().setCursor(Cursor.DEFAULT);
 					loginBtn.setDisable(false);
 				}
 			});
@@ -105,6 +99,10 @@ public class LoginPageController {
 			dialogText.textProperty().bind(backgroundService.messageProperty());
 			backgroundService.start();
 			loginBtn.setDisable(true);
+			STAGE.getScene().setCursor(Cursor.WAIT);
+		}else {
+			dialogText.setText("Enter something, Bro.");
+			loginDialog.show();
 		}
 	}
 
