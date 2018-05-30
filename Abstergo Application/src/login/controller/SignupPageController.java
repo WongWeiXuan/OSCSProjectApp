@@ -16,13 +16,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import login.LoginPageModel;
 
 public class SignupPageController {
@@ -81,9 +79,8 @@ public class SignupPageController {
 
     @FXML
     void nextPage(ActionEvent event) throws IOException {
-    	Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage2.fxml"));
-		stage.setScene(new Scene(root));
+		((Node) event.getSource()).getScene().setRoot(root);
     }
     
     @FXML
@@ -105,9 +102,8 @@ public class SignupPageController {
 			@Override
 			public void handle(MouseEvent event) {
 				try {
-					Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 					Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml"));
-					stage.setScene(new Scene(root));
+					((Node) event.getSource()).getScene().setRoot(root);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

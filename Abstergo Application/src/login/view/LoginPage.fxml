@@ -21,11 +21,7 @@
    <children>
       <StackPane fx:id="loginStackpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../pictures/megumin_konosuba-1920x1200.jpg" />
-               </image>
-            </ImageView>
+            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
             <VBox style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                <children>
                   <HBox alignment="CENTER" VBox.vgrow="ALWAYS">

@@ -14,10 +14,12 @@ login\LoginBluetoothModel.class
 login\controller\SignupPage2Controller$4.class
 login\controller\LoginPageController$1$1.class
 login\controller\SignupPageController$1.class
+login\controller\SignupPage3Controller.class
 log\LogTest.class
 login\controller\LoginPageController.class
 login\controller\SignupPage2Controller$2$1.class
 login\LoginBluetoothModel$2.class
+navigation\controller\NavigationBarController.class
 login\controller\SignupPageController$2.class
 login\controller\SignupPage2Controller$1$1$1.class
 login\LoginBluetoothModel$1.class

@@ -2,28 +2,32 @@ package application;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 public class Main extends Application {
+	final private String[] FONTARRAY = { "Regular", "Bold", "BoldItalic", "Italic" };
+
 	@Override
 	public void start(Stage primaryStage) {
-		String [] fontArray = {"Regular", "Bold", "BoldItalic", "Italic"};
+
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
-			// primaryStage.getIcons().add(new Image(""));
+			primaryStage.getIcons().add(new Image("pictures/abstergo-industries-logo-only.png"));
 			primaryStage.setTitle("Abstergo Security Suite");
-			// primaryStage.initStyle(StageStyle.UNDECORATED);
 			primaryStage.setWidth(1280);
 			primaryStage.setHeight(850);
-			
-			for(String s: fontArray) {
+			primaryStage.setMinWidth(1280);
+			primaryStage.setMinHeight(850);
+
+			for (String s : FONTARRAY) {
 				Font font = Font.loadFont(getClass().getResourceAsStream("/resource/SourceSansPro-" + s + ".ttf"), 24);
-				if(font == null) {
+				if (font == null) {
 					System.out.println("NULL font family");
 				}
 			}

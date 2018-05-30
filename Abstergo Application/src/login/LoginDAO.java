@@ -35,10 +35,10 @@ public class LoginDAO {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		for (BluetoothDevice bd : dbal) {
 			if (first) {
-				writer.write(bd.getBluetoothAddress() + ";" + bd.getFriendlyName());
+				writer.write(bd.getBluetoothAddress() + ";" + bd.getFriendlyName() + ";" + bd.getMajorClass());
 				first = false;
 			} else {
-				writer.write("\n" + bd.getBluetoothAddress() + ";" + bd.getFriendlyName());
+				writer.write("\n" + bd.getBluetoothAddress() + ";" + bd.getFriendlyName()+ ";" + bd.getMajorClass());
 			}
 		}
 		writer.close();
@@ -49,7 +49,7 @@ public class LoginDAO {
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
-		String lineToRemove = bd.getBluetoothAddress() + ";" + bd.getFriendlyName();
+		String lineToRemove = bd.getBluetoothAddress() + ";" + bd.getFriendlyName()+ ";" + bd.getMajorClass();
 		String currentLine;
 
 		while ((currentLine = reader.readLine()) != null) {

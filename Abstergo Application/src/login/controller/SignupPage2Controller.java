@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.bluetooth.RemoteDevice;
 
-import com.intel.bluetooth.BlueCoveImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
@@ -21,9 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,7 +28,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import login.LoginBluetoothModel;
 
@@ -64,9 +60,8 @@ public class SignupPage2Controller {
 	final private String UPATH = "pictures/UnidentifiedIcon.png";
 
 	private void changeScene() throws IOException {
-		Stage stage = (Stage) circle1.getScene().getWindow();
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); //Change scene
-		stage.setScene(new Scene(root));
+		circle1.getScene().setRoot(root);
 	}
 	
 	void printDeviceList(Map<RemoteDevice, Integer> listOfDevice) throws IOException {
@@ -161,7 +156,9 @@ public class SignupPage2Controller {
 					protected Map<RemoteDevice, Integer> call() throws Exception {
 						System.out.println("Starting bluetooth scanning..."); // Debug purpose
 						LoginBluetoothModel.initialiseBluetooth();
-						return LoginBluetoothModel.scanBluetoothDevice();
+						Thread.sleep(3000); // It returns too fast so making it slower to look nicer?
+						Map<RemoteDevice, Integer> scanning = LoginBluetoothModel.scanBluetoothDevice();
+						return scanning;
 					}
 				};
 			}

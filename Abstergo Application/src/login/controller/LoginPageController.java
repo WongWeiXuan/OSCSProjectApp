@@ -20,7 +20,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -57,9 +56,8 @@ public class LoginPageController {
 
 	@FXML
 	void openSignup(MouseEvent event) throws IOException {
-		Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml"));
-		stage.setScene(new Scene(root));
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); //Change scene
+		((Node) event.getSource()).getScene().setRoot(root);
 	}
 
 	@FXML

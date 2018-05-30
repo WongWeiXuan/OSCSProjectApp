@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Vector;
-import java.util.Map.Entry;
-
 import javax.bluetooth.BluetoothStateException;
 import javax.bluetooth.DeviceClass;
 import javax.bluetooth.DiscoveryAgent;
@@ -17,7 +15,6 @@ import javax.bluetooth.LocalDevice;
 import javax.bluetooth.RemoteDevice;
 import javax.bluetooth.ServiceRecord;
 
-import com.intel.bluetooth.BlueCoveConfigProperties;
 import com.intel.bluetooth.BlueCoveImpl;
 import com.intel.bluetooth.RemoteDeviceHelper;
 
