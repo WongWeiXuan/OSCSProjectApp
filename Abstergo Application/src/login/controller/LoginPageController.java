@@ -21,6 +21,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -47,7 +49,7 @@ public class LoginPageController {
 	private Label dialogText;
 	@FXML
 	private JFXButton dialogCloseBtn;
-	private Service<Void> backgroundService;
+	private Service<Boolean> backgroundService;
 
 	@FXML
 	void closeDialog(ActionEvent event) {
@@ -59,6 +61,13 @@ public class LoginPageController {
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); //Change scene
 		((Node) event.getSource()).getScene().setRoot(root);
 	}
+	
+	 @FXML
+    void checkEnter(KeyEvent event) {
+		 if(event.getCode().equals(KeyCode.ENTER)) {
+			 loginBtn.fire();
+		 }
+    }
 
 	@FXML
 	void validateLogin(ActionEvent event) throws InterruptedException {
@@ -69,16 +78,16 @@ public class LoginPageController {
 		if (!username.isEmpty() && !password.isEmpty()) {
 			final LoginPageModel LOGIN = new LoginPageModel(username, password);
 
-			backgroundService = new Service<Void>() {
+			backgroundService = new Service<Boolean>() {
 
 				@Override
-				protected Task<Void> createTask() {
-					return new Task<Void>() {
+				protected Task<Boolean> createTask() {
+					return new Task<Boolean>() {
 
 						@Override
-						protected Void call() throws Exception {
-							updateMessage("Your hashed password is: " + Base64.getEncoder().encodeToString(LOGIN.encodeHashPassword()));
-							return null;
+						protected Boolean call() throws Exception {
+							//updateMessage("Your hashed password is: " + LoginPageModel.byteArrayToHexString(LOGIN.encodeHashPassword()));
+							return LOGIN.validateAccount();
 						}
 					};
 				}
@@ -87,14 +96,22 @@ public class LoginPageController {
 			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
 				public void handle(WorkerStateEvent event) {
-					dialogText.textProperty().unbind();
-					loginDialog.show();
+					if(backgroundService.getValue()) {
+						dialogText.setText("Login Successful.");
+						// Redirect Page
+						// TODO
+					}else {
+						dialogText.setText("Login Failed.");
+						
+					}
+					//dialogText.textProperty().unbind();
 					STAGE.getScene().setCursor(Cursor.DEFAULT);
 					loginBtn.setDisable(false);
+					loginDialog.show();
 				}
 			});
 
-			dialogText.textProperty().bind(backgroundService.messageProperty());
+			//dialogText.textProperty().bind(backgroundService.messageProperty());
 			backgroundService.start();
 			loginBtn.setDisable(true);
 			STAGE.getScene().setCursor(Cursor.WAIT);

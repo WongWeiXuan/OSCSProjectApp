@@ -60,7 +60,7 @@
                               <Font size="36.0" />
                            </font>
                         </Label>
-                        <JFXPasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
+                        <JFXPasswordField fx:id="passwordField" onKeyPressed="#checkEnter" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
                            <font>
                               <Font size="36.0" />
                            </font>

@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
+
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -19,6 +25,8 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.TextFlow;
 import login.LoginPageModel;
@@ -42,7 +50,8 @@ public class SignupPageController {
     private JFXPasswordField passwordRetypeField;
     @FXML
     private JFXButton nextBtn;
-    
+    static CacheManager cacheManager = null;
+	
     private void checkPassword() {
     	String password = passwordField.getText();
     	String retypedPassword = passwordRetypeField.getText();
@@ -76,9 +85,27 @@ public class SignupPageController {
     	}
     	checkPassword();
     }
+    
+    @FXML
+    void checkEnter(KeyEvent event) {
+    	if(event.getCode().equals(KeyCode.ENTER)) {
+			 nextBtn.fire();
+		 }
+    }
 
     @FXML
     void nextPage(ActionEvent event) throws IOException {
+    	Cache<String, String> registration = cacheManager.getCache("registration", String.class, String.class);
+    	if(registration == null) {
+    		registration = cacheManager.createCache("registration", 
+        		    CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
+    		registration.put("Email", emailField.getText());
+        	registration.put("Password", passwordField.getText());
+    	}else {
+    		registration.replace("Email", emailField.getText());
+        	registration.replace("Password", passwordField.getText());
+    	}
+    	
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage2.fxml"));
 		((Node) event.getSource()).getScene().setRoot(root);
     }
@@ -123,5 +150,17 @@ public class SignupPageController {
 				checkPassword();
 			}
     	});
+        
+        if(cacheManager == null) {
+        	cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withCache("preConfirgured", 
+        			CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(5))) 
+        		    .build(); 
+        	cacheManager.init();
+        }else {
+        	Cache<String, String> cache = cacheManager.getCache("registration", String.class, String.class);
+        	emailField.setText(cache.get("Email"));
+        	passwordField.setText(cache.get("Password"));
+        	passwordRetypeField.setText(cache.get("Password"));
+        }
     }
 }

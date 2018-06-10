@@ -52,19 +52,54 @@
                      <children>
                         <VBox alignment="CENTER" spacing="50.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="You are all set, click finish and log in again.">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </Text>
-                              <JFXButton fx:id="finishBtn" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#goToLogin" prefHeight="50.0" ripplerFill="RED" style="-fx-background-color: #2F5597; -fx-background-radius: 10px; -fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-size: 24px;" text="Finish" textFill="WHITE" VBox.vgrow="ALWAYS">
-                                 <VBox.margin>
-                                    <Insets left="50.0" right="50.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </JFXButton>
+                              <VBox spacing="20.0">
+                                 <children>
+                                    <TextFlow textAlignment="CENTER">
+                                       <children>
+                                          <Text fx:id="emailText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email: ">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </TextFlow>
+                                    <TextFlow textAlignment="CENTER">
+                                       <children>
+                                          <Text fx:id="deviceText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Device Paired: ">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </TextFlow>
+                                    <TextFlow textAlignment="CENTER">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="If everything is correct, click finish and log in.">
+                                             <font>
+                                                <Font size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </TextFlow>
+                                 </children>
+                              </VBox>
+                              <HBox spacing="50.0">
+                                 <children>
+                                    <JFXButton fx:id="changeBtn" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#goToChange" prefHeight="50.0" ripplerFill="RED" style="-fx-background-color: #FFB71D; -fx-background-radius: 10px; -fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-size: 24px;" text="Change" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <JFXButton fx:id="finishBtn" buttonType="RAISED" maxWidth="1.7976931348623157E308" onAction="#goToLogin" prefHeight="50.0" ripplerFill="RED" style="-fx-background-color: #2F5597; -fx-background-radius: 10px; -fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-size: 24px;" text="Finish" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font size="24.0" />
+                                       </font>
+                                    </JFXButton>
+                                 </children>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </HBox>
                            </children>
                         </VBox>
                      </children>

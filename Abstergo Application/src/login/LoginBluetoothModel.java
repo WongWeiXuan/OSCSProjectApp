@@ -23,7 +23,7 @@ public class LoginBluetoothModel {
 	private static Object lock = new Object();
 	// Storing RemoteDevice List & URL List
 	private static Vector<RemoteDevice> vector = new Vector<RemoteDevice>();
-	private static Map<RemoteDevice, Integer> deviceListing = new HashMap<RemoteDevice, Integer>();
+	private static Map<RemoteDevice, String> deviceListing = new HashMap<RemoteDevice, String>();
 	// DiscoveryAgent & DiscoveryListener
 	private static DiscoveryAgent agent;
 	private static DiscoveryListener listener;
@@ -33,6 +33,7 @@ public class LoginBluetoothModel {
 	private static boolean found = false;
 	// BluetoothDeviceFilter
 	private static int[] filter = { 512, 1792, 7936 };
+	private static boolean initialized = false;
 
 	public LoginBluetoothModel() throws BluetoothStateException, FileNotFoundException {
 		initialiseBluetooth();
@@ -48,6 +49,8 @@ public class LoginBluetoothModel {
 		BlueCoveImpl.setConfigProperty("bluecove.inquiry.duration", "2");
 		BlueCoveImpl.setConfigProperty("bluecove.inquiry.report.asap", "true");
 		BlueCoveImpl.setConfigProperty("bluecove.connect.timeout", "20000");
+		
+		initialized = true;
 	}
 
 	public static BluetoothDevice deviceSelectionQuery(int selection) {
@@ -65,12 +68,12 @@ public class LoginBluetoothModel {
 		return pairedArray.get(selected);
 	}
 
-	public static Map<RemoteDevice, Integer> scanBluetoothDevice() throws InterruptedException, IOException {
+	public static Map<RemoteDevice, String> scanBluetoothDevice() throws InterruptedException, IOException {
 		listener = new DiscoveryListener() {
 			public void deviceDiscovered(RemoteDevice btDevice, DeviceClass arg1) {
-				int deviceMajor = arg1.getMajorDeviceClass();
+				String deviceMajor = String.valueOf(arg1.getMajorDeviceClass());
 				for (int i : filter) { // Only add if it is a phone, watch or undentified
-					if (deviceMajor == i) { // When matches
+					if (Integer.parseInt(deviceMajor) == i) { // When matches
 						vector.add(btDevice);
 						deviceListing.put(btDevice, deviceMajor);
 						break;
@@ -107,7 +110,6 @@ public class LoginBluetoothModel {
 			RemoteDeviceHelper.removeAuthentication(rd);
 			BluetoothDevice bd = new BluetoothDevice(rd.getBluetoothAddress(), rd.getFriendlyName(true), deviceListing.get(rd));
 			pairedArray.add(bd);
-			LoginDAO.addPairedDevice(pairedArray);
 		}
 
 		return paired;
@@ -158,6 +160,14 @@ public class LoginBluetoothModel {
 		return lock;
 	}
 
+	public static ArrayList<BluetoothDevice> getPairedArray() {
+		return pairedArray;
+	}
+
+	public static boolean isInitialized() {
+		return initialized;
+	}
+	
 	/*
 	 * public static boolean scanAndUnpairBluetoothDevice() throws
 	 * InterruptedException, IOException{ RemoteDevice[] pairedDevice =

@@ -7,10 +7,12 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import com.google.gson.JsonObject;
+
 public class LoginPageModel {
 	private String email;
 	private String password;
-	private byte[] salt;
+	private String salt;
 
 	protected LoginPageModel() {
 		email = null;
@@ -22,27 +24,38 @@ public class LoginPageModel {
 		super();
 		this.email = email;
 		this.password = password;
+		try {
+			this.salt = byteArrayToHexString(generateSalt());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public LoginPageModel(String email, String password, byte[] salt) {
+	public LoginPageModel(String email, String password, String salt) {
 		super();
 		this.email = email;
 		this.password = password;
 		this.salt = salt;
 	}
 
-	public void generateSalt() throws NoSuchAlgorithmException {
+	public byte[] generateSalt() throws NoSuchAlgorithmException {
 		final SecureRandom SR = SecureRandom.getInstance("SHA1PRNG");
 		byte[] salt = new byte[128];
 		SR.nextBytes(salt);
 
-		this.salt = salt;
+		return salt;
 	}
 
 	public byte[] encodeHashPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
-		if(salt == null) {
-			generateSalt();
-		}
+		byte[] salt = generateSalt();
+		char[] passwordChar = password.toCharArray();
+		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		byte[] hash = skf.generateSecret(spec).getEncoded();
+		return hash;
+	}
+	
+	public byte[] encodeHashPassword(byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		char[] passwordChar = password.toCharArray();
 		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
 		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
@@ -51,8 +64,8 @@ public class LoginPageModel {
 		return hash;
 	}
 
-	protected boolean verifyPassword(byte[] hash) throws NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] enteredHash = encodeHashPassword();
+	protected boolean verifyPassword(byte[] hash, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		byte[] enteredHash = encodeHashPassword(salt);
 		int diff = hash.length ^ enteredHash.length;
 		for(int i = 0; i < hash.length && i < enteredHash.length; i++) {
 			diff |= hash[i] ^ enteredHash[i];
@@ -61,12 +74,18 @@ public class LoginPageModel {
 		return diff == 0;
 	}
 
-	protected boolean validateAccount() {
-		/*
-		 * //Calls DAO (Azure) for database retrievedPassword =
-		 * LoginDAO.getPassword(email); return verifyPassword(retrievedPassword);
-		 */
-
+	public boolean validateAccount() {
+		try {
+			JsonObject hash = LoginDAO.getLogin(email);
+			byte[] dbPassword = hexStringToByteArray(hash.get("password").getAsString());
+			byte[] dbSalt = hexStringToByteArray(hash.get("salt").getAsString());
+			return verifyPassword(dbPassword, dbSalt);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
@@ -106,14 +125,17 @@ public class LoginPageModel {
 
 	/*
 	public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		String email = "Testing";
-		String password = "ABCabc123!@#";
+		String email = "Wolf";
+		String password = "QWEasdzxc123!@#";
 
 		LoginPageModel model = new LoginPageModel(email, password);
 		
-		byte[] hash = model.encodeHashPassword();
-		System.out.println("Password hash: " + Base64.getEncoder().encodeToString(hash));
-		System.out.println("Is password correct? -> " + model.verifyPassword(hash));
+		
+		byte[] salt = model.generateSalt();
+		byte[] hash = model.encodeHashPassword(salt);
+		
+	    System.out.println(byteArrayToHexString(salt));
+		System.out.println("Password hash: " + byteArrayToHexString(hash));
 		
 		String result = LoginPageModel.checkPasswordComplexity(password);
 		
@@ -124,4 +146,22 @@ public class LoginPageModel {
 		}
 	}
 	*/
+	
+	public static String byteArrayToHexString(byte[] bytes) {
+		StringBuilder sb = new StringBuilder();
+	    for (byte b : bytes) {
+	        sb.append(String.format("%02X ", b));
+	    }
+	    return sb.toString().replace(" ", "");
+	}
+	
+	public static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
+	}
 }

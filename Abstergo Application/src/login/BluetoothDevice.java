@@ -3,9 +3,9 @@ package login;
 public class BluetoothDevice {
 	private String bluetoothAddress;
 	private String friendlyName;
-	private int majorClass;
+	private String majorClass;
 
-	public BluetoothDevice(String bluetoothAddress, String friendlyName, int majorClass) {
+	public BluetoothDevice(String bluetoothAddress, String friendlyName, String majorClass) {
 		this.bluetoothAddress = bluetoothAddress;
 		this.friendlyName = friendlyName;
 		this.majorClass = majorClass;
@@ -19,7 +19,7 @@ public class BluetoothDevice {
 		return friendlyName;
 	}
 
-	public int getMajorClass() {
+	public String getMajorClass() {
 		return majorClass;
 	}
 }
