@@ -13,9 +13,13 @@ import org.ehcache.config.builders.ResourcePoolsBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.RequiredFieldValidator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,7 +43,11 @@ public class SignupPageController {
     @FXML
     private Label loginText;
     @FXML
+    private TextFlow alreadyExistLabel;
+    @FXML
     private JFXTextField emailField;
+    @FXML
+    private ImageView emailX;
     @FXML
     private TextFlow passwordCheckTextFlow;
     @FXML
@@ -47,9 +55,15 @@ public class SignupPageController {
     @FXML
     private JFXPasswordField passwordField;
     @FXML
+    private ImageView passwordX;
+    @FXML
     private JFXPasswordField passwordRetypeField;
     @FXML
+    private ImageView passwordRetypeX;
+    @FXML
     private JFXButton nextBtn;
+    private Boolean [] checks = {false, false, false};
+    private Service<Boolean> backgroundService;
     static CacheManager cacheManager = null;
 	
     private void checkPassword() {
@@ -58,12 +72,15 @@ public class SignupPageController {
     	
     	if(!password.isEmpty()) {
 			if(password.equals(retypedPassword)) {
-				nextBtn.setStyle("-fx-background-color: #2F5597");
+				passwordRetypeX.setVisible(false);
+				checks[2] = true;
 			}else {
-				nextBtn.setStyle("-fx-background-color: red");
+				passwordRetypeX.setVisible(true);
+				checks[2] = false;
 			}
     	}else {
-    		nextBtn.setStyle("-fx-background-color: #2F5597");
+    		passwordRetypeX.setVisible(true);
+    		checks[2] = false;
     	}
     }
     
@@ -72,18 +89,60 @@ public class SignupPageController {
     	
     	if(password.isEmpty()) {
     		passwordCheckTextFlow.setVisible(false);
+    		passwordX.setVisible(true);
+    		checks[1] = false;
     	}else {
         	String returnText = LoginPageModel.checkPasswordComplexity(password);
         	if(returnText.equals("Pass")) {
         		passwordCheckTextLabel.setStyle("-fx-text-fill: green");
+        		passwordX.setVisible(false);
+        		checks[1] = true;
         	}else {
         		passwordCheckTextLabel.setStyle("-fx-text-fill: red");
+        		passwordX.setVisible(true);
+        		checks[1] = false;
         	}
         	
         	passwordCheckTextLabel.setText(returnText);
         	passwordCheckTextFlow.setVisible(true);
     	}
     	checkPassword();
+    }
+    
+    void checkEmail() {
+    	String email = emailField.getText();
+    	if(email != null && !email.isEmpty()) {
+    		backgroundService = new Service<Boolean>() {
+				@Override
+				protected Task<Boolean> createTask() {
+					return new Task<Boolean>() {
+
+						@Override
+						protected Boolean call() throws Exception {
+							return LoginPageModel.checkWhetherEmailExist(email);
+						}
+					};
+				}
+			};
+
+			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+				public void handle(WorkerStateEvent event) {
+					if (backgroundService.getValue()) {
+						alreadyExistLabel.setVisible(true);
+		        		emailX.setVisible(true);
+		        		checks[0] = false;
+					} else {
+						if(alreadyExistLabel.isVisible() && emailX.isVisible()) {
+		        			alreadyExistLabel.setVisible(false);
+		            		emailX.setVisible(false);
+		        		}
+		        		checks[0] = true;
+					}
+				}
+			});
+
+			backgroundService.start();
+    	}
     }
     
     @FXML
@@ -95,19 +154,28 @@ public class SignupPageController {
 
     @FXML
     void nextPage(ActionEvent event) throws IOException {
-    	Cache<String, String> registration = cacheManager.getCache("registration", String.class, String.class);
-    	if(registration == null) {
-    		registration = cacheManager.createCache("registration", 
-        		    CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
-    		registration.put("Email", emailField.getText());
-        	registration.put("Password", passwordField.getText());
-    	}else {
-    		registration.replace("Email", emailField.getText());
-        	registration.replace("Password", passwordField.getText());
+    	if(emailField.validate() && passwordField.validate() && passwordRetypeField.validate()
+    			&& checks[0] && checks[1] && checks[2]) {
+    		if(cacheManager == null) {
+        		cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withCache("preConfirgured", 
+            			CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(5))) 
+            		    .build(); 
+            	cacheManager.init();
+        	}
+        	Cache<String, String> registration = cacheManager.getCache("registration", String.class, String.class);
+        	if(registration == null) {
+        		registration = cacheManager.createCache("registration", 
+            		    CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
+        		registration.put("Email", emailField.getText());
+            	registration.put("Password", passwordField.getText());
+        	}else {
+        		registration.replace("Email", emailField.getText());
+            	registration.replace("Password", passwordField.getText());
+        	}
+        	
+    		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage2.fxml"));
+    		((Node) event.getSource()).getScene().setRoot(root);
     	}
-    	
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage2.fxml"));
-		((Node) event.getSource()).getScene().setRoot(root);
     }
     
     @FXML
@@ -137,9 +205,29 @@ public class SignupPageController {
 			}
         });
         
+        RequiredFieldValidator validator = new RequiredFieldValidator();
+        validator.setMessage("Please fill in the field...");
+        RequiredFieldValidator validator2 = new RequiredFieldValidator();
+        validator2.setMessage("Please fill in the field...");
+        RequiredFieldValidator validator3 = new RequiredFieldValidator();
+        validator3.setMessage("Please fill in the field...");
+        emailField.getValidators().add(validator);
+        passwordField.getValidators().add(validator2);
+        passwordRetypeField.getValidators().add(validator3);
+        
+        emailField.textProperty().addListener(new ChangeListener<Object>() {
+
+			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+				emailField.validate();
+				checkEmail();
+				checks[0] = false;
+			}
+    	});
+        
         passwordField.textProperty().addListener(new ChangeListener<Object>() {
 
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+				passwordField.validate();
 				checkPasswordComplexity();
 			}
     	});
@@ -147,16 +235,12 @@ public class SignupPageController {
         passwordRetypeField.textProperty().addListener(new ChangeListener<Object>() {
 
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
+				passwordRetypeField.validate();
 				checkPassword();
 			}
     	});
         
-        if(cacheManager == null) {
-        	cacheManager = CacheManagerBuilder.newCacheManagerBuilder().withCache("preConfirgured", 
-        			CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(5))) 
-        		    .build(); 
-        	cacheManager.init();
-        }else {
+        if(cacheManager != null) {
         	Cache<String, String> cache = cacheManager.getCache("registration", String.class, String.class);
         	emailField.setText(cache.get("Email"));
         	passwordField.setText(cache.get("Password"));

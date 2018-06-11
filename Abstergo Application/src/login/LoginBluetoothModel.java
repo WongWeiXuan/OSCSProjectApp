@@ -40,9 +40,6 @@ public class LoginBluetoothModel {
 	}
 
 	public static void initialiseBluetooth() throws BluetoothStateException, FileNotFoundException {
-		//if (LoginDAO.getPairedDevice() != null) {
-			//pairedArray = LoginDAO.getPairedDevice();
-		//}
 		LocalDevice localDevice = LocalDevice.getLocalDevice();
 		localDevice.setDiscoverable(DiscoveryAgent.LIAC);
 		agent = localDevice.getDiscoveryAgent();
@@ -156,12 +153,20 @@ public class LoginBluetoothModel {
 		LoginDAO.removePairedDevice(bd);
 	}
 
+	public static void shutdownBluetooth() {
+		BlueCoveImpl.shutdown();
+	}
+	
 	public static Object getLock() {
 		return lock;
 	}
 
 	public static ArrayList<BluetoothDevice> getPairedArray() {
 		return pairedArray;
+	}
+	
+	protected static void setPairedArray(ArrayList<BluetoothDevice> pairedArray) {
+		LoginBluetoothModel.pairedArray = pairedArray;
 	}
 
 	public static boolean isInitialized() {

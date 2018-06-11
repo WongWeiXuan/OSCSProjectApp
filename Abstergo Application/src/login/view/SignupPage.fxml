@@ -6,6 +6,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -59,16 +61,41 @@
                      <children>
                         <VBox>
                            <children>
-                              <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email:" textFill="WHITE">
-                                 <font>
-                                    <Font name="Source Sans Pro" size="24.0" />
-                                 </font>
-                              </Label>
-                              <JFXTextField fx:id="emailField" labelFloat="true" minHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
-                                 <font>
-                                    <Font name="Source Sans Pro Bold" size="36.0" />
-                                 </font>
-                              </JFXTextField>
+                              <HBox>
+                                 <children>
+                                    <Label maxWidth="1.7976931348623157E308" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email:" textFill="WHITE" HBox.hgrow="ALWAYS">
+                                       <font>
+                                          <Font name="Source Sans Pro" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <TextFlow fx:id="alreadyExistLabel" textAlignment="RIGHT" visible="false">
+                                       <children>
+                                          <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email already exist." textAlignment="RIGHT" textFill="RED">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </TextFlow>
+                                 </children>
+                              </HBox>
+                              <StackPane>
+                                 <children>
+                                    <JFXTextField fx:id="emailField" labelFloat="true" minHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
+                                       <font>
+                                          <Font name="Source Sans Pro Bold" size="36.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <ImageView fx:id="emailX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
+                                       <image>
+                                          <Image url="@../../pictures/x.png" />
+                                       </image>
+                                       <StackPane.margin>
+                                          <Insets right="20.0" />
+                                       </StackPane.margin>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
                            </children>
                            <VBox.margin>
                               <Insets left="200.0" right="200.0" top="50.0" />
@@ -99,11 +126,23 @@
                                     </TextFlow>
                                  </children>
                               </HBox>
-                              <JFXPasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </JFXPasswordField>
+                              <StackPane>
+                                 <children>
+                                    <JFXPasswordField fx:id="passwordField" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </JFXPasswordField>
+                                    <ImageView fx:id="passwordX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
+                                       <image>
+                                          <Image url="@../../pictures/x.png" />
+                                       </image>
+                                       <StackPane.margin>
+                                          <Insets right="20.0" />
+                                       </StackPane.margin>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
                            </children>
                            <VBox.margin>
                               <Insets left="200.0" right="200.0" top="50.0" />
@@ -116,11 +155,23 @@
                                     <Font name="Source Sans Pro" size="24.0" />
                                  </font>
                               </Label>
-                              <JFXPasswordField fx:id="passwordRetypeField" onKeyPressed="#checkEnter" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </JFXPasswordField>
+                              <StackPane>
+                                 <children>
+                                    <JFXPasswordField fx:id="passwordRetypeField" onKeyPressed="#checkEnter" prefHeight="100.0" prefWidth="200.0" style="-fx-border-color: white; -fx-border-width: 0 0 2px 0; -fx-text-inner-color: white;">
+                                       <font>
+                                          <Font size="36.0" />
+                                       </font>
+                                    </JFXPasswordField>
+                                    <ImageView fx:id="passwordRetypeX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
+                                       <image>
+                                          <Image url="@../../pictures/x.png" />
+                                       </image>
+                                       <StackPane.margin>
+                                          <Insets right="20.0" />
+                                       </StackPane.margin>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
                            </children>
                            <VBox.margin>
                               <Insets bottom="50.0" left="200.0" right="200.0" top="50.0" />

@@ -14,7 +14,7 @@ public class LoginPageModel {
 	private String password;
 	private String salt;
 
-	protected LoginPageModel() {
+	public LoginPageModel() {
 		email = null;
 		password = null;
 		salt = null;
@@ -24,11 +24,6 @@ public class LoginPageModel {
 		super();
 		this.email = email;
 		this.password = password;
-		try {
-			this.salt = byteArrayToHexString(generateSalt());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public LoginPageModel(String email, String password, String salt) {
@@ -47,9 +42,9 @@ public class LoginPageModel {
 	}
 
 	public byte[] encodeHashPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
-		byte[] salt = generateSalt();
+		salt = byteArrayToHexString(generateSalt());
 		char[] passwordChar = password.toCharArray();
-		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
+		PBEKeySpec spec = new PBEKeySpec(passwordChar, hexStringToByteArray(salt), 200000, 64 * 16);
 		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
 		byte[] hash = skf.generateSecret(spec).getEncoded();
 		return hash;
@@ -122,30 +117,14 @@ public class LoginPageModel {
 			return "Unexpected error.";
 		}
 	}
-
-	/*
-	public static void main(String[] args) throws InvalidKeySpecException, NoSuchAlgorithmException {
-		String email = "Wolf";
-		String password = "QWEasdzxc123!@#";
-
-		LoginPageModel model = new LoginPageModel(email, password);
-		
-		
-		byte[] salt = model.generateSalt();
-		byte[] hash = model.encodeHashPassword(salt);
-		
-	    System.out.println(byteArrayToHexString(salt));
-		System.out.println("Password hash: " + byteArrayToHexString(hash));
-		
-		String result = LoginPageModel.checkPasswordComplexity(password);
-		
-		if ("Pass".equals(result)) {
-			System.out.println("Password changed successfully.");
-		} else {
-			System.out.println(result);
-		}
+	
+	public static boolean checkWhetherEmailExist(String email) {
+		return LoginDAO.getEmail(email);
 	}
-	*/
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 	public static String byteArrayToHexString(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();

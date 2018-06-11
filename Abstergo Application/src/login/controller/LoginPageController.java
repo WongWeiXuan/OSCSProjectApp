@@ -1,7 +1,6 @@
 package login.controller;
 
 import java.io.IOException;
-import java.util.Base64;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
@@ -98,6 +97,7 @@ public class LoginPageController {
 				public void handle(WorkerStateEvent event) {
 					if(backgroundService.getValue()) {
 						dialogText.setText("Login Successful.");
+						//if(LoginPageModel.checkPairedDevice())
 						// Redirect Page
 						// TODO
 					}else {

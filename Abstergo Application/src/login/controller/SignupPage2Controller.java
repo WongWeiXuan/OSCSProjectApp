@@ -47,6 +47,10 @@ public class SignupPage2Controller {
 	@FXML
 	private HBox instructionHBox;
 	@FXML
+    private VBox listViewVBox;
+    @FXML
+    private Label refreshLabel;
+	@FXML
 	private GridPane animationGridPane;
 	@FXML
 	private Circle circle1;
@@ -67,6 +71,9 @@ public class SignupPage2Controller {
 	@FXML
 	private HBox popupHBox;
 	@FXML
+	private TranslateTransition transition1;
+	private TranslateTransition transition2;
+	private TranslateTransition transition3;
 	private JFXButton closeBtn;
 	private Service<Map<RemoteDevice, String>> backgroundService;
 	private Service<Boolean> backgroundService2;
@@ -74,6 +81,7 @@ public class SignupPage2Controller {
 	final private String PPATH = "pictures/PhoneIcon.png";
 	final private String WPATH = "pictures/WatchIcon.png";
 	final private String UPATH = "pictures/UnidentifiedIcon.png";
+	final private String REPATH = "pictures/refresh-page-option.png";
 
 	private void changeScene() throws IOException {
 		Cache<String, String> cache = SignupPageController.cacheManager.getCache("deviceRegistration", String.class, String.class);
@@ -84,6 +92,7 @@ public class SignupPage2Controller {
 
 	@FXML
 	void continueWithPairing(ActionEvent event) {
+		listView.getItems().clear();
 		confirmationVBox.setVisible(false);
 		animationGridPane.setVisible(true);
 		closeBtn.fire();
@@ -91,11 +100,21 @@ public class SignupPage2Controller {
 
 	@FXML
 	void goToPage3(ActionEvent event) throws IOException {
+		// Animation lags the entire application... Runs even after scene changes.
+		transition1.stop();
+		transition2.stop();
+		transition3.stop();
+		
 		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
 		circle1.getScene().setRoot(root);
 	}
 
+	// Upon Scanning Finish
 	void printDeviceList(Map<RemoteDevice, String> listOfDevice) throws IOException {
+		if(!listViewVBox.isVisible()) {
+			listViewVBox.setVisible(true);
+		}
+		
 		for (Entry<RemoteDevice, String> entry : listOfDevice.entrySet()) {
 			String path = "";
 			if ("512".equals(entry.getValue())) {
@@ -134,24 +153,31 @@ public class SignupPage2Controller {
 
 								@Override
 								protected Boolean call() throws Exception {
-									System.out.println("Initializing Pairing..."); // Debug purpose
 									instructionHBox.setVisible(true);
-									listView.setVisible(false);
+									listViewVBox.setVisible(false);
 									int selectedIndex = listView.getSelectionModel().getSelectedIndex();
 									boolean result = LoginBluetoothModel.pairBluetoothDevice(selectedIndex);
-
 									// Storing in cache
 									if (result) {
 										ArrayList<BluetoothDevice> pairedArray = LoginBluetoothModel.getPairedArray();
 										BluetoothDevice device = pairedArray.get(selectedIndex);
-										Cache<String, String> deviceRegistration = SignupPageController.cacheManager
-												.createCache("deviceRegistration",
-														CacheConfigurationBuilder.newCacheConfigurationBuilder(
-																String.class, String.class,
-																ResourcePoolsBuilder.heap(3)));
-										deviceRegistration.put("BluetoothAddress", device.getBluetoothAddress());
-										deviceRegistration.put("DeviceName", device.getFriendlyName());
-										deviceRegistration.put("MajorClass", String.valueOf(device.getMajorClass()));
+										
+										// Check whether cache already exist
+										Cache<String, String> deviceRegistration = SignupPageController.cacheManager.getCache("deviceRegistration", String.class, String.class);
+										if(deviceRegistration == null) { // If non-existence
+											deviceRegistration = SignupPageController.cacheManager
+													.createCache("deviceRegistration",
+															CacheConfigurationBuilder.newCacheConfigurationBuilder(
+																	String.class, String.class,
+																	ResourcePoolsBuilder.heap(3)));
+											deviceRegistration.put("BluetoothAddress", device.getBluetoothAddress());
+											deviceRegistration.put("DeviceName", device.getFriendlyName());
+											deviceRegistration.put("MajorClass", String.valueOf(device.getMajorClass()));
+										}else { // If exist
+											deviceRegistration.replace("BluetoothAddress", device.getBluetoothAddress());
+											deviceRegistration.replace("DeviceName", device.getFriendlyName());
+											deviceRegistration.replace("MajorClass", String.valueOf(device.getMajorClass()));
+										}
 									}
 									return result;
 								}
@@ -165,6 +191,7 @@ public class SignupPage2Controller {
 							if (backgroundService2.getValue()) {
 								System.out.println("Paired"); // Debug purpose
 								try {
+									tries = 0; // Resetting
 									changeScene();
 								} catch (IOException e) {
 									e.printStackTrace();
@@ -176,7 +203,8 @@ public class SignupPage2Controller {
 									tries++;
 								} else {
 									instructionHBox.setVisible(false);
-									listView.setVisible(true);
+									listViewVBox.setVisible(true);
+									tries = 0; // Resetting
 								}
 							}
 						}
@@ -191,7 +219,9 @@ public class SignupPage2Controller {
 
 	@FXML
 	void closePopup(ActionEvent event) throws InterruptedException, IOException {
-		popupHBox.setVisible(false);
+		if(popupHBox.isVisible()) {
+			popupHBox.setVisible(false);
+		}
 
 		backgroundService = new Service<Map<RemoteDevice, String>>() {
 
@@ -201,7 +231,6 @@ public class SignupPage2Controller {
 
 					@Override
 					protected Map<RemoteDevice, String> call() throws Exception {
-						System.out.println("Starting bluetooth scanning..."); // Debug purpose
 						if(!LoginBluetoothModel.isInitialized()) {
 							LoginBluetoothModel.initialiseBluetooth();
 						}
@@ -227,6 +256,13 @@ public class SignupPage2Controller {
 
 		backgroundService.start();
 	}
+	
+	@FXML
+    void refreshScan(MouseEvent event) throws InterruptedException, IOException {
+		listView.getItems().clear();
+		animationGridPane.setVisible(true);
+		closePopup(null);
+    }
 
 	@FXML
 	void initialize() {
@@ -249,32 +285,30 @@ public class SignupPage2Controller {
 			cachePairedText.setText(cache.get("DeviceName") + " is paired. Confirm?");
 			confirmationVBox.setVisible(true);
 		}
-
-		final TranslateTransition transition1 = new TranslateTransition();
+		
+		
+		transition1 = new TranslateTransition();
 		transition1.setDuration(Duration.millis(500));
 		transition1.setAutoReverse(true);
 		transition1.setCycleCount(2);
 		transition1.setToY(-30);
 		transition1.setNode(circle1);
-		transition1.play();
 
-		final TranslateTransition transition2 = new TranslateTransition();
+		transition2 = new TranslateTransition();
 		transition2.setDuration(Duration.millis(500));
 		transition2.setAutoReverse(true);
 		transition2.setCycleCount(2);
 		transition2.setToY(-30);
 		transition2.setNode(circle2);
 		transition2.setDelay(Duration.millis(500));
-		transition2.play();
 
-		final TranslateTransition transition3 = new TranslateTransition();
+		transition3 = new TranslateTransition();
 		transition3.setDuration(Duration.millis(500));
 		transition3.setAutoReverse(true);
 		transition3.setCycleCount(2);
 		transition3.setToY(-30);
 		transition3.setNode(circle3);
 		transition3.setDelay(Duration.millis(1000));
-		transition3.play();
 
 		transition3.setOnFinished(new EventHandler<ActionEvent>() {
 
@@ -290,5 +324,16 @@ public class SignupPage2Controller {
 				}
 			}
 		});
+		transition1.play();
+		transition2.play();
+		transition3.play();
+		
+		Image image = new Image(REPATH);
+		ImageView imageView = new ImageView(image);
+		imageView.setPreserveRatio(true);
+		imageView.setFitWidth(30);
+		imageView.setFitHeight(30);
+		refreshLabel.setGraphic(imageView);
+		refreshLabel.setGraphicTextGap(10);
 	}
 }

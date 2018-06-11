@@ -22,4 +22,8 @@ public class BluetoothDevice {
 	public String getMajorClass() {
 		return majorClass;
 	}
+
+	public static void createLogin(LoginPageModel login, BluetoothDevice device) {
+		LoginDAO.createLogin(login, device);
+	}
 }
