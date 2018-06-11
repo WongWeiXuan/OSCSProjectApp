@@ -1,65 +1,120 @@
 package login;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Scanner;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class LoginDAO {
-	final private static String TEXTFILE = "src/login/BaconAndEggs.txt";
-	
-	protected static ArrayList<BluetoothDevice> getPairedDevice() throws FileNotFoundException {
-		ArrayList<BluetoothDevice> bda = new ArrayList<BluetoothDevice>();
-		File file = new File(TEXTFILE);
-		Scanner sc = new Scanner(file);
-		while(sc.hasNextLine()) {
-			Scanner sc1 = new Scanner(sc.nextLine());
-			sc1.useDelimiter(";");
-			BluetoothDevice bd = new BluetoothDevice(sc1.next(), sc1.next());
-			bda.add(bd);
-			sc1.close();
-		}
-		sc.close();
-		
-		return bda;
+	protected static ArrayList<BluetoothDevice> getPairedDevice() {
+		return null;
+		// TODO
 	}
+
+	protected static void addPairedDevice(ArrayList<BluetoothDevice> dbal) {
+		// TODO
+	}
+
+	protected static void removePairedDevice(BluetoothDevice bd) {
+		// TODO
+	}
+
+	protected static boolean getEmail(String email) {
+		try {
+			URL url = new URL("http://localhost/AbstergoREST/rest/Login/get/" + email);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
 	
-	protected static void addPairedDevice(ArrayList<BluetoothDevice> dbal) throws IOException {
-		boolean first = true;
-		File file = new File(TEXTFILE);
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-		for(BluetoothDevice bd: dbal) {
-			if(first) {
-				writer.write(bd.getBluetoothAddress() + ";" + bd.getFriendlyName());
-				first = false;
-			}else {
-				writer.write("\n" + bd.getBluetoothAddress() + ";" + bd.getFriendlyName());
+			BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream()))); // Getting the response from the webservice
+
+			String output = br.readLine();
+			br.close();
+			connection.disconnect();
+			if (output != null) {
+				return true;
 			}
+		}catch(IOException ex) {
+			ex.printStackTrace();
 		}
-		writer.close();
+		return false;
 	}
 	
-	protected static void removePairedDevice(BluetoothDevice bd) throws IOException {
-		File file = new File(TEXTFILE);
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	protected static JsonObject getLogin(String email) {
+		try {
+			URL url = new URL("http://localhost/AbstergoREST/rest/Login/get/" + email);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+	
+			BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream()))); // Getting the response from the webservice
 
-		
-		String lineToRemove = bd.getBluetoothAddress() + ";" + bd.getFriendlyName();
-		String currentLine;
-
-		while((currentLine = reader.readLine()) != null) {
-		    // trim newline when comparing with lineToRemove
-		    String trimmedLine = currentLine.trim();
-		    if(trimmedLine.equals(lineToRemove)) continue;
-		    writer.write(currentLine + System.getProperty("line.separator"));
+			String output;
+			while ((output = br.readLine()) != null) {
+				br.close();
+				connection.disconnect();
+				JsonElement jelement = new JsonParser().parse(output);
+				return jelement.getAsJsonObject();
+			}
+		}catch(IOException ex) {
+			ex.printStackTrace();
 		}
-		writer.close(); 
-		reader.close(); 
+		return null;
+	}
+	
+	public static String createLogin(LoginPageModel loginModel, BluetoothDevice device) {
+		try {
+			// Open Connection to REST Server
+			URL url = new URL("http://localhost/AbstergoREST/rest/Login");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Content-Type", "application/json");
+			
+			// Convert Object to Json
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+			String jsonInString = mapper.writeValueAsString(loginModel);
+			String jsonInString2 = mapper.writeValueAsString(device);
+			String completeJson = jsonInString.substring(0, jsonInString.length() - 1) + "," + jsonInString2.substring(1);
+			
+			// Pass in the Json Object to REST Server
+			OutputStream os = connection.getOutputStream();
+			os.write(completeJson.getBytes());
+			os.flush();
+
+			if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+				throw new RuntimeException("Failed : HTTP error code : "
+					+ connection.getResponseCode());
+			}
+
+			// Get Response from the REST Server
+			BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream()))); 
+
+			// Return Value
+			String output;
+			while ((output = br.readLine()) != null) {
+				br.close();
+				connection.disconnect();
+				return output;
+			}
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
+		return null;
 	}
 }

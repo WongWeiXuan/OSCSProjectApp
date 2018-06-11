@@ -1,67 +1,98 @@
 package login;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import com.google.gson.JsonObject;
 
 public class LoginPageModel {
-	private String username;
+	private String email;
 	private String password;
+	private String salt;
 
-	protected LoginPageModel() {
-		username = null;
+	public LoginPageModel() {
+		email = null;
 		password = null;
+		salt = null;
 	}
 
-	protected LoginPageModel(String username, String password) {
-		this.username = username;
+	public LoginPageModel(String email, String password) {
+		super();
+		this.email = email;
 		this.password = password;
 	}
+	
+	public LoginPageModel(String email, String password, String salt) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.salt = salt;
+	}
 
-	protected String hashPassword() {
-		Argon2 argon2 = Argon2Factory.create();
-		// Parsing String to char[]
+	public byte[] generateSalt() throws NoSuchAlgorithmException {
+		final SecureRandom SR = SecureRandom.getInstance("SHA1PRNG");
+		byte[] salt = new byte[128];
+		SR.nextBytes(salt);
+
+		return salt;
+	}
+
+	public byte[] encodeHashPassword() throws NoSuchAlgorithmException, InvalidKeySpecException {
+		salt = byteArrayToHexString(generateSalt());
 		char[] passwordChar = password.toCharArray();
-		String hash = "";
-		try {
-			hash = argon2.hash(45, 65536, 1, passwordChar); // Hash password (Max 3 secs)
-			// int iterations = Argon2Helper.findIterations(argon2, 3000, 65536, 1);
-			// System.out.println("Optimal number of iterations: " + hash);
-		} finally {
-			// Wipe confidential data
-			argon2.wipeArray(passwordChar);
-		}
+		PBEKeySpec spec = new PBEKeySpec(passwordChar, hexStringToByteArray(salt), 200000, 64 * 16);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		byte[] hash = skf.generateSecret(spec).getEncoded();
 		return hash;
 	}
 	
-	protected boolean verifyPassword(String hash) {
-		Argon2 argon2 = Argon2Factory.create();
-		
-		if (argon2.verify(hash, password)) {
-			return true; // Hash matches password
-		} else {
-			return false; // Hash doesn't match password
-		}
+	public byte[] encodeHashPassword(byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		char[] passwordChar = password.toCharArray();
+		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		byte[] hash = skf.generateSecret(spec).getEncoded();
+
+		return hash;
 	}
-	
-	protected boolean validateAccount() {
-		/*
-		 * //Calls DAO (Azure) for database 
-		 * retrievedPassword = LoginDAO.getPassword(username);
-		 * return verifyPassword(retrievedPassword);
-		 */
+
+	protected boolean verifyPassword(byte[] hash, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+		byte[] enteredHash = encodeHashPassword(salt);
+		int diff = hash.length ^ enteredHash.length;
+		for(int i = 0; i < hash.length && i < enteredHash.length; i++) {
+			diff |= hash[i] ^ enteredHash[i];
+		}
+		
+		return diff == 0;
+	}
+
+	public boolean validateAccount() {
+		try {
+			JsonObject hash = LoginDAO.getLogin(email);
+			byte[] dbPassword = hexStringToByteArray(hash.get("password").getAsString());
+			byte[] dbSalt = hexStringToByteArray(hash.get("salt").getAsString());
+			return verifyPassword(dbPassword, dbSalt);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
 		
 		return false;
 	}
 
-	private int getPasswordComplexity() {
-		if (password.length() < 8 && password.length() > 36) {
+	private static int getPasswordComplexity(String password) {
+		if (password.length() < 12) {
 			return 1;
 		}
 
 		if (password.contains(" ")) {
 			return 2;
 		} else {
-			String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])(?=\\S+$).{8,36}";
+			String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\\W])(?=\\S+$).{12,}";
 			boolean whether = password.matches(regex);
 
 			if (!whether) {
@@ -72,36 +103,44 @@ public class LoginPageModel {
 		return 0;
 	}
 
-	protected String checkPasswordComplexity() {
-		switch (getPasswordComplexity()) {
+	public static String checkPasswordComplexity(String password) {
+		switch (getPasswordComplexity(password)) {
 		case 0:
-			return "";
+			return "Pass";
 		case 1:
-			return "Password must be 8 to 36 letters.";
+			return "Password must be at least 12 letters.";
 		case 2:
 			return "Password cannot contain spaces.";
 		case 3:
-			return "Password must contains at least one lowercase letter, uppercase letter, symbol and number.";
+			return "Password must contains at least one lowercase letter,\n uppercase letter,\n symbol and number.";
 		default:
 			return "Unexpected error.";
 		}
 	}
-
-	/*
-	public static void main(String[] args) {
-		String username = "Testing";
-		String password = "ABCabc123!@#";
-
-		LoginPageModel model = new LoginPageModel(username, password);
-		String hash = model.hashPassword();
-		String hashByte = hash.getBytes(); (97 Bytes)
-		System.out.println("Password hash: " + hash);
-		System.out.println("Is password correct? -> " + model.verifyPassword(hash));
-		if (model.checkPasswordComplexity().isEmpty()) {
-			System.out.println("Password changed successfully.");
-		} else {
-			System.out.println(model.checkPasswordComplexity());
-		}
+	
+	public static boolean checkWhetherEmailExist(String email) {
+		return LoginDAO.getEmail(email);
 	}
-	*/
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public static String byteArrayToHexString(byte[] bytes) {
+		StringBuilder sb = new StringBuilder();
+	    for (byte b : bytes) {
+	        sb.append(String.format("%02X ", b));
+	    }
+	    return sb.toString().replace(" ", "");
+	}
+	
+	public static byte[] hexStringToByteArray(String s) {
+	    int len = s.length();
+	    byte[] data = new byte[len / 2];
+	    for (int i = 0; i < len; i += 2) {
+	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+	                             + Character.digit(s.charAt(i+1), 16));
+	    }
+	    return data;
+	}
 }
