@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,9 +16,30 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class LoginDAO {
-	protected static ArrayList<BluetoothDevice> getPairedDevice() {
+	protected static JsonObject getPairedDevice(String email) {
+		try {
+			URL url = new URL("http://localhost/AbstergoREST/rest/Login/getDevice/" + email);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+	
+			BufferedReader br = new BufferedReader(new InputStreamReader((connection.getInputStream()))); // Getting the response from the webservice
+
+			String output = br.readLine();
+			br.close();
+			connection.disconnect();
+			if (output != null) {
+				br.close();
+				connection.disconnect();
+				JsonElement jelement = new JsonParser().parse(output);
+				return jelement.getAsJsonObject();
+			}
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
 		return null;
-		// TODO
 	}
 
 	protected static void addPairedDevice(ArrayList<BluetoothDevice> dbal) {

@@ -3,7 +3,9 @@ package login;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 
+import javax.bluetooth.BluetoothStateException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
@@ -120,6 +122,25 @@ public class LoginPageModel {
 	
 	public static boolean checkWhetherEmailExist(String email) {
 		return LoginDAO.getEmail(email);
+	}
+	
+	public static BluetoothDevice getPairedDevice(String email) {
+		JsonObject jObject = LoginDAO.getPairedDevice(email);
+		return new BluetoothDevice(jObject.get("bluetoothAddress").getAsString(), jObject.get("friendlyName").getAsString(), jObject.get("majorClass").getAsString());
+	}
+	
+	public static boolean checkPairedDevice(BluetoothDevice device) {
+		try {
+			ArrayList<BluetoothDevice> bluetoothArray = new ArrayList<BluetoothDevice>();
+			bluetoothArray.add(device);
+			LoginBluetoothModel.setPairedArray(bluetoothArray);
+			return LoginBluetoothModel.scanForPairedBluetoothDevice();
+		} catch (BluetoothStateException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public void setPassword(String password) {

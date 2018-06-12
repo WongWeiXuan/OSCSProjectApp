@@ -10,10 +10,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	final private String[] FONTARRAY = { "Regular", "Bold", "BoldItalic", "Italic" };
-
+	private static Stage stage;
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			stage = primaryStage;
 			Parent root = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
@@ -34,6 +36,10 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static Stage getStage() {
+		return stage;
 	}
 
 	public static void main(String[] args) {

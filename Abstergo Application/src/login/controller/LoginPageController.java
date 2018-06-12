@@ -25,6 +25,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import login.BluetoothThreadModel;
 import login.LoginPageModel;
 
 public class LoginPageController {
@@ -49,6 +50,7 @@ public class LoginPageController {
 	@FXML
 	private JFXButton dialogCloseBtn;
 	private Service<Boolean> backgroundService;
+	private static boolean deviceNotFound;
 
 	@FXML
 	void closeDialog(ActionEvent event) {
@@ -69,7 +71,7 @@ public class LoginPageController {
     }
 
 	@FXML
-	void validateLogin(ActionEvent event) throws InterruptedException {
+	void validateLogin(ActionEvent event) {
 		final Stage STAGE = (Stage) ((Node) event.getSource()).getScene().getWindow();
 		String username = usernameField.getText();
 		String password = passwordField.getText();
@@ -97,12 +99,9 @@ public class LoginPageController {
 				public void handle(WorkerStateEvent event) {
 					if(backgroundService.getValue()) {
 						dialogText.setText("Login Successful.");
-						//if(LoginPageModel.checkPairedDevice())
-						// Redirect Page
-						// TODO
+						BluetoothThreadModel.startThread(LoginPageModel.getPairedDevice(username));
 					}else {
 						dialogText.setText("Login Failed.");
-						
 					}
 					//dialogText.textProperty().unbind();
 					STAGE.getScene().setCursor(Cursor.DEFAULT);
@@ -121,6 +120,10 @@ public class LoginPageController {
 		}
 	}
 
+	public static void setDeviceNotFound(boolean deviceNotFounded) {
+		deviceNotFound = deviceNotFounded;
+	}
+
 	@FXML
 	void initialize() {
 		assert loginStackpane != null : "fx:id=\"loginStackpane\" was not injected: check your FXML file 'LoginPage.fxml'.";
@@ -134,5 +137,11 @@ public class LoginPageController {
 		loginDialog.setDialogContainer(loginStackpane);
 		loginDialog.setContent(loginDialogLayout);
 		loginDialog.setTransitionType(DialogTransition.CENTER);
+		if(deviceNotFound) {
+			dialogTitleText.setText("Device not detected");
+			dialogText.setText("Please turn on bluetooth on your device or make sure you are not out of range.");
+			loginDialog.show();
+		}
+		deviceNotFound = false;
 	}
 }
