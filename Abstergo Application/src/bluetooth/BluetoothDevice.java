@@ -1,4 +1,7 @@
-package login;
+package bluetooth;
+
+import login.LoginDAO;
+import login.LoginPageModel;
 
 public class BluetoothDevice {
 	private String bluetoothAddress;

@@ -10,6 +10,7 @@ import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXButton;
 
+import bluetooth.BluetoothDevice;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -22,7 +23,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import login.BluetoothDevice;
 import login.LoginPageModel;
 
 public class SignupPage3Controller {

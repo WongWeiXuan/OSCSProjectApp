@@ -17,6 +17,8 @@ import org.ehcache.config.builders.ResourcePoolsBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
+import bluetooth.BluetoothDevice;
+import bluetooth.LoginBluetoothModel;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -36,8 +38,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import login.BluetoothDevice;
-import login.LoginBluetoothModel;
 
 public class SignupPage2Controller {
 	@FXML

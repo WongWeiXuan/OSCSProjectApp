@@ -11,6 +11,9 @@ import javax.crypto.spec.PBEKeySpec;
 
 import com.google.gson.JsonObject;
 
+import bluetooth.BluetoothDevice;
+import bluetooth.LoginBluetoothModel;
+
 public class LoginPageModel {
 	private String email;
 	private String password;

@@ -15,6 +15,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import bluetooth.BluetoothDevice;
+
 public class LoginDAO {
 	protected static JsonObject getPairedDevice(String email) {
 		try {
@@ -42,11 +44,11 @@ public class LoginDAO {
 		return null;
 	}
 
-	protected static void addPairedDevice(ArrayList<BluetoothDevice> dbal) {
+	public static void addPairedDevice(ArrayList<BluetoothDevice> dbal) {
 		// TODO
 	}
 
-	protected static void removePairedDevice(BluetoothDevice bd) {
+	public static void removePairedDevice(BluetoothDevice bd) {
 		// TODO
 	}
 

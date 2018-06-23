@@ -1,4 +1,4 @@
-package login;
+package bluetooth;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,6 +18,8 @@ import javax.bluetooth.ServiceRecord;
 
 import com.intel.bluetooth.BlueCoveImpl;
 import com.intel.bluetooth.RemoteDeviceHelper;
+
+import login.LoginDAO;
 
 public class LoginBluetoothModel {
 	// Locks
@@ -166,7 +168,7 @@ public class LoginBluetoothModel {
 		return pairedArray;
 	}
 	
-	protected static void setPairedArray(ArrayList<BluetoothDevice> pairedArray) {
+	public static void setPairedArray(ArrayList<BluetoothDevice> pairedArray) {
 		LoginBluetoothModel.pairedArray = pairedArray;
 	}
 
