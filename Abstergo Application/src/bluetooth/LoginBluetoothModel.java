@@ -49,12 +49,12 @@ public class LoginBluetoothModel {
 		BlueCoveImpl.setConfigProperty("bluecove.inquiry.duration", "2");
 		BlueCoveImpl.setConfigProperty("bluecove.inquiry.report.asap", "true");
 		BlueCoveImpl.setConfigProperty("bluecove.connect.timeout", "20000");
-		
+
 		initialized = true;
 	}
 
 	public static BluetoothDevice deviceSelectionQuery(int selection) {
-		Scanner sc = new Scanner(System.in);
+		Scanner sc = new Scanner(System.in, "UTF-8");
 		int selected = 0;
 		try {
 			selected = Integer.parseInt(sc.next()) - 1;
@@ -83,7 +83,7 @@ public class LoginBluetoothModel {
 
 			public void inquiryCompleted(int arg0) {
 				synchronized (lock) {
-					lock.notify();
+					lock.notifyAll();
 				}
 			}
 
@@ -98,7 +98,6 @@ public class LoginBluetoothModel {
 		synchronized (lock) {
 			lock.wait();
 		}
-
 		return deviceListing;
 	}
 
@@ -108,7 +107,8 @@ public class LoginBluetoothModel {
 		Thread.sleep(1000);
 		if (paired) {
 			RemoteDeviceHelper.removeAuthentication(rd);
-			BluetoothDevice bd = new BluetoothDevice(rd.getBluetoothAddress(), rd.getFriendlyName(true), deviceListing.get(rd));
+			BluetoothDevice bd = new BluetoothDevice(rd.getBluetoothAddress(), rd.getFriendlyName(true),
+					deviceListing.get(rd));
 			pairedArray.add(bd);
 		}
 
@@ -128,7 +128,7 @@ public class LoginBluetoothModel {
 
 			public void inquiryCompleted(int arg0) {
 				synchronized (lock) {
-					lock.notify();
+					lock.notifyAll();
 				}
 			}
 
@@ -143,7 +143,6 @@ public class LoginBluetoothModel {
 		synchronized (lock) {
 			lock.wait();
 		}
-
 		return found;
 	}
 
@@ -159,7 +158,7 @@ public class LoginBluetoothModel {
 	public static void shutdownBluetooth() {
 		BlueCoveImpl.shutdown();
 	}
-	
+
 	public static Object getLock() {
 		return lock;
 	}
@@ -167,7 +166,7 @@ public class LoginBluetoothModel {
 	public static ArrayList<BluetoothDevice> getPairedArray() {
 		return pairedArray;
 	}
-	
+
 	public static void setPairedArray(ArrayList<BluetoothDevice> pairedArray) {
 		LoginBluetoothModel.pairedArray = pairedArray;
 	}
@@ -175,7 +174,7 @@ public class LoginBluetoothModel {
 	public static boolean isInitialized() {
 		return initialized;
 	}
-	
+
 	/*
 	 * public static boolean scanAndUnpairBluetoothDevice() throws
 	 * InterruptedException, IOException{ RemoteDevice[] pairedDevice =
@@ -205,32 +204,26 @@ public class LoginBluetoothModel {
 	 */
 
 	/*
-	public static void main(String[] args) throws InterruptedException, IOException { 
-		LoginBluetoothModel.initialiseBluetooth(); 
-		Map<RemoteDevice,Integer> test = LoginBluetoothModel.scanBluetoothDevice(); // Retrieve list of devices
-	  
-		// Print the list of device 
-		for (Entry<RemoteDevice, Integer> entry : deviceListing.entrySet()) {
-			System.out.println(entry.getKey().getFriendlyName(false)); 
-			System.out.println(entry.getKey().hashCode()); 
-		}
-	  
-		// "Select" device 
-		//Scanner sc = new Scanner(System.in);
-		//LoginBluetoothModel.pairBluetoothDevice(Integer.parseInt(sc.next())); // Pair it
-	  
-		//sc.close(); // Close scanner
-	  
-		// LoginBluetoothModel.scanAndUnpairBluetoothDevice();
-	  
-		while (true) { 
-			if (LoginBluetoothModel.scanForPairedBluetoothDevice()) {
-				System.out.println("Active connection"); 
-				Thread.sleep(1000); 
-			} else {
-				System.out.println("Connection lost with paired device!"); 
-			} 
-		} 
-	}
-	*/
+	 * public static void main(String[] args) throws InterruptedException,
+	 * IOException { LoginBluetoothModel.initialiseBluetooth();
+	 * Map<RemoteDevice,String> test = LoginBluetoothModel.scanBluetoothDevice(); //
+	 * Retrieve list of devices
+	 * 
+	 * // Print the list of device for (Entry<RemoteDevice, String> entry :
+	 * deviceListing.entrySet()) {
+	 * System.out.println(entry.getKey().getFriendlyName(false));
+	 * System.out.println(entry.getKey().hashCode()); }
+	 * 
+	 * // "Select" device //Scanner sc = new Scanner(System.in);
+	 * //LoginBluetoothModel.pairBluetoothDevice(Integer.parseInt(sc.next())); //
+	 * Pair it
+	 * 
+	 * //sc.close(); // Close scanner
+	 * 
+	 * // LoginBluetoothModel.scanAndUnpairBluetoothDevice();
+	 * 
+	 * while (true) { if (LoginBluetoothModel.scanForPairedBluetoothDevice()) {
+	 * System.out.println("Active connection"); Thread.sleep(1000); } else {
+	 * System.out.println("Connection lost with paired device!"); } } }
+	 */
 }

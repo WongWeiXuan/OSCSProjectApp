@@ -5,33 +5,33 @@ import java.util.ArrayList;
 
 import javax.bluetooth.BluetoothStateException;
 
-public class BluetoothThread implements Runnable{
+public class BluetoothThread implements Runnable {
 	private volatile boolean running;
 	private BluetoothDevice device;
-	
+
 	public BluetoothThread(BluetoothDevice device) {
 		running = true;
 		this.device = device;
 	}
-	
+
 	@Override
 	public void run() {
 		try {
 			ArrayList<BluetoothDevice> array = new ArrayList<BluetoothDevice>();
 			array.add(device);
-			if(!LoginBluetoothModel.isInitialized()) {
+			if (!LoginBluetoothModel.isInitialized()) {
 				LoginBluetoothModel.initialiseBluetooth();
 			}
 			LoginBluetoothModel.setPairedArray(array);
-			
-			while(running) {
+
+			while (running) {
 				try {
 					System.out.println("Running");
 					boolean exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
-					if(!exist) {
+					if (!exist) {
 						System.out.println("Device not found!");
 						BluetoothThreadModel.stopThread();
-						//BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation
+						// BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation
 					}
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
@@ -46,7 +46,7 @@ public class BluetoothThread implements Runnable{
 	}
 
 	// Method to stop the thread
-    public synchronized void stop() {
-        running = false;
-    }
+	public synchronized void stop() {
+		running = false;
+	}
 }

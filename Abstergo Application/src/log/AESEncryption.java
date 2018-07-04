@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
@@ -24,16 +23,14 @@ public class AESEncryption {
 		iv = generateIV();
 	}
 
-	
 	public AESEncryption(byte[] key) {
-		this.key = key;
+		this.key = key.clone();
 		this.iv = generateIV();
 	}
 
-
 	public AESEncryption(byte[] key, byte[] iv) {
-		this.key = key;
-		this.iv = iv;
+		this.key = key.clone();
+		this.iv = iv.clone();
 	}
 
 	private byte[] generateKey() {
@@ -111,7 +108,7 @@ public class AESEncryption {
 			fis = new FileInputStream(file);
 			fos = new FileOutputStream(output);
 			cos = new CipherOutputStream(fos, getEncryptCipher());
-			
+
 			fos.write(iv); // Writing iv to file
 			byte[] data = new byte[1024];
 			int read = fis.read(data);
@@ -119,7 +116,7 @@ public class AESEncryption {
 				cos.write(data, 0, read);
 				read = fis.read(data);
 			}
-			
+
 			return output;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,8 +139,8 @@ public class AESEncryption {
 		}
 		return null;
 	}
-	
-	public File decryptFile(File file) throws IOException {
+
+	public File decryptFile(File file) {
 		FileInputStream fis = null;
 		FileOutputStream fos = null;
 		CipherOutputStream cos = null;
@@ -154,66 +151,67 @@ public class AESEncryption {
 			fos = new FileOutputStream(output);
 
 			byte[] ivBuffer = new byte[12]; // Reading iv
-			fis.read(ivBuffer, 0, 12);
-			this.iv = ivBuffer;
-			
-			cos = new CipherOutputStream(fos, getDecryptCipher());
-			
-			byte[] data = new byte[1024];
-			int read2 = fis.read(data);
-			while (read2 != -1) {
-				cos.write(data, 0, read2);
-				read2 = fis.read(data);
+			int read = fis.read(ivBuffer, 0, 12);
+			if (read != -1) {
+				System.out.println(read);
+				cos = new CipherOutputStream(fos, getDecryptCipher());
+
+				byte[] data = new byte[1024];
+				int read2 = fis.read(data);
+				while (read2 != -1) {
+					cos.write(data, 0, read2);
+					read2 = fis.read(data);
+				}
 			}
-			
 			return output;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (cos != null) {
-				cos.close();
-			}
-			if (fos != null) {
-				fos.close();
-			}
-			if (fis != null) {
-				fis.close();
+			try {
+				if (cos != null) {
+					cos.close();
+				}
+				if (fos != null) {
+					fos.close();
+				}
+				if (fis != null) {
+					fis.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
-		
+
 		return null;
 	}
 
 	public static void writeToFile(File input, String name) {
 		File output = new File(name);
 		try {
-		    FileUtils.copyFile(input, output);
+			FileUtils.copyFile(input, output);
 		} catch (IOException e) {
-		    e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
-	
+
 	public void clearMemory() {
 		Arrays.fill(key, (byte) 0);
 	}
 
 	/*
-	public static void main(String[] args) throws IOException {
-		AESEncryption aes = new AESEncryption();
-		System.out.println(Base64.getEncoder().encodeToString(aes.iv));
-		System.out.println(Base64.getEncoder().encodeToString(aes.key));
-		aes.encryptFile();
-		
-		Scanner sc = new Scanner(System.in);
-		sc.nextLine();
-		sc.close();
-		
-		aes.decryptFile();
-
-		//System.out.println("Encrypted String: " + encryptedString);
-		//System.out.println("Decrypted String: " + decryptedString);
-
-		aes.clearMemory();
-	}
-	*/
+	 * public static void main(String[] args) throws IOException { AESEncryption aes
+	 * = new AESEncryption();
+	 * System.out.println(Base64.getEncoder().encodeToString(aes.iv));
+	 * System.out.println(Base64.getEncoder().encodeToString(aes.key));
+	 * //aes.encryptFile(new File("ApplicationAES.txt"));
+	 * 
+	 * Scanner sc = new Scanner(System.in); sc.nextLine(); sc.close();
+	 * 
+	 * File file = aes.decryptFile(new File("ApplicationAES.txt"));
+	 * writeToFile(file, "ApplicationDECRYPTED.txt"); //
+	 * System.out.println("Encrypted String: " + encryptedString); //
+	 * System.out.println("Decrypted String: " + decryptedString);
+	 * 
+	 * aes.clearMemory(); }
+	 */
 }

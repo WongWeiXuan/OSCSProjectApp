@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="login.controller.SignupPageController">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.controller.SignupPageController">
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -39,13 +39,20 @@
                         </TextFlow>
                         <TextFlow textAlignment="RIGHT">
                            <children>
-                              <Label fx:id="loginText" style="-fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-weight: Bold;" text="Login" textFill="WHITE">
+                              <Label fx:id="loginText" contentDisplay="RIGHT" graphicTextGap="20.0" onMouseClicked="#goToLogin" style="-fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-weight: Bold;" text="Login" textFill="WHITE">
                                  <font>
                                     <Font name="Source Sans Pro Bold" size="24.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
+                                 <graphic>
+                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../pictures/back-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
                               </Label>
                            </children>
                            <padding>

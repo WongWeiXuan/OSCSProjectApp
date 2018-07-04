@@ -10,7 +10,7 @@ import login.controller.LoginPageController;
 
 public class BluetoothThreadModel {
 	private static BluetoothThread bluetoothThread;
-	
+
 	public static void startThread(BluetoothDevice device) {
 		bluetoothThread = new BluetoothThread(device);
 		Thread t = new Thread(bluetoothThread, "Thread");
@@ -20,7 +20,7 @@ public class BluetoothThreadModel {
 	public static void stopThread() {
 		bluetoothThread.stop();
 	}
-	
+
 	public static void logoutNotFound() {
 		Platform.runLater(new Runnable() {
 			@Override

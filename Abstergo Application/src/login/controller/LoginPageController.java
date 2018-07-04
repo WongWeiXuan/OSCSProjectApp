@@ -59,16 +59,16 @@ public class LoginPageController {
 
 	@FXML
 	void openSignup(MouseEvent event) throws IOException {
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); //Change scene
+		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
 		((Node) event.getSource()).getScene().setRoot(root);
 	}
-	
-	 @FXML
-    void checkEnter(KeyEvent event) {
-		 if(event.getCode().equals(KeyCode.ENTER)) {
-			 loginBtn.fire();
-		 }
-    }
+
+	@FXML
+	void checkEnter(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			loginBtn.fire();
+		}
+	}
 
 	@FXML
 	void validateLogin(ActionEvent event) {
@@ -87,7 +87,8 @@ public class LoginPageController {
 
 						@Override
 						protected Boolean call() throws Exception {
-							//updateMessage("Your hashed password is: " + LoginPageModel.byteArrayToHexString(LOGIN.encodeHashPassword()));
+							// updateMessage("Your hashed password is: " +
+							// LoginPageModel.byteArrayToHexString(LOGIN.encodeHashPassword()));
 							return LOGIN.validateAccount();
 						}
 					};
@@ -97,24 +98,24 @@ public class LoginPageController {
 			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
 				public void handle(WorkerStateEvent event) {
-					if(backgroundService.getValue()) {
+					if (backgroundService.getValue()) {
 						dialogText.setText("Login Successful.");
 						BluetoothThreadModel.startThread(LoginPageModel.getPairedDevice(username));
-					}else {
+					} else {
 						dialogText.setText("Login Failed.");
 					}
-					//dialogText.textProperty().unbind();
+					// dialogText.textProperty().unbind();
 					STAGE.getScene().setCursor(Cursor.DEFAULT);
 					loginBtn.setDisable(false);
 					loginDialog.show();
 				}
 			});
 
-			//dialogText.textProperty().bind(backgroundService.messageProperty());
+			// dialogText.textProperty().bind(backgroundService.messageProperty());
 			backgroundService.start();
 			loginBtn.setDisable(true);
 			STAGE.getScene().setCursor(Cursor.WAIT);
-		}else {
+		} else {
 			dialogText.setText("Enter something, Bro.");
 			loginDialog.show();
 		}
@@ -137,7 +138,7 @@ public class LoginPageController {
 		loginDialog.setDialogContainer(loginStackpane);
 		loginDialog.setContent(loginDialogLayout);
 		loginDialog.setTransitionType(DialogTransition.CENTER);
-		if(deviceNotFound) {
+		if (deviceNotFound) {
 			dialogTitleText.setText("Device not detected");
 			dialogText.setText("Please turn on bluetooth on your device or make sure you are not out of range.");
 			loginDialog.show();

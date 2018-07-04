@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="login.controller.SignupPage2Controller">
+<AnchorPane minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.controller.SignupPage2Controller">
    <children>
       <StackPane alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -142,11 +142,11 @@
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <VBox fx:id="listViewVBox" visible="false">
+                                    <VBox fx:id="listViewVBox">
                                        <children>
                                           <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" minHeight="50.0" style="-fx-background-color: rgba(255,255,255,0.8);">
                                              <children>
-                                                <Label fx:id="refreshLabel" onMouseClicked="#refreshScan" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Refresh">
+                                                <Label fx:id="refreshLabel" contentDisplay="RIGHT" graphicTextGap="10.0" onMouseClicked="#refreshScan" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Refresh">
                                                    <font>
                                                       <Font name="System Bold" size="24.0" />
                                                    </font>
@@ -156,13 +156,20 @@
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
+                                                   <graphic>
+                                                      <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../pictures/refresh-page-option.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
                                                 </Label>
                                              </children>
                                           </HBox>
                                           <JFXListView fx:id="listView" minWidth="1280.0" style="-fx-background-color: rgba(255, 255, 0,0);" styleClass="listView" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
-                                    <GridPane fx:id="animationGridPane" minWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);">
+                                    <GridPane fx:id="animationGridPane" minWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);" visible="false">
                                       <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -237,7 +244,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox fx:id="popupHBox" style="-fx-background-color: rgba(157, 195, 230, 0.95);">
+                        <HBox fx:id="popupHBox" style="-fx-background-color: rgba(157, 195, 230, 0.95);" visible="false">
                            <children>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
