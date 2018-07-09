@@ -86,10 +86,16 @@ public class LoginPageController {
 					return new Task<Boolean>() {
 
 						@Override
-						protected Boolean call() throws Exception {
+						protected Boolean call() {
 							// updateMessage("Your hashed password is: " +
 							// LoginPageModel.byteArrayToHexString(LOGIN.encodeHashPassword()));
-							return LOGIN.validateAccount();
+							boolean value = false;
+							try {
+								value = LOGIN.validateAccount();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+							return value;
 						}
 					};
 				}
@@ -97,6 +103,7 @@ public class LoginPageController {
 
 			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+				@Override
 				public void handle(WorkerStateEvent event) {
 					if (backgroundService.getValue()) {
 						dialogText.setText("Login Successful.");

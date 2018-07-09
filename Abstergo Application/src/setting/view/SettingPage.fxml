@@ -204,8 +204,8 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="applyBtn" text="Apply" />
-                  <JFXButton fx:id="restoreBtn" text="Restore to default" />
+                  <JFXButton fx:id="applyBtn" onAction="#applySettings" text="Apply" />
+                  <JFXButton fx:id="restoreBtn" onAction="#restoreSettings" text="Restore to default" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />

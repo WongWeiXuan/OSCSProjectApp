@@ -124,6 +124,7 @@ public class SignupPageController {
 			};
 
 			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+				@Override
 				public void handle(WorkerStateEvent event) {
 					if (backgroundService.getValue()) {
 						alreadyExistLabel.setVisible(true);
@@ -211,6 +212,7 @@ public class SignupPageController {
 
 		emailField.textProperty().addListener(new ChangeListener<Object>() {
 
+			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				emailField.validate();
 				checkEmail();
@@ -220,6 +222,7 @@ public class SignupPageController {
 
 		passwordField.textProperty().addListener(new ChangeListener<Object>() {
 
+			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				passwordField.validate();
 				checkPasswordComplexity();
@@ -228,6 +231,7 @@ public class SignupPageController {
 
 		passwordRetypeField.textProperty().addListener(new ChangeListener<Object>() {
 
+			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				passwordRetypeField.validate();
 				checkPassword();

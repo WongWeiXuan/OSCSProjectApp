@@ -70,6 +70,7 @@ public class LoginBluetoothModel {
 
 	public static Map<RemoteDevice, String> scanBluetoothDevice() throws InterruptedException, IOException {
 		listener = new DiscoveryListener() {
+			@Override
 			public void deviceDiscovered(RemoteDevice btDevice, DeviceClass arg1) {
 				String deviceMajor = String.valueOf(arg1.getMajorDeviceClass());
 				for (int i : filter) { // Only add if it is a phone, watch or undentified
@@ -81,15 +82,18 @@ public class LoginBluetoothModel {
 				}
 			}
 
+			@Override
 			public void inquiryCompleted(int arg0) {
 				synchronized (lock) {
 					lock.notifyAll();
 				}
 			}
 
+			@Override
 			public void serviceSearchCompleted(int arg0, int arg1) {
 			}
 
+			@Override
 			public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
 			}
 		};
@@ -118,6 +122,7 @@ public class LoginBluetoothModel {
 	public static boolean scanForPairedBluetoothDevice() throws BluetoothStateException, InterruptedException {
 		found = false;
 		listener = new DiscoveryListener() {
+			@Override
 			public void deviceDiscovered(RemoteDevice btDevice, DeviceClass arg1) {
 				for (BluetoothDevice rd : pairedArray) {
 					if (rd.getBluetoothAddress().equals(btDevice.getBluetoothAddress())) {
@@ -126,15 +131,18 @@ public class LoginBluetoothModel {
 				}
 			}
 
+			@Override
 			public void inquiryCompleted(int arg0) {
 				synchronized (lock) {
 					lock.notifyAll();
 				}
 			}
 
+			@Override
 			public void serviceSearchCompleted(int arg0, int arg1) {
 			}
 
+			@Override
 			public void servicesDiscovered(int transID, ServiceRecord[] servRecord) {
 			}
 		};

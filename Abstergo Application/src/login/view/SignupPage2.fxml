@@ -142,7 +142,7 @@
                                           </VBox>
                                        </children>
                                     </HBox>
-                                    <VBox fx:id="listViewVBox">
+                                    <VBox fx:id="listViewVBox" visible="false">
                                        <children>
                                           <HBox alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" minHeight="50.0" style="-fx-background-color: rgba(255,255,255,0.8);">
                                              <children>
@@ -169,7 +169,7 @@
                                           <JFXListView fx:id="listView" minWidth="1280.0" style="-fx-background-color: rgba(255, 255, 0,0);" styleClass="listView" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>
-                                    <GridPane fx:id="animationGridPane" minWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);" visible="false">
+                                    <GridPane fx:id="animationGridPane" minWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                                       <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -244,7 +244,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox fx:id="popupHBox" style="-fx-background-color: rgba(157, 195, 230, 0.95);" visible="false">
+                        <HBox fx:id="popupHBox" style="-fx-background-color: rgba(157, 195, 230, 0.95);">
                            <children>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>

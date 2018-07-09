@@ -192,6 +192,7 @@ public class SignupPage2Controller {
 
 					backgroundService2.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+						@Override
 						public void handle(WorkerStateEvent event) {
 							if (backgroundService2.getValue()) {
 								System.out.println("Paired"); // Debug purpose
@@ -249,6 +250,7 @@ public class SignupPage2Controller {
 
 		backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+			@Override
 			public void handle(WorkerStateEvent event) {
 				try {
 					printDeviceList(backgroundService.getValue());
@@ -316,6 +318,7 @@ public class SignupPage2Controller {
 
 		transition3.setOnFinished(new EventHandler<ActionEvent>() {
 
+			@Override
 			public void handle(ActionEvent event) {
 				try {
 					TimeUnit.MILLISECONDS.sleep(500);

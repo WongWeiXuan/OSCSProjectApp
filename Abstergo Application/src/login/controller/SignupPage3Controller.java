@@ -74,6 +74,7 @@ public class SignupPage3Controller {
 
 		backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+			@Override
 			public void handle(WorkerStateEvent event) {
 				try {
 					STAGE.getScene().setCursor(Cursor.DEFAULT);

@@ -27,6 +27,8 @@ import com.sun.jna.platform.win32.WinNT.EVENTLOGRECORD;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 
+import logExtra.AESEncryption;
+
 public class LogModel {
 	private File encryptedFile;
 	private String logName;

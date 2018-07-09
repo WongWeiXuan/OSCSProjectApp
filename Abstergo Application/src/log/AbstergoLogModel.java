@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Scanner;
 
+import logExtra.AESEncryption;
+
 public class AbstergoLogModel {
 	private String fileName;
 	private byte[] key;

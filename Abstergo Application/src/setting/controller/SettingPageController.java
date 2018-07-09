@@ -16,11 +16,13 @@ import com.jfoenix.controls.JFXToggleNode;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -84,6 +86,7 @@ public class SettingPageController {
 	private JFXButton applyBtn;
 	@FXML
 	private JFXButton restoreBtn;
+	private Setting setting;
 
 	@FXML
 	void setSlider(KeyEvent event) {
@@ -95,6 +98,27 @@ public class SettingPageController {
 		System.out.println("Slider: " + incomingSlider.getValue());
 		incomingSliderSpinner.getValueFactory().setValue((int) incomingSlider.getValue());
 	}
+	
+	@FXML
+    void applySettings(ActionEvent event) {
+		SettingModel model = setting.getPreference();
+		boolean incomingAccept = incomingCheckbox.isSelected();
+		long incomingMaximum = (long) incomingSlider.getValue();
+		String onDiconnection = onDisconnectCombo.getSelectionModel().getSelectedItem().getText();
+		//int timeoutTime = Integer.parseInt( ( (ToggleButton)timeout.getSelectedToggle().getUserData()).getText() );
+		Toggle toggle = timeout.getSelectedToggle();
+		JFXToggleNode node = (JFXToggleNode) toggle.getUserData();
+		String text = node.getId();
+		System.out.println(text);
+		// TODO
+		//SettingModel model2 = new SettingModel(model.getLogFile(), model.getLogDisplay(), );
+		//setting.setPreference(model);
+    }
+
+    @FXML
+    void restoreSettings(ActionEvent event) {
+    	setting.restoreDefaults();
+    }
 
 	@FXML
 	void initialize() {
@@ -106,7 +130,7 @@ public class SettingPageController {
 		jfxDrawer.close();
 
 		// Setting
-		Setting setting = new Setting();
+		setting = new Setting();
 		SettingModel settingModel = setting.getPreference();
 
 		ArrayList<String> disconnectArray = new ArrayList<String>();
@@ -161,11 +185,12 @@ public class SettingPageController {
 		long maximum = root.getFreeSpace() / 1024 / 1024; // MB
 		incomingSlider.setValue(value);
 
-		SpinnerValueFactory<Integer> valueFactory = new IntegerSpinnerValueFactory(0, 2048, (int) (long) value);
+		SpinnerValueFactory<Integer> valueFactory = new IntegerSpinnerValueFactory(0, 2048, (int) value);
 		incomingSliderSpinner.setValueFactory(valueFactory);
 
 		incomingSliderSpinner.valueProperty().addListener(new ChangeListener<Object>() {
 
+			@Override
 			public void changed(ObservableValue<?> observable, Object oldValue, Object newValue) {
 				incomingSlider.setValue(incomingSliderSpinner.getValue());
 			}
