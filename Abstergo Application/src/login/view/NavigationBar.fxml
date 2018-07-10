@@ -24,7 +24,7 @@
                      <children>
                         <ImageView fitWidth="210.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <image>
-                              <Image url="@../../pictures/abstergo-industries-logo.png" />
+                              <Image url="@../../resource/pictures/abstergo-industries-logo.png" />
                            </image>
                            <cursor>
                               <Cursor fx:constant="HAND" />

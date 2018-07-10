@@ -19,7 +19,7 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml"));
 			Scene scene = new Scene(root);
 			primaryStage.setScene(scene);
-			primaryStage.getIcons().add(new Image("pictures/abstergo-industries-logo-only.png"));
+			primaryStage.getIcons().add(new Image("resource/pictures/abstergo-industries-logo-only.png"));
 			primaryStage.setTitle("Abstergo Security Suite");
 			primaryStage.setWidth(1280);
 			primaryStage.setHeight(850);

@@ -5,27 +5,6 @@
 	<groupId>AbstergoApplication</groupId>
 	<artifactId>AbstergoApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src</directory>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.jfoenix</groupId>
@@ -83,4 +62,60 @@
 			<version>2.0.14</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.wvengen</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<version>2.0.14</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<obfuscate>true</obfuscate>
+					<injar>${project.build.finalName}.jar</injar>
+					<outjar>${project.build.finalName}-small.jar</outjar>
+					<outputDirectory>${project.build.directory}</outputDirectory>
+					<proguardInclude>${project.basedir}/proguard.conf</proguardInclude>
+					<options>
+						<option>-dontshrink</option>
+						<option>-dontoptimize</option>
+						<option>-flattenpackagehierarchy ''</option>
+						<option>-keep public class * { *; }</option>
+						<option>-keepclasseswithmembers public class application.Main {public static void main(java.lang.String[]);}</option>
+						<option>-adaptresourcefilecontents **.fxml,**.properties,META-INF/MANIFEST.MF</option>
+						<option>-keepclassmembernames class * {@javafx.fxml.FXML *;}</option>
+					</options>
+					<libs>
+						<lib>${java.home}/lib/rt.jar</lib>
+						<lib>${java.home}/lib/jce.jar</lib>
+						<lib>${java.home}/lib/jsse.jar</lib>
+						<lib>${java.home}/lib/ext/jfxrt.jar</lib>
+					</libs>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

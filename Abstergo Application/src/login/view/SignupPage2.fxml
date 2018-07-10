@@ -23,7 +23,7 @@
    <children>
       <StackPane alignment="TOP_LEFT" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
+            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
             <VBox minHeight="800.0" minWidth="1280.0" style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                <children>
                   <HBox alignment="CENTER" fillHeight="false" maxHeight="200.0" maxWidth="1.7976931348623157E308">
@@ -81,7 +81,7 @@
                                                 </TextFlow>
                                                 <ImageView fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                                    <image>
-                                                      <Image url="@../../pictures/pairing1.png" />
+                                                      <Image url="@../../resource/pictures/pairing1.png" />
                                                    </image>
                                                    <VBox.margin>
                                                       <Insets top="100.0" />
@@ -105,7 +105,7 @@
                                                 </TextFlow>
                                                 <ImageView fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                                    <image>
-                                                      <Image url="@../../pictures/pairing2.png" />
+                                                      <Image url="@../../resource/pictures/pairing2.png" />
                                                    </image>
                                                    <VBox.margin>
                                                       <Insets top="100.0" />
@@ -129,7 +129,7 @@
                                                 </TextFlow>
                                                 <ImageView fitWidth="400.0" pickOnBounds="true" preserveRatio="true" VBox.vgrow="ALWAYS">
                                                    <image>
-                                                      <Image url="@../../pictures/pairing3.png" />
+                                                      <Image url="@../../resource/pictures/pairing3.png" />
                                                    </image>
                                                    <VBox.margin>
                                                       <Insets top="100.0" />
@@ -159,7 +159,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../pictures/refresh-page-option.png" />
+                                                            <Image url="@../../resource/pictures/refresh-page-option.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -255,7 +255,7 @@
                                     </Text>
                                     <ImageView fitHeight="400.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/IphoneBlue.png" />
+                                          <Image url="@../../resource/pictures/IphoneBlue.png" />
                                        </image>
                                        <HBox.margin>
                                           <Insets left="20.0" />
@@ -278,7 +278,7 @@
                                     </Text>
                                     <ImageView fitHeight="400.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/SamsungBlue.png" />
+                                          <Image url="@../../resource/pictures/SamsungBlue.png" />
                                        </image>
                                        <HBox.margin>
                                           <Insets left="20.0" />

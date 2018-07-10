@@ -78,9 +78,9 @@ public class SignupPage2Controller {
 	private Service<Map<RemoteDevice, String>> backgroundService;
 	private Service<Boolean> backgroundService2;
 
-	final private String PPATH = "pictures/PhoneIcon.png";
-	final private String WPATH = "pictures/WatchIcon.png";
-	final private String UPATH = "pictures/UnidentifiedIcon.png";
+	final private String PPATH = "resource/pictures/PhoneIcon.png";
+	final private String WPATH = "resource/pictures/WatchIcon.png";
+	final private String UPATH = "resource/pictures/UnidentifiedIcon.png";
 
 	private void changeScene() throws IOException {
 		Cache<String, String> cache = SignupPageController.cacheManager.getCacheManager().getCache("deviceRegistration",

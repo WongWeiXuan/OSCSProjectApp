@@ -27,7 +27,7 @@
                            <children>
                               <ImageView fx:id="logoImageview" fitWidth="210.0" onMouseClicked="#toggleDrawer" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../pictures/abstergo-industries-logo.png" />
+                                    <Image url="@../../resource/pictures/abstergo-industries-logo.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -48,7 +48,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/mail.png" />
+                                          <Image url="@../../resource/pictures/mail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -73,7 +73,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -95,7 +95,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -117,7 +117,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -139,7 +139,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/settings.png" />
+                                          <Image url="@../../resource/pictures/settings.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

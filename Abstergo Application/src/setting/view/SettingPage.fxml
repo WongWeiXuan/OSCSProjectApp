@@ -26,7 +26,7 @@
    <children>
       <HBox alignment="TOP_RIGHT" nodeOrientation="RIGHT_TO_LEFT">
          <children>
-            <StackPane minHeight="850.0" minWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;">
+            <StackPane minHeight="850.0" minWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;">
                <children>
                   <JFXDrawer fx:id="jfxDrawer" defaultDrawerSize="250.0" minWidth="200.0" />
                   <VBox fx:id="drawerVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: black;">
@@ -35,7 +35,7 @@
                            <children>
                               <ImageView fx:id="logoImageview" fitWidth="210.0" onMouseClicked="#toggleDrawer" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../pictures/abstergo-industries-logo.png" />
+                                    <Image url="@../../resource/pictures/abstergo-industries-logo.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -56,7 +56,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/mail.png" />
+                                          <Image url="@../../resource/pictures/mail.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -81,7 +81,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -103,7 +103,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -125,7 +125,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -147,7 +147,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/settings.png" />
+                                          <Image url="@../../resource/pictures/settings.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -164,7 +164,7 @@
                   </VBox>
                </children>
             </StackPane>
-            <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;" HBox.hgrow="ALWAYS">
+            <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" HBox.hgrow="ALWAYS">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
                      <font>

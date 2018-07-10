@@ -20,7 +20,7 @@
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
+            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
             <VBox style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                <children>
                   <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
@@ -49,7 +49,7 @@
                                  <graphic>
                                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../pictures/back-arrow.png" />
+                                          <Image url="@../../resource/pictures/back-arrow.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -95,7 +95,7 @@
                                     </JFXTextField>
                                     <ImageView fx:id="emailX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />
@@ -142,7 +142,7 @@
                                     </JFXPasswordField>
                                     <ImageView fx:id="passwordX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />
@@ -171,7 +171,7 @@
                                     </JFXPasswordField>
                                     <ImageView fx:id="passwordRetypeX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />
