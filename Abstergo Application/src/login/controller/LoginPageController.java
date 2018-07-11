@@ -52,6 +52,16 @@ public class LoginPageController {
 	private Service<Boolean> backgroundService;
 	private static boolean deviceNotFound;
 
+	private void changeToHome() {
+		Parent root;
+		try {
+			root = (Parent) FXMLLoader.load(getClass().getResource("../../setting/view/SettingPage.fxml")); // Change scene
+			dialogText.getScene().setRoot(root);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+	
 	@FXML
 	void closeDialog(ActionEvent event) {
 		loginDialog.close();
@@ -108,6 +118,7 @@ public class LoginPageController {
 					if (backgroundService.getValue()) {
 						dialogText.setText("Login Successful.");
 						BluetoothThreadModel.startThread(LoginPageModel.getPairedDevice(username));
+						changeToHome();
 					} else {
 						dialogText.setText("Login Failed.");
 					}

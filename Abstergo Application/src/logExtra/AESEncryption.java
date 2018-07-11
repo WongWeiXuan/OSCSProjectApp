@@ -152,8 +152,8 @@ public class AESEncryption {
 
 			byte[] ivBuffer = new byte[12]; // Reading iv
 			int read = fis.read(ivBuffer, 0, 12);
+			this.iv = ivBuffer.clone(); // Getting iv from file and setting it
 			if (read != -1) {
-				System.out.println(read);
 				cos = new CipherOutputStream(fos, getDecryptCipher());
 
 				byte[] data = new byte[1024];
@@ -183,15 +183,6 @@ public class AESEncryption {
 		}
 
 		return null;
-	}
-
-	public static void writeToFile(File input, String name) {
-		File output = new File(name);
-		try {
-			FileUtils.copyFile(input, output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void clearMemory() {

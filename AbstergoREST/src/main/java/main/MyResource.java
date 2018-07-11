@@ -1,7 +1,6 @@
 package main;
 
 import java.sql.SQLException;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -58,3 +57,4 @@ public class MyResource {
 		return Response.status(201).entity(result).build();
 	}
 }
+

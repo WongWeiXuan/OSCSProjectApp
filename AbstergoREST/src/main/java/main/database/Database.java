@@ -5,13 +5,15 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import main.model.BluetoothDevice;
+import main.model.FileHash;
 import main.model.Login;
 
 public class Database {
 	String login = "AbstergoLogin";
-	String password = "abstergologin";
+	String password = "AbstergoLogin";
 	String url = "jdbc:sqlserver://127.0.0.1:1433;databaseName=Abstergo";
 
 	Connection conn = null;
@@ -38,6 +40,7 @@ public class Database {
 		}
 	}
 	
+	// User
 	public Login getLoginFromEmail(String email) throws SQLException {
 		String sqlline = "SELECT * FROM Login WHERE Email = ?";
 		PreparedStatement ps = conn.prepareStatement(sqlline);
@@ -59,10 +62,12 @@ public class Database {
 		ppstmt.setString(1, login.getEmail());
 		ppstmt.setString(2, login.getPassword());
 		ppstmt.setString(3, login.getSalt());
-		
+		System.out.println("Password: " + login.getPassword());
+		System.out.println("Salt: " + login.getSalt());
 		return executeUpdate(ppstmt);
 	}
 
+	// Device
 	public BluetoothDevice getDeviceFromEmail(String email) throws SQLException {
 		String sqlline = "SELECT * FROM Device WHERE Email = ?";
 		PreparedStatement ps = conn.prepareStatement(sqlline);
@@ -89,4 +94,44 @@ public class Database {
 		
 		return executeUpdate(ppstmt);
 	}
+	
+	// FileHash
+	public ArrayList<FileHash> getFileHash() throws SQLException {
+		ArrayList<FileHash> fileHashArray = new ArrayList<FileHash>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileHash;");
+		ResultSet rs =	ppstmt.executeQuery();
+		while(rs.next()) {
+			String fileName = rs.getString("FileName");
+			String fileSHA1 = rs.getString("FileSHA1");
+			FileHash fileHash = new FileHash(fileName, fileSHA1);
+			fileHashArray.add(fileHash);
+		}
+		
+		return fileHashArray;
+	}
+	
+	public FileHash getFileHashFromFileName(String fileNames) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileHash WHERE FileName = ?;");
+		ppstmt.setString(1, fileNames);
+		ResultSet rs =	ppstmt.executeQuery();
+		FileHash fileHash = null;
+		while(rs.next()) {
+			String fileName = rs.getString("FileName");
+			String fileSHA1 = rs.getString("FileSHA1");
+			fileHash = new FileHash(fileName, fileSHA1);
+		}
+		
+		return fileHash;
+	}
+	
+	public boolean updateFileHash(FileHash fileHash) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("UPDATE FileHash SET FileSHA1 = ? WHERE FileName = ?;");
+//		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileHash(FileName,FileSHA1) VALUES (?,?);");
+		ppstmt.setString(2, fileHash.getFileName());
+		ppstmt.setString(1, fileHash.getFileSHA1());
+		
+		System.out.println("NAME: " + fileHash.getFileName() + " > SHA: " + fileHash.getFileSHA1());
+		return executeUpdate(ppstmt);
+	}
+		
 }

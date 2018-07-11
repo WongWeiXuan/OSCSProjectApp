@@ -35,12 +35,13 @@ public class NavigationBarController {
 
 	@FXML
 	void initialize() {
-		assert jfxDrawer != null : "fx:id=\"jfxDrawer\" was not injected: check your FXML file 'NavigationBar.fxml'.";
-
+		// Navigation
 		jfxDrawer.setSidePane(drawerVBox);
 		jfxDrawer.setDefaultDrawerSize(120);
 		jfxDrawer.setOverLayVisible(true);
 		jfxDrawer.setDirection(DrawerDirection.RIGHT);
 		jfxDrawer.close();
+		
+		// Others
 	}
 }

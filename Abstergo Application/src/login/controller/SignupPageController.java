@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+
 import org.ehcache.Cache;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
@@ -107,40 +110,59 @@ public class SignupPageController {
 		checkPassword();
 	}
 
-	void checkEmail() {
+	private boolean checkEmailFormat(String email) {
+		boolean result = true;
+		try {
+			InternetAddress emailAddr = new InternetAddress(email);
+			emailAddr.validate();
+		} catch (AddressException ex) {
+			result = false;
+		}
+		return result;
+	}
+
+	private void checkEmail() {
 		String email = emailField.getText();
 		if (email != null && !email.isEmpty()) {
-			backgroundService = new Service<Boolean>() {
-				@Override
-				protected Task<Boolean> createTask() {
-					return new Task<Boolean>() {
-
-						@Override
-						protected Boolean call() throws Exception {
-							return LoginPageModel.checkWhetherEmailExist(email);
-						}
-					};
-				}
-			};
-
-			backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-				@Override
-				public void handle(WorkerStateEvent event) {
-					if (backgroundService.getValue()) {
-						alreadyExistLabel.setVisible(true);
-						emailX.setVisible(true);
-						checks[0] = false;
-					} else {
-						if (alreadyExistLabel.isVisible() && emailX.isVisible()) {
-							alreadyExistLabel.setVisible(false);
-							emailX.setVisible(false);
-						}
-						checks[0] = true;
+			if(!checkEmailFormat(email)) {
+				((Label) alreadyExistLabel.getChildren().get(0)).setText("Wrong email format. E.g. Abstergo@gmail.com");
+				alreadyExistLabel.setVisible(true);
+				emailX.setVisible(true);
+				checks[0] = false;
+			} else {
+				backgroundService = new Service<Boolean>() {
+					@Override
+					protected Task<Boolean> createTask() {
+						return new Task<Boolean>() {
+	
+							@Override
+							protected Boolean call() throws Exception {
+								return LoginPageModel.checkWhetherEmailExist(email);
+							}
+						};
 					}
-				}
-			});
-
-			backgroundService.start();
+				};
+	
+				backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+					@Override
+					public void handle(WorkerStateEvent event) {
+						if (backgroundService.getValue()) {
+							((Label) alreadyExistLabel.getChildren().get(0)).setText("Email already exist in Database");
+							alreadyExistLabel.setVisible(true);
+							emailX.setVisible(true);
+							checks[0] = false;
+						} else {
+							if (alreadyExistLabel.isVisible() && emailX.isVisible()) {
+								alreadyExistLabel.setVisible(false);
+								emailX.setVisible(false);
+							}
+							checks[0] = true;
+						}
+					}
+				});
+	
+				backgroundService.start();
+			}
 		}
 	}
 

@@ -19,7 +19,7 @@ public class Setting {
 	private String ID6 = "Timeout";
 
 	public Setting() {
-		preferences = Preferences.userNodeForPackage(getClass());
+		preferences = Preferences.userNodeForPackage(Setting.class);
 	}
 
 	public SettingModel getPreference() {

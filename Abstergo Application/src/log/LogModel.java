@@ -68,24 +68,22 @@ public class LogModel {
 		return Advapi32.INSTANCE.CloseEventLog(this.handle);
 	}
 
-	private File writeToFile(ArrayList<ArrayList<String>> stringArray, String fileName) {
+	private File writeToFile(ArrayList<LogDetailsModel> stringArray, String fileName) {
 		try {
 			File temp = File.createTempFile(fileName, ".txt");
 			FileOutputStream fos = new FileOutputStream(temp, true);
 			Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
 			BufferedWriter bw = new BufferedWriter(writer);
 			PrintWriter out = new PrintWriter(bw);
-			for (ArrayList<String> array : stringArray) {
-				boolean first = true;
-
-				for (String s : array) {
-					if (first) {
-						out.append(s);
-						first = false;
-					} else {
-						out.append(";" + s);
-					}
-				}
+			for (LogDetailsModel array : stringArray) {
+				out.append(array.getEventCategory());
+				out.append(";" + array.getEventID());
+				out.append(";" + array.getEventSource());
+				out.append(";" + array.getEventType());
+				out.append(";" + array.getRecordNumber());
+				out.append(";" + array.getEventTimeGenerated());
+				out.append(";" + array.getEventTimeWritten());
+				out.append(";" + array.getEventData());
 				out.append("\n");
 			}
 			out.flush();
@@ -105,19 +103,18 @@ public class LogModel {
 		return null;
 	}
 
-	private ArrayList<String> getRecordSettings(EVENTLOGRECORD record, Pointer pevlr) {
+	private LogDetailsModel getRecordSettings(EVENTLOGRECORD record, Pointer pevlr) {
 		// TODO Add settings
-		// TODO Change stringArray to <Object> instead of ArrayList<String>
-		ArrayList<String> stringArray = new ArrayList<String>();
-		stringArray.add("Event Category: " + record.EventCategory.intValue());
-		stringArray.add("Event ID: " + (record.EventID.intValue() & 0xFFFF));
-		stringArray.add("Event Source: " + pevlr.getWideString(record.size()));
-		stringArray.add("Event Type: " + getType(record.EventType.intValue()).toString());
-		stringArray.add("Record Number: " + record.RecordNumber);
-		stringArray.add("Event Time Generated: " + record.TimeGenerated.intValue());
-		stringArray.add("Event Time Written: " + record.TimeWritten.intValue());
-		stringArray.add("Event Data: " + getString(record, pevlr));
-		return stringArray;
+		LogDetailsModel logDetailsModel = new LogDetailsModel();
+		logDetailsModel.setEventCategory( String.valueOf(record.EventCategory.intValue()) + "." );
+		logDetailsModel.setEventID( String.valueOf(record.EventID.intValue() & 0xFFFF) + "." );
+		logDetailsModel.setEventSource( pevlr.getWideString(record.size()) + "." );
+		logDetailsModel.setEventType( getType(record.EventType.intValue()).toString() + "." );
+		logDetailsModel.setRecordNumber( String.valueOf(record.RecordNumber) + "." );
+		logDetailsModel.setEventTimeGenerated( String.valueOf(record.TimeGenerated.intValue()) + "." );
+		logDetailsModel.setEventTimeWritten( String.valueOf(record.TimeWritten.intValue()) + "." );
+		logDetailsModel.setEventData( getString(record, pevlr) + "." );
+		return logDetailsModel;
 	}
 
 	public int getNewestID(File encrypted, String key) {
@@ -185,7 +182,7 @@ public class LogModel {
 		IntByReference pnMinNumberOfBytesNeeded = new IntByReference();
 		Memory buffer = new Memory(1024 * 64);
 
-		ArrayList<ArrayList<String>> stringArrayArray = new ArrayList<ArrayList<String>>();
+		ArrayList<LogDetailsModel> stringArrayArray = new ArrayList<LogDetailsModel>();
 		while (true) {
 			if ("System".equals(logName)) {
 				if (!Advapi32.INSTANCE.ReadEventLog(handle,
@@ -294,18 +291,18 @@ public class LogModel {
 		return opened;
 	}
 
-	public static void main(String[] args) throws IOException {
-		String key = "l2nMvmLRUqY7JeQZgD9nHQ==";
-		AESEncryption aes = new AESEncryption(Base64.getDecoder().decode(key.getBytes(StandardCharsets.UTF_8)));
-
-		File file = new File("ApplicationAES.txt");
-		LogModel log = new LogModel(file, "Application");
-		// log.openEventLog();
-		// File file = log.read(key);
-		// log.closeEventLog();
-
-		File encrypted = aes.decryptFile(file);
-		AESEncryption.writeToFile(encrypted, log.logName + "DECRYPTED.txt");
-	}
-
+//	public static void main(String[] args) throws IOException {
+//		String key = "l2nMvmLRUqY7JeQZgD9nHQ==";
+//		AESEncryption aes = new AESEncryption(Base64.getDecoder().decode(key.getBytes(StandardCharsets.UTF_8)));
+//
+//		File file = new File("ApplicationAES.txt");
+//		LogModel log = new LogModel("Application");
+//		log.openEventLog();
+//		File file = log.read(key);
+//		log.closeEventLog();
+//
+//		File encrypted = aes.decryptFile(file);
+//		File encrypted = aes.encryptFile(file);
+//		LogDAO.writeToFile(encrypted, "src/resource/logs/" + log.logName + "Log.txt");
+//	}
 }

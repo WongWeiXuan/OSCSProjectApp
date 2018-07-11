@@ -77,7 +77,7 @@
                                     </Label>
                                     <TextFlow fx:id="alreadyExistLabel" textAlignment="RIGHT" visible="false">
                                        <children>
-                                          <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email already exist." textAlignment="RIGHT" textFill="RED">
+                                          <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email already exist in Database." textAlignment="RIGHT" textFill="RED">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
