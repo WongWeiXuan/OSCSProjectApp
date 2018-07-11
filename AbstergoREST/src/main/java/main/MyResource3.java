@@ -25,13 +25,8 @@ import javax.ws.rs.core.StreamingOutput;
 public class MyResource3 {
 
 	private String getURL(String fileName) {
-		String url = "https://github.com/WongWeiXuan/OSCSProjectApp/raw/WxBranch/Abstergo%20Application/src";
-		if("DiscoveryThread.java".equals(fileName)) {
-			url += "/log/DiscoveryThread.java";
-			return url;
-		}
-		
-		return "";
+		fileName = fileName.replace("~", "/");
+		return "https://github.com/WongWeiXuan/OSCSProjectApp/raw/WxBranch/Abstergo%20Application/" + fileName;
 	}
 	
 	@GET
@@ -39,11 +34,12 @@ public class MyResource3 {
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public Response getFileHashes(@PathParam("fileName") String fileName) throws SQLException, ClassNotFoundException {
 		String url = getURL(fileName);
+		System.out.println(url);
 		StreamingOutput stream = new StreamingOutput() {
 		    @Override
 		    public void write(OutputStream os) throws IOException,
 		    WebApplicationException {
-		        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+		        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
 		        URL website = new URL(url);
 				ReadableByteChannel rbc = Channels.newChannel(website.openStream());

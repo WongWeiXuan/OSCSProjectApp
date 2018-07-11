@@ -1,5 +1,6 @@
 package validation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ public class ApplicationValidation implements Runnable{
 
 	@Override
 	public void run() {
+		ApplicationValidationDAO.clearFileMap();
 		Map<String, String> fileHashMap = ApplicationValidationDAO.getFileHashMap();
 
 		System.out.println("Files that failed: ");
@@ -20,17 +22,21 @@ public class ApplicationValidation implements Runnable{
 		}
 		
 		if(array.size() > 0) {
-			ApplicationValidationDAO.getFile("DiscoveryThread.java");
+			for(String s : array) {
+				System.out.println("\nDownloading " + s + "...");
+				ApplicationValidationDAO.getFile(s);
+				System.out.println("Download complete");
+			}
 		}
 	}
 	
-	private boolean compareHashes(Map<String, String> fileHashMap) {
-		if(compareHashesPlus(fileHashMap).size() > 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+//	private boolean compareHashes(Map<String, String> fileHashMap) {
+//		if(compareHashesPlus(fileHashMap).size() > 0) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
 	
 	private ArrayList<String> compareHashesPlus(Map<String, String> fileHashMap) {
 		ArrayList<String> stringArray = new ArrayList<String>();
@@ -48,7 +54,7 @@ public class ApplicationValidation implements Runnable{
 		return stringArray;
 	}
 	
-	public static void main(String[] arg0) {
+	public static void main(String[] arg0) throws IOException {
 		Thread thread = new Thread(new ApplicationValidation());
 		thread.start();
 	}

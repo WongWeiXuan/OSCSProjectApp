@@ -1,19 +1,27 @@
 package validation;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
+
+import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -48,7 +56,7 @@ public class ApplicationValidationDAO {
 				input.close();
 				inputStream.close();
 				connection.disconnect();
-				
+
 				JsonElement jelement = new JsonParser().parse(output);
 				return jelement.getAsJsonArray();
 			}
@@ -64,11 +72,11 @@ public class ApplicationValidationDAO {
 		}
 		return null;
 	}
-	
+
 	protected static JsonObject getFileHashFromFileName(String fileName) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://localhost/AbstergoREST/rest/FileHash/get/" + fileName);
+			URL url = new URL("http://localhost/AbstergoREST/rest/FileHash/get/" + getFileMapping(fileName));
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
@@ -85,7 +93,7 @@ public class ApplicationValidationDAO {
 				input.close();
 				inputStream.close();
 				connection.disconnect();
-				
+
 				JsonElement jelement = new JsonParser().parse(output);
 				return jelement.getAsJsonObject();
 			}
@@ -101,34 +109,35 @@ public class ApplicationValidationDAO {
 		}
 		return null;
 	}
-	
+
 	protected static void getFile(String name) {
 		BufferedReader br = null;
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
 		try {
-			URL url = new URL("http://localhost/AbstergoREST/rest/Download/" + name);
+			String line = getFileMapping(name).replace("/", "~");
+			URL url = new URL("http://localhost/AbstergoREST/rest/Download/" + line);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
 
-			File file = File.createTempFile(name, ".java");
+			File file = new File(name);
 			inputStream = connection.getInputStream();
-			outputStream = new FileOutputStream(file);
-		
+
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
 			while ((read = inputStream.read(bytes)) != -1) {
-				outputStream.write(bytes, 0, read);
+				FileUtils.writeStringToFile(file, new String(bytes.clone(), "UTF-8"), "UTF-8");
 			}
 			
-			JsonObject json = getFileHashFromFileName(name);
-			System.out.println("DOWNLOAD SHA1: " + Transcation.generateSHA(file) + "; " + json.get("fileSHA1").getAsString());
-			if (json.get("fileSHA1").getAsString().equals(Transcation.generateSHA(file))) {
-				System.out.println("HMMMMM...");
-			}
+			deleteLastLine(file);
+			File toBeReplaced = new File(getFileMapping(name));
+			
+			copyTextOver(file, toBeReplaced);
+			// Copy text to original file
+			// DO NOT REPLACE
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -142,6 +151,121 @@ public class ApplicationValidationDAO {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private static void copyTextOver(File file, File toBeReplaced) {
+		PrintWriter writer;
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			writer = new PrintWriter(toBeReplaced, "UTF-8");
+			
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				writer.println(line);
+	         }    
+			
+			writer.flush();
+			writer.close();
+			br.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	protected static Map<String, String> getFileHashMap() {
+		try {
+			check(new File("src"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		System.out.println("SIZE: " + fileHashArray.size());
+		return fileHashMap;
+	}
+
+	private static void check(File file) throws IOException {
+		if (file != null) {
+			for (File descendants : file.listFiles(new FilenameFilter() { // Hashing everything except resource folder
+
+				@Override
+				public boolean accept(File dir, String name) {
+					if (name.equals("resource")) {
+						return false;
+					} else {
+						return true;
+					}
+				}
+
+			})) {
+				if (descendants.isDirectory()) {
+					check(descendants);
+				} else if (descendants.isFile()) {
+					writeToFile(descendants.getName(), descendants.getPath());
+					FileHash fileHash = new FileHash(descendants.getName(), Transcation.generateSHA(descendants));
+//					System.out.println(fileHash.getFileName() + ", \n\t" + fileHash.getFileSHA1());
+					fileHashMap.put(fileHash.getFileName(), fileHash.getFileSHA1());
+				}
+			}
+		}
+	}
+
+	private static void deleteLastLine(File file) {
+		try {
+			RandomAccessFile raf = new RandomAccessFile(file, "rw");
+			long length = file.length() - 1;
+			byte b;
+			do {
+				length -= 1;
+				raf.seek(length);
+				b = raf.readByte();
+			} while (b != 10);
+			raf.setLength(length + 1);
+			raf.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String getFileMapping(String fileName) {
+		try {
+			Map<String, String> fileMap = new HashMap<String, String>();
+
+			Scanner sc = new Scanner(new File("src/validation/FileMapping.txt"));
+
+			while (sc.hasNextLine()) {
+				Scanner sc2 = new Scanner(sc.nextLine());
+				sc2.useDelimiter(";");
+				fileMap.put(sc2.next(), sc2.next());
+				sc2.close();
+			}
+			sc.close();
+
+			return fileMap.get(fileName);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
+	
+	public static void clearFileMap() {
+		PrintWriter writer;
+		try {
+			// Clearing file
+			writer = new PrintWriter(new File("src/validation/FileMapping.txt"), "UTF-8");
+			writer.print("");
+			writer.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -199,33 +323,23 @@ public class ApplicationValidationDAO {
 		return null;
 	}
 
-	protected static Map<String, String> getFileHashMap() {
-		check(new File("src"));
-//		System.out.println("SIZE: " + fileHashArray.size());
-		return fileHashMap;
-	}
-
-	private static void check(File file) {
-		if (file != null) {
-			for (File descendants : file.listFiles(new FilenameFilter() { // Hashing everything except resource folder
-
-				@Override
-				public boolean accept(File dir, String name) {
-					if (name.equals("resource")) {
-						return false;
-					} else {
-						return true;
-					}
+	// For development
+	private static void writeToFile(String name, String path) {
+		BufferedWriter bw = null;
+		try {
+			bw = new BufferedWriter(new FileWriter("src/validation/FileMapping.txt", true));
+			bw.write(name + ";" + path.replace("\\", "/") + "\n");
+			bw.flush();
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (bw != null) {
+					bw.close();
 				}
-
-			})) {
-				if (descendants.isDirectory()) {
-					check(descendants);
-				} else if (descendants.isFile()) {
-					FileHash fileHash = new FileHash(descendants.getName(), Transcation.generateSHA(descendants));
-//					System.out.println(fileHash.getFileName() + ", \n\t" + fileHash.getFileSHA1());
-					fileHashMap.put(fileHash.getFileName(), fileHash.getFileSHA1());
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}

@@ -12,8 +12,6 @@ import javax.crypto.CipherOutputStream;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.io.FileUtils;
-
 public class AESEncryption {
 	private byte[] key;
 	private byte[] iv;

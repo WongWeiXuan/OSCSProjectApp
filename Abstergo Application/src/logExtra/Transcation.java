@@ -3,6 +3,7 @@ package logExtra;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
@@ -26,10 +27,11 @@ public class Transcation {
 		try {
 			MessageDigest digest = MessageDigest.getInstance("SHA-1");
 			fis = new FileInputStream(file);
+			DigestInputStream dis = new DigestInputStream(fis, digest);
 			byte[] buffer = new byte[1024];
 			int bytesCount = 0;
 
-			while ((bytesCount = fis.read(buffer)) != -1) {
+			while ((bytesCount = dis.read(buffer)) != -1) {
 				digest.update(buffer, 0, bytesCount);
 			}
 
