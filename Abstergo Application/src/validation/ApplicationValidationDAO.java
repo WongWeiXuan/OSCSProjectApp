@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -16,16 +16,17 @@ import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
-import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Files;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -122,22 +123,23 @@ public class ApplicationValidationDAO {
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
 
-			File file = new File(name);
+			File file = File.createTempFile(name, ".java");
 			inputStream = connection.getInputStream();
-
+			outputStream = new FileOutputStream(file);
+		
 			int read = 0;
 			byte[] bytes = new byte[1024];
 
 			while ((read = inputStream.read(bytes)) != -1) {
-				FileUtils.writeStringToFile(file, new String(bytes.clone(), "UTF-8"), "UTF-8");
+				outputStream.write(bytes, 0, read);
 			}
 			
 			deleteLastLine(file);
 			File toBeReplaced = new File(getFileMapping(name));
-			
-			copyTextOver(file, toBeReplaced);
+
 			// Copy text to original file
-			// DO NOT REPLACE
+			copyTextOver(file, toBeReplaced);
+			file.delete();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} finally {
@@ -155,27 +157,33 @@ public class ApplicationValidationDAO {
 	}
 
 	private static void copyTextOver(File file, File toBeReplaced) {
-		PrintWriter writer;
+		BufferedWriter writer = null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			writer = new PrintWriter(toBeReplaced, "UTF-8");
-			
-			String line = "";
-			while ((line = br.readLine()) != null) {
-				writer.println(line);
-	         }    
-			
+			List<String> stringList = Files.readLines(file, Charset.forName("UTF-8"));
+			writer = new BufferedWriter(new FileWriter(toBeReplaced));
+
+			for (String s : stringList) {
+				writer.write(s);
+				writer.newLine();
+			}
+
 			writer.flush();
-			writer.close();
-			br.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			if(writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		
+
 	}
 
 	protected static Map<String, String> getFileHashMap() {
@@ -254,7 +262,7 @@ public class ApplicationValidationDAO {
 
 		return "";
 	}
-	
+
 	public static void clearFileMap() {
 		PrintWriter writer;
 		try {
@@ -345,6 +353,7 @@ public class ApplicationValidationDAO {
 	}
 
 	public static void main(String[] arg0) {
+		ApplicationValidationDAO.clearFileMap();
 		updateFileHashes(ApplicationValidationDAO.getFileHashMap());
 	}
 }
