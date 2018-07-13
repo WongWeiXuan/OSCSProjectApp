@@ -16,11 +16,11 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="login.controller.SignupPageController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.controller.SignupPageController">
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
+            <VBox style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
             <VBox style="-fx-background-color: rgba(0, 0, 0, 0.2);">
                <children>
                   <HBox alignment="CENTER" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
@@ -39,13 +39,20 @@
                         </TextFlow>
                         <TextFlow textAlignment="RIGHT">
                            <children>
-                              <Label fx:id="loginText" style="-fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-weight: Bold;" text="Login" textFill="WHITE">
+                              <Label fx:id="loginText" contentDisplay="RIGHT" graphicTextGap="20.0" onMouseClicked="#goToLogin" style="-fx-font-family: &quot;Source Sans Pro&quot;; -fx-font-weight: Bold;" text="Login" textFill="WHITE">
                                  <font>
                                     <Font name="Source Sans Pro Bold" size="24.0" />
                                  </font>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
+                                 <graphic>
+                                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resource/pictures/back-arrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
                               </Label>
                            </children>
                            <padding>
@@ -70,7 +77,7 @@
                                     </Label>
                                     <TextFlow fx:id="alreadyExistLabel" textAlignment="RIGHT" visible="false">
                                        <children>
-                                          <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email already exist." textAlignment="RIGHT" textFill="RED">
+                                          <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email already exist in Database." textAlignment="RIGHT" textFill="RED">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -88,7 +95,7 @@
                                     </JFXTextField>
                                     <ImageView fx:id="emailX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />
@@ -135,7 +142,7 @@
                                     </JFXPasswordField>
                                     <ImageView fx:id="passwordX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />
@@ -164,7 +171,7 @@
                                     </JFXPasswordField>
                                     <ImageView fx:id="passwordRetypeX" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" visible="false" StackPane.alignment="CENTER_RIGHT">
                                        <image>
-                                          <Image url="@../../pictures/x.png" />
+                                          <Image url="@../../resource/pictures/x.png" />
                                        </image>
                                        <StackPane.margin>
                                           <Insets right="20.0" />

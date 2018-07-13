@@ -17,6 +17,8 @@ import org.ehcache.config.builders.ResourcePoolsBuilder;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 
+import bluetooth.BluetoothDevice;
+import bluetooth.LoginBluetoothModel;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -30,14 +32,13 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import login.BluetoothDevice;
-import login.LoginBluetoothModel;
 
 public class SignupPage2Controller {
 	@FXML
@@ -45,11 +46,13 @@ public class SignupPage2Controller {
 	@FXML
 	private URL location;
 	@FXML
+    private AnchorPane root;
+	@FXML
 	private HBox instructionHBox;
 	@FXML
-    private VBox listViewVBox;
-    @FXML
-    private Label refreshLabel;
+	private VBox listViewVBox;
+	@FXML
+	private Label refreshLabel;
 	@FXML
 	private GridPane animationGridPane;
 	@FXML
@@ -78,13 +81,13 @@ public class SignupPage2Controller {
 	private Service<Map<RemoteDevice, String>> backgroundService;
 	private Service<Boolean> backgroundService2;
 
-	final private String PPATH = "pictures/PhoneIcon.png";
-	final private String WPATH = "pictures/WatchIcon.png";
-	final private String UPATH = "pictures/UnidentifiedIcon.png";
-	final private String REPATH = "pictures/refresh-page-option.png";
+	final private String PPATH = "resource/pictures/PhoneIcon.png";
+	final private String WPATH = "resource/pictures/WatchIcon.png";
+	final private String UPATH = "resource/pictures/UnidentifiedIcon.png";
 
 	private void changeScene() throws IOException {
-		Cache<String, String> cache = SignupPageController.cacheManager.getCache("deviceRegistration", String.class, String.class);
+		Cache<String, String> cache = SignupPageController.cacheManager.getCacheManager().getCache("deviceRegistration",
+				String.class, String.class);
 		cachePairedText.setText(cache.get("DeviceName") + " is paired. Confirm?");
 		instructionHBox.setVisible(false);
 		confirmationVBox.setVisible(true);
@@ -104,17 +107,18 @@ public class SignupPage2Controller {
 		transition1.stop();
 		transition2.stop();
 		transition3.stop();
-		
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
-		circle1.getScene().setRoot(root);
+
+		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
+		PreLoginPageController.stackPaneClone.getChildren().remove(0);
+		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 	}
 
 	// Upon Scanning Finish
 	void printDeviceList(Map<RemoteDevice, String> listOfDevice) throws IOException {
-		if(!listViewVBox.isVisible()) {
+		if (!listViewVBox.isVisible()) {
 			listViewVBox.setVisible(true);
 		}
-		
+
 		for (Entry<RemoteDevice, String> entry : listOfDevice.entrySet()) {
 			String path = "";
 			if ("512".equals(entry.getValue())) {
@@ -161,22 +165,27 @@ public class SignupPage2Controller {
 									if (result) {
 										ArrayList<BluetoothDevice> pairedArray = LoginBluetoothModel.getPairedArray();
 										BluetoothDevice device = pairedArray.get(selectedIndex);
-										
+
 										// Check whether cache already exist
-										Cache<String, String> deviceRegistration = SignupPageController.cacheManager.getCache("deviceRegistration", String.class, String.class);
-										if(deviceRegistration == null) { // If non-existence
-											deviceRegistration = SignupPageController.cacheManager
+										Cache<String, String> deviceRegistration = SignupPageController.cacheManager
+												.getCacheManager()
+												.getCache("deviceRegistration", String.class, String.class);
+										if (deviceRegistration == null) { // If non-existence
+											deviceRegistration = SignupPageController.cacheManager.getCacheManager()
 													.createCache("deviceRegistration",
 															CacheConfigurationBuilder.newCacheConfigurationBuilder(
 																	String.class, String.class,
 																	ResourcePoolsBuilder.heap(3)));
 											deviceRegistration.put("BluetoothAddress", device.getBluetoothAddress());
 											deviceRegistration.put("DeviceName", device.getFriendlyName());
-											deviceRegistration.put("MajorClass", String.valueOf(device.getMajorClass()));
-										}else { // If exist
-											deviceRegistration.replace("BluetoothAddress", device.getBluetoothAddress());
+											deviceRegistration.put("MajorClass",
+													String.valueOf(device.getMajorClass()));
+										} else { // If exist
+											deviceRegistration.replace("BluetoothAddress",
+													device.getBluetoothAddress());
 											deviceRegistration.replace("DeviceName", device.getFriendlyName());
-											deviceRegistration.replace("MajorClass", String.valueOf(device.getMajorClass()));
+											deviceRegistration.replace("MajorClass",
+													String.valueOf(device.getMajorClass()));
 										}
 									}
 									return result;
@@ -187,6 +196,7 @@ public class SignupPage2Controller {
 
 					backgroundService2.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+						@Override
 						public void handle(WorkerStateEvent event) {
 							if (backgroundService2.getValue()) {
 								System.out.println("Paired"); // Debug purpose
@@ -219,7 +229,7 @@ public class SignupPage2Controller {
 
 	@FXML
 	void closePopup(ActionEvent event) throws InterruptedException, IOException {
-		if(popupHBox.isVisible()) {
+		if (popupHBox.isVisible()) {
 			popupHBox.setVisible(false);
 		}
 
@@ -231,7 +241,7 @@ public class SignupPage2Controller {
 
 					@Override
 					protected Map<RemoteDevice, String> call() throws Exception {
-						if(!LoginBluetoothModel.isInitialized()) {
+						if (!LoginBluetoothModel.isInitialized()) {
 							LoginBluetoothModel.initialiseBluetooth();
 						}
 						Thread.sleep(3000); // It returns too fast so making it slower to look nicer?
@@ -244,6 +254,7 @@ public class SignupPage2Controller {
 
 		backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+			@Override
 			public void handle(WorkerStateEvent event) {
 				try {
 					printDeviceList(backgroundService.getValue());
@@ -256,13 +267,13 @@ public class SignupPage2Controller {
 
 		backgroundService.start();
 	}
-	
+
 	@FXML
-    void refreshScan(MouseEvent event) throws InterruptedException, IOException {
+	void refreshScan(MouseEvent event) throws InterruptedException, IOException {
 		listView.getItems().clear();
 		animationGridPane.setVisible(true);
 		closePopup(null);
-    }
+	}
 
 	@FXML
 	void initialize() {
@@ -278,15 +289,14 @@ public class SignupPage2Controller {
 		assert popupHBox != null : "fx:id=\"popupHBox\" was not injected: check your FXML file 'SignupPage2.fxml'.";
 		assert closeBtn != null : "fx:id=\"closeBtn\" was not injected: check your FXML file 'SignupPage2.fxml'.";
 
-		Cache<String, String> cache = SignupPageController.cacheManager.getCache("deviceRegistration", String.class,
-				String.class);
+		Cache<String, String> cache = SignupPageController.cacheManager.getCacheManager().getCache("deviceRegistration",
+				String.class, String.class);
 		if (cache != null) {
 			popupHBox.setVisible(false);
 			cachePairedText.setText(cache.get("DeviceName") + " is paired. Confirm?");
 			confirmationVBox.setVisible(true);
 		}
-		
-		
+
 		transition1 = new TranslateTransition();
 		transition1.setDuration(Duration.millis(500));
 		transition1.setAutoReverse(true);
@@ -312,6 +322,7 @@ public class SignupPage2Controller {
 
 		transition3.setOnFinished(new EventHandler<ActionEvent>() {
 
+			@Override
 			public void handle(ActionEvent event) {
 				try {
 					TimeUnit.MILLISECONDS.sleep(500);
@@ -327,13 +338,5 @@ public class SignupPage2Controller {
 		transition1.play();
 		transition2.play();
 		transition3.play();
-		
-		Image image = new Image(REPATH);
-		ImageView imageView = new ImageView(image);
-		imageView.setPreserveRatio(true);
-		imageView.setFitWidth(30);
-		imageView.setFitHeight(30);
-		refreshLabel.setGraphic(imageView);
-		refreshLabel.setGraphicTextGap(10);
 	}
 }

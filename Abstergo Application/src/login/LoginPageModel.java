@@ -3,11 +3,16 @@ package login;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
 
+import javax.bluetooth.BluetoothStateException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 import com.google.gson.JsonObject;
+
+import bluetooth.BluetoothDevice;
+import bluetooth.LoginBluetoothModel;
 
 public class LoginPageModel {
 	private String email;
@@ -25,7 +30,7 @@ public class LoginPageModel {
 		this.email = email;
 		this.password = password;
 	}
-	
+
 	public LoginPageModel(String email, String password, String salt) {
 		super();
 		this.email = email;
@@ -49,7 +54,7 @@ public class LoginPageModel {
 		byte[] hash = skf.generateSecret(spec).getEncoded();
 		return hash;
 	}
-	
+
 	public byte[] encodeHashPassword(byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
 		char[] passwordChar = password.toCharArray();
 		PBEKeySpec spec = new PBEKeySpec(passwordChar, salt, 200000, 64 * 16);
@@ -59,13 +64,14 @@ public class LoginPageModel {
 		return hash;
 	}
 
-	protected boolean verifyPassword(byte[] hash, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+	protected boolean verifyPassword(byte[] hash, byte[] salt)
+			throws NoSuchAlgorithmException, InvalidKeySpecException {
 		byte[] enteredHash = encodeHashPassword(salt);
 		int diff = hash.length ^ enteredHash.length;
-		for(int i = 0; i < hash.length && i < enteredHash.length; i++) {
+		for (int i = 0; i < hash.length && i < enteredHash.length; i++) {
 			diff |= hash[i] ^ enteredHash[i];
 		}
-		
+
 		return diff == 0;
 	}
 
@@ -80,7 +86,7 @@ public class LoginPageModel {
 		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
-		
+
 		return false;
 	}
 
@@ -117,30 +123,49 @@ public class LoginPageModel {
 			return "Unexpected error.";
 		}
 	}
-	
+
 	public static boolean checkWhetherEmailExist(String email) {
 		return LoginDAO.getEmail(email);
+	}
+
+	public static BluetoothDevice getPairedDevice(String email) {
+		JsonObject jObject = LoginDAO.getPairedDevice(email);
+		return new BluetoothDevice(jObject.get("bluetoothAddress").getAsString(),
+				jObject.get("friendlyName").getAsString(), jObject.get("majorClass").getAsString());
+	}
+
+	public static boolean checkPairedDevice(BluetoothDevice device) {
+		try {
+			ArrayList<BluetoothDevice> bluetoothArray = new ArrayList<BluetoothDevice>();
+			bluetoothArray.add(device);
+			LoginBluetoothModel.setPairedArray(bluetoothArray);
+			return LoginBluetoothModel.scanForPairedBluetoothDevice();
+		} catch (BluetoothStateException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public static String byteArrayToHexString(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
-	    for (byte b : bytes) {
-	        sb.append(String.format("%02X ", b));
-	    }
-	    return sb.toString().replace(" ", "");
+		for (byte b : bytes) {
+			sb.append(String.format("%02X ", b));
+		}
+		return sb.toString().replace(" ", "");
 	}
-	
+
 	public static byte[] hexStringToByteArray(String s) {
-	    int len = s.length();
-	    byte[] data = new byte[len / 2];
-	    for (int i = 0; i < len; i += 2) {
-	        data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
-	                             + Character.digit(s.charAt(i+1), 16));
-	    }
-	    return data;
+		int len = s.length();
+		byte[] data = new byte[len / 2];
+		for (int i = 0; i < len; i += 2) {
+			data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+		}
+		return data;
 	}
 }

@@ -10,6 +10,7 @@ import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXButton;
 
+import bluetooth.BluetoothDevice;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -20,9 +21,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import login.BluetoothDevice;
 import login.LoginPageModel;
 
 public class SignupPage3Controller {
@@ -30,6 +32,8 @@ public class SignupPage3Controller {
 	private ResourceBundle resources;
 	@FXML
 	private URL location;
+	@FXML
+    private AnchorPane root;
 	@FXML
 	private Text emailText;
 	@FXML
@@ -43,15 +47,16 @@ public class SignupPage3Controller {
 	private Service<Void> backgroundService;
 
 	@FXML
-    void goToChange(ActionEvent event) throws IOException {
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
-		((Node) event.getSource()).getScene().setRoot(root);
-    }
-	
+	void goToChange(ActionEvent event) throws IOException {
+		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
+		PreLoginPageController.stackPaneClone.getChildren().remove(0);
+		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
+	}
+
 	@FXML
 	void goToLogin(ActionEvent event) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
 		final Stage STAGE = (Stage) ((Node) event.getSource()).getScene().getWindow();
-		
+
 		backgroundService = new Service<Void>() {
 
 			@Override
@@ -61,7 +66,8 @@ public class SignupPage3Controller {
 					@Override
 					protected Void call() throws Exception {
 						// Create user to DB
-						BluetoothDevice device = new BluetoothDevice(cache2.get("BluetoothAddress"), cache2.get("DeviceName"), cache2.get("MajorClass"));
+						BluetoothDevice device = new BluetoothDevice(cache2.get("BluetoothAddress"),
+								cache2.get("DeviceName"), cache2.get("MajorClass"));
 						LoginPageModel login = new LoginPageModel(cache.get("Email"), cache.get("Password"));
 						login.setPassword(LoginPageModel.byteArrayToHexString(login.encodeHashPassword()));
 						BluetoothDevice.createLogin(login, device);
@@ -73,21 +79,22 @@ public class SignupPage3Controller {
 
 		backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
 
+			@Override
 			public void handle(WorkerStateEvent event) {
 				try {
 					STAGE.getScene().setCursor(Cursor.DEFAULT);
-					SignupPageController.cacheManager.removeCache("preConfigured");
-					SignupPageController.cacheManager.close();
-					
-					Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml"));
-					// Change scene
-					STAGE.getScene().setRoot(root);
+					SignupPageController.cacheManager.getCacheManager().removeCache("preConfigured");
+					SignupPageController.cacheManager.getCacheManager().close();
+
+					Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml")); // Change scene
+					toBeChanged.setOpacity(1);
+					((StackPane)root.getParent()).getChildren().setAll(toBeChanged);
 				} catch (IOException e) {
 					e.printStackTrace();
-				} 
+				}
 			}
 		});
-		
+
 		STAGE.getScene().setCursor(Cursor.WAIT);
 		backgroundService.start();
 	}
@@ -96,9 +103,11 @@ public class SignupPage3Controller {
 	void initialize() {
 		assert finishBtn != null : "fx:id=\"finishBtn\" was not injected: check your FXML file 'SignupPage3.fxml'.";
 
-		cache = SignupPageController.cacheManager.getCache("registration", String.class, String.class);
-		cache2 = SignupPageController.cacheManager.getCache("deviceRegistration", String.class, String.class);
-		
+		cache = SignupPageController.cacheManager.getCacheManager().getCache("registration", String.class,
+				String.class);
+		cache2 = SignupPageController.cacheManager.getCacheManager().getCache("deviceRegistration", String.class,
+				String.class);
+
 		emailText.setText("Email: " + cache.get("Email"));
 		deviceText.setText("Device Paired: " + cache2.get("DeviceName"));
 	}
