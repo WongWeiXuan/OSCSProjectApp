@@ -2,181 +2,24 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDrawer?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
 
-
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="log.controller.LogPageController">
+<AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="log.controller.LogPageController">
    <children>
-      <HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <StackPane minHeight="850.0" minWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="NEVER">
-               <children>
-                  <JFXDrawer fx:id="jfxDrawer" defaultDrawerSize="250.0" minWidth="200.0" />
-                  <VBox fx:id="drawerVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: black;">
-                     <children>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <ImageView fx:id="logoImageview" fitWidth="210.0" onMouseClicked="#toggleDrawer" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../resource/pictures/abstergo-industries-logo.png" />
-                                 </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </children>
-                        </VBox>
-                        <Line endX="125.0" startX="-125.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" />
-                        <TextFlow>
-                           <children>
-                              <Label fx:id="emailNav" graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resource/pictures/mail.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets left="30.0" />
-                           </padding>
-                        </TextFlow>
-                        <TextFlow>
-                           <children>
-                              <Label graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Placement" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="30.0" />
-                           </padding>
-                        </TextFlow>
-                        <TextFlow>
-                           <children>
-                              <Label graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Placement" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="30.0" />
-                           </padding>
-                        </TextFlow>
-                        <TextFlow>
-                           <children>
-                              <Label graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Placement" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="30.0" />
-                           </padding>
-                        </TextFlow>
-                        <TextFlow>
-                           <children>
-                              <Label fx:id="settingsNav" graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Settings" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../resource/pictures/settings.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets left="30.0" />
-                           </padding>
-                        </TextFlow>
-                     </children>
-                     <padding>
-                        <Insets top="20.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </StackPane>
-            <AnchorPane nodeOrientation="LEFT_TO_RIGHT" style="-fx-background-color: rgb(245,245,245);" HBox.hgrow="ALWAYS">
-               <children>
-                  <JFXButton fx:id="updateBtn" layoutX="864.0" layoutY="331.0" onAction="#updateAndGetLogs" text="Get / Update" />
-                  <JFXButton fx:id="downloadBtn" layoutX="856.0" layoutY="434.0" onAction="#establishFileTransfer" text="Download Logs" />
-                  <JFXButton fx:id="filterBtn" layoutX="891.0" layoutY="380.0" onAction="#filterLogs" text="Filter" />
-                  <Label layoutX="351.0" layoutY="38.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="A very ugly log page">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                  <JFXTreeTableView fx:id="logTable" layoutX="40.0" layoutY="178.0" prefHeight="644.0" prefWidth="770.0" />
-                  <JFXComboBox fx:id="filterCombo" layoutX="833.0" layoutY="178.0" prefHeight="31.0" prefWidth="169.0" />
-                  <JFXTextField fx:id="filterInput" layoutX="833.0" layoutY="221.0" />
-               </children>
-            </AnchorPane>
-         </children>
-      </HBox>
+      <JFXButton fx:id="updateBtn" layoutX="864.0" layoutY="331.0" onAction="#updateAndGetLogs" text="Get / Update" />
+      <JFXButton fx:id="downloadBtn" layoutX="856.0" layoutY="434.0" onAction="#establishFileTransfer" text="Download Logs" />
+      <JFXButton fx:id="filterBtn" layoutX="891.0" layoutY="380.0" onAction="#filterLogs" text="Filter" />
+      <Label layoutX="351.0" layoutY="38.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="A very ugly log page">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <JFXTreeTableView fx:id="logTable" layoutX="40.0" layoutY="178.0" prefHeight="644.0" prefWidth="770.0" />
+      <JFXComboBox fx:id="filterCombo" layoutX="833.0" layoutY="178.0" prefHeight="31.0" prefWidth="169.0" />
+      <JFXTextField fx:id="filterInput" layoutX="833.0" layoutY="221.0" />
    </children>
 </AnchorPane>

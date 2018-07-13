@@ -21,6 +21,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import login.LoginPageModel;
@@ -30,6 +32,8 @@ public class SignupPage3Controller {
 	private ResourceBundle resources;
 	@FXML
 	private URL location;
+	@FXML
+    private AnchorPane root;
 	@FXML
 	private Text emailText;
 	@FXML
@@ -44,8 +48,9 @@ public class SignupPage3Controller {
 
 	@FXML
 	void goToChange(ActionEvent event) throws IOException {
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
-		((Node) event.getSource()).getScene().setRoot(root);
+		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
+		PreLoginPageController.stackPaneClone.getChildren().remove(0);
+		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 	}
 
 	@FXML
@@ -81,9 +86,9 @@ public class SignupPage3Controller {
 					SignupPageController.cacheManager.getCacheManager().removeCache("preConfigured");
 					SignupPageController.cacheManager.getCacheManager().close();
 
-					Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml"));
-					// Change scene
-					STAGE.getScene().setRoot(root);
+					Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml")); // Change scene
+					toBeChanged.setOpacity(1);
+					((StackPane)root.getParent()).getChildren().setAll(toBeChanged);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

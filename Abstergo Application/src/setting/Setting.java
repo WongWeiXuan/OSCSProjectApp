@@ -16,7 +16,7 @@ public class Setting {
 	private String ID3 = "IncomingAccept"; // Whether to enable receiving files
 	private String ID4 = "IncomingMaximum"; // Maximum file size to accept
 	private String ID5 = "OnDisconnect"; // When device's bluetooth lose connection
-	private String ID6 = "Timeout";
+	private String ID6 = "Timeout";  // How long will it automatic reconnect if device is found
 
 	public Setting() {
 		preferences = Preferences.userNodeForPackage(Setting.class);
@@ -30,7 +30,7 @@ public class Setting {
 		model.setIncomingAccept(preferences.getBoolean(ID3, true));
 		model.setIncomingMaximum(preferences.getLong(ID4, 50));
 		model.setOnDiconnection(preferences.get(ID5, "Logout"));
-		model.setTimeout(preferences.getInt(ID6, 15));
+		model.setTimeout(preferences.getInt(ID6, 15 * 60 * 1000));
 
 		return model;
 	}

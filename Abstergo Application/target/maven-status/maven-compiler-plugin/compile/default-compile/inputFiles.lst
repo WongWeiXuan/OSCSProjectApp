@@ -6,6 +6,7 @@ C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluet
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\LoginBluetoothModel.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\application\Main.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Connection.java
+C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\controller\ValidationPageController.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Block.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDAO.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginDAO.java
@@ -17,6 +18,7 @@ C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setti
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\FileHash.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Client.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\LoginPageController.java
+C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\PreLoginPageController.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginPageModel.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\CacheMan.java
 C:\Users\Wei Xuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThreadModel.java

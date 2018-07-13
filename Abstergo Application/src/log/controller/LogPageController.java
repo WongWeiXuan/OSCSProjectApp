@@ -1,11 +1,12 @@
 package log.controller;
 
+import java.io.IOException;
 import java.util.function.Predicate;
+
+import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
@@ -18,36 +19,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import log.LogDetailsTree;
 import log.LogModelModel;
+import login.controller.LoginPageController;
+import login.controller.PreLoginPageController;
 
 public class LogPageController {
-	// Navigation Bar
-	@FXML
-	private JFXDrawer jfxDrawer;
-	@FXML
-	private VBox drawerVBox;
-	@FXML
-	private ImageView logoImageview;
-	@FXML
-	private Label emailNav;
-	@FXML
-	private Label settingsNav;
-
-	@FXML
-	void toggleDrawer(MouseEvent event) {
-		jfxDrawer.toggle();
-	}
-
 	// Logs
+	@FXML
+    private AnchorPane root;
 	@FXML
 	private JFXButton updateBtn;
 	@FXML
@@ -76,14 +63,20 @@ public class LogPageController {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	@FXML
-	void initialize() {
-		// Navigation
-		jfxDrawer.setSidePane(drawerVBox);
-		jfxDrawer.setDefaultDrawerSize(120);
-		jfxDrawer.setOverLayVisible(true);
-		jfxDrawer.setDirection(DrawerDirection.RIGHT);
-		jfxDrawer.close();
+	void initialize() throws IOException {
+		Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+		if (userCache == null) {
+			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/Login.fxml")); // Change scene
+			toBeChanged.setOpacity(1);
+			PreLoginPageController.stackPaneClone.getChildren().remove(0);
+			PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
+			PreLoginPageController.anchorPaneClone.getChildren().clear();
+			PreLoginPageController.navBarClone.setVisible(false);
+		} else {
+			userCache.put("Last", "/setting/view/SettingPage.fxml");
+		}
 
 		// Logs
 		LogModelModel model = new LogModelModel();

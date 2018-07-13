@@ -1,9 +1,22 @@
 package bluetooth;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.bluetooth.BluetoothStateException;
+
+import org.ehcache.Cache;
+import org.ehcache.spi.loaderwriter.CacheLoadingException;
+
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
+import login.controller.LoginPageController;
+import login.controller.PreLoginPageController;
+import setting.Setting;
 
 public class BluetoothThread implements Runnable {
 	private volatile boolean running;
@@ -29,9 +42,32 @@ public class BluetoothThread implements Runnable {
 					System.out.println("Running");
 					boolean exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
 					if (!exist) {
+						//BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
 						System.out.println("Device not found!");
-						BluetoothThreadModel.stopThread();
-						// BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation
+
+						Setting setting = new Setting(); // Getting time set
+						Timer timer = new Timer();
+						timer.schedule(new TimerTask() {
+							@Override
+							public void run() {
+								BluetoothThreadModel.stopThread();
+							}
+
+						}, setting.getPreference().getTimeout()); // 15 mins btw (Default)
+
+						long polling = 1000;
+						while (running) {
+							boolean exist2 = LoginBluetoothModel.scanForPairedBluetoothDevice();
+							System.out.println("WHILE: " + exist2);
+							if (exist2) {
+								timer.cancel();
+								logBackIn();
+								break;
+							}
+							Thread.sleep(polling);
+							if (polling < 15000)
+								polling *= 1.5;
+						}
 					}
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
@@ -43,6 +79,26 @@ public class BluetoothThread implements Runnable {
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	// If within timeframe the device is detected again
+	private void logBackIn() {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+					AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource(userCache.get("Last"))); // Change scene
+					PreLoginPageController.stackPaneClone.getChildren().remove(0);
+					PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
+					PreLoginPageController.navBarClone.setVisible(true);
+				} catch (CacheLoadingException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 	// Method to stop the thread

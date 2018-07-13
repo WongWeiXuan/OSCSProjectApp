@@ -13,9 +13,12 @@ public class LogDAO {
 		ArrayList<File> logFiles = new ArrayList<File>();
 		// Get all logs on system
 		File logFolder = new File(logFolderPath);
-		for (File file : logFolder.listFiles()) {
-			if (file.isFile()) {
-				logFiles.add(file);
+		File[] fileList = logFolder.listFiles();
+		if(fileList != null) {
+			for (File file : fileList) {
+				if (file.isFile()) {
+					logFiles.add(file);
+				}
 			}
 		}
 		

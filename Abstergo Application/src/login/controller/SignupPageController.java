@@ -25,13 +25,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.TextFlow;
 import login.CacheMan;
 import login.LoginPageModel;
@@ -41,6 +40,8 @@ public class SignupPageController {
 	private ResourceBundle resources;
 	@FXML
 	private URL location;
+	@FXML
+    private AnchorPane root;
 	@FXML
 	private Label loginText;
 	@FXML
@@ -65,7 +66,7 @@ public class SignupPageController {
 	private JFXButton nextBtn;
 	private Boolean[] checks = { false, false, false };
 	private Service<Boolean> backgroundService;
-	static CacheMan cacheManager;
+	protected static CacheMan cacheManager;
 
 	private void checkPassword() {
 		String password = passwordField.getText();
@@ -176,8 +177,10 @@ public class SignupPageController {
 	@FXML
 	void goToLogin(MouseEvent event) {
 		try {
-			Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml"));
-			((Node) event.getSource()).getScene().setRoot(root);
+			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml")); // Change scene
+			toBeChanged.setOpacity(1);
+			PreLoginPageController.stackPaneClone.getChildren().remove(0);
+			PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -201,8 +204,9 @@ public class SignupPageController {
 			}
 
 			try {
-				Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage2.fxml"));
-				((Node) event.getSource()).getScene().setRoot(root);
+				AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/SignupPage2.fxml")); // Change scene
+				PreLoginPageController.stackPaneClone.getChildren().remove(0);
+				PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

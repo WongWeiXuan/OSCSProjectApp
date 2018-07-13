@@ -37,7 +37,7 @@ import logExtra.Transcation;
 public class ApplicationValidationDAO {
 	private static Map<String, String> fileHashMap = new HashMap<String, String>();
 
-	protected static JsonArray getFileHashes() {
+	public static JsonArray getFileHashes() {
 		BufferedReader br = null;
 		try {
 			URL url = new URL("http://localhost/AbstergoREST/rest/FileHash/get");
@@ -186,7 +186,7 @@ public class ApplicationValidationDAO {
 
 	}
 
-	protected static Map<String, String> getFileHashMap() {
+	public static Map<String, String> getFileHashMap() {
 		try {
 			check(new File("src"));
 		} catch (IOException e) {
@@ -198,7 +198,7 @@ public class ApplicationValidationDAO {
 
 	private static void check(File file) throws IOException {
 		if (file != null) {
-			for (File descendants : file.listFiles(new FilenameFilter() { // Hashing everything except resource folder
+			File[] fileList = file.listFiles(new FilenameFilter() { // Hashing everything except resource folder
 
 				@Override
 				public boolean accept(File dir, String name) {
@@ -209,14 +209,18 @@ public class ApplicationValidationDAO {
 					}
 				}
 
-			})) {
-				if (descendants.isDirectory()) {
-					check(descendants);
-				} else if (descendants.isFile()) {
-					writeToFile(descendants.getName(), descendants.getPath());
-					FileHash fileHash = new FileHash(descendants.getName(), Transcation.generateSHA(descendants));
-//					System.out.println(fileHash.getFileName() + ", \n\t" + fileHash.getFileSHA1());
-					fileHashMap.put(fileHash.getFileName(), fileHash.getFileSHA1());
+			});
+			
+			if(fileList != null) {
+				for (File descendants : fileList) {
+					if (descendants.isDirectory()) {
+						check(descendants);
+					} else if (descendants.isFile()) {
+						writeToFile(descendants.getName(), descendants.getPath());
+						FileHash fileHash = new FileHash(descendants.getName(), Transcation.generateSHA(descendants));
+//						System.out.println(fileHash.getFileName() + ", \n\t" + fileHash.getFileSHA1());
+						fileHashMap.put(fileHash.getFileName(), fileHash.getFileSHA1());
+					}
 				}
 			}
 		}

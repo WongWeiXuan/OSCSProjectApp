@@ -1,16 +1,15 @@
 package setting.controller;
 
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ResourceBundle;
+
+import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleNode;
 
@@ -18,42 +17,26 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
+import login.CacheMan;
+import login.controller.LoginPageController;
+import login.controller.PreLoginPageController;
 import setting.Setting;
 import setting.SettingModel;
 
 public class SettingPageController {
 	@FXML
-	private ResourceBundle resources;
-	@FXML
-	private URL location;
-	@FXML
-	private JFXDrawer jfxDrawer;
-	@FXML
-	private VBox drawerVBox;
-	@FXML
-	private ImageView logoImageview;
-	@FXML
-	private Label emailNav;
-	@FXML
-	private Label settingsNav;
-
-	@FXML
-	void toggleDrawer(MouseEvent event) {
-		jfxDrawer.toggle();
-	}
-
+    private AnchorPane root;
 	@FXML
 	private ToggleGroup timeout;
 	@FXML
@@ -121,14 +104,23 @@ public class SettingPageController {
     }
 
 	@FXML
-	void initialize() {
-		// NavBar
-		jfxDrawer.setSidePane(drawerVBox);
-		jfxDrawer.setDefaultDrawerSize(120);
-		jfxDrawer.setOverLayVisible(true);
-		jfxDrawer.setDirection(DrawerDirection.RIGHT);
-		jfxDrawer.close();
-
+	void initialize() throws IOException {
+		CacheMan cacheManager = LoginPageController.cacheManager;
+		Cache<String, String> userCache = null;
+		if(cacheManager != null) {
+			userCache = cacheManager.getCacheManager().getCache("user", String.class, String.class);
+		}
+		if (userCache == null) {
+			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
+			toBeChanged.setOpacity(1);
+			PreLoginPageController.stackPaneClone.getChildren().remove(0);
+			PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
+			PreLoginPageController.anchorPaneClone.getChildren().clear();
+			PreLoginPageController.navBarClone.setVisible(false);
+		} else {
+			userCache.put("Last", "/setting/view/SettingPage.fxml");
+		}
+		
 		// Setting
 		setting = new Setting();
 		SettingModel settingModel = setting.getPreference();

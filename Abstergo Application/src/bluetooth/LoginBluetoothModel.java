@@ -39,7 +39,8 @@ public class LoginBluetoothModel {
 	private static boolean initialized = false;
 
 	public LoginBluetoothModel() throws BluetoothStateException, FileNotFoundException {
-		initialiseBluetooth();
+		if(!initialized)
+			initialiseBluetooth();
 	}
 
 	public static void initialiseBluetooth() throws BluetoothStateException, FileNotFoundException {

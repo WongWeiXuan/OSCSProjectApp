@@ -32,6 +32,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -44,6 +45,8 @@ public class SignupPage2Controller {
 	private ResourceBundle resources;
 	@FXML
 	private URL location;
+	@FXML
+    private AnchorPane root;
 	@FXML
 	private HBox instructionHBox;
 	@FXML
@@ -105,8 +108,9 @@ public class SignupPage2Controller {
 		transition2.stop();
 		transition3.stop();
 
-		Parent root = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
-		circle1.getScene().setRoot(root);
+		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
+		PreLoginPageController.stackPaneClone.getChildren().remove(0);
+		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 	}
 
 	// Upon Scanning Finish

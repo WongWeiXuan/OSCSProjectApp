@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="navigation.controller.NavigationBarController">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="navigation.controller.NavigationBarController">
    <children>
       <HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -107,7 +107,7 @@
                         </TextFlow>
                         <TextFlow>
                            <children>
-                              <Label graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Placement" textFill="WHITE">
+                              <Label fx:id="logsNav" graphicTextGap="30.0" onMouseClicked="#changePage" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Logs" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -117,7 +117,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../resource/pictures/abstergo-industries-logo-only.png" />
+                                          <Image url="@../../resource/pictures/log.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -129,7 +129,7 @@
                         </TextFlow>
                         <TextFlow>
                            <children>
-                              <Label fx:id="settingsNav" graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Settings" textFill="WHITE">
+                              <Label fx:id="settingsNav" graphicTextGap="30.0" onMouseClicked="#changePage" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Settings" textFill="WHITE">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
