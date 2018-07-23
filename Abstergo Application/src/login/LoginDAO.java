@@ -10,6 +10,8 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
+import javax.net.ssl.HttpsURLConnection;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,8 +25,9 @@ public class LoginDAO {
 	protected static JsonObject getPairedDevice(String email) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://localhost/AbstergoREST/rest/Login/getDevice/" + email);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL("https://localhost/AbstergoREST/rest/Login/getDevice/" + email);
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setHostnameVerifier((hostname, session) -> true);
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -69,8 +72,9 @@ public class LoginDAO {
 	protected static boolean getEmail(String email) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://localhost/AbstergoREST/rest/Login/get/" + email);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL("https://localhost/AbstergoREST/rest/Login/get/" + email);
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setHostnameVerifier((hostname, session) -> true);
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -104,8 +108,9 @@ public class LoginDAO {
 	protected static JsonObject getLogin(String email) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://localhost/AbstergoREST/rest/Login/get/" + email);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL("https://localhost/AbstergoREST/rest/Login/get/" + email);
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setHostnameVerifier((hostname, session) -> true);
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -142,8 +147,9 @@ public class LoginDAO {
 		BufferedReader br = null;
 		try {
 			// Open Connection to REST Server
-			URL url = new URL("http://localhost/AbstergoREST/rest/Login");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL("https://localhost/AbstergoREST/rest/Login");
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setHostnameVerifier((hostname, session) -> true);
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("POST");

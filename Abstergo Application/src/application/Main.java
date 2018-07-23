@@ -62,6 +62,8 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("javax.net.ssl.trustStore","src/resource/WolfsKeystore");
+		System.setProperty("javax.net.ssl.trustStorePassword","password");
 		launch(args);
 	}
 }

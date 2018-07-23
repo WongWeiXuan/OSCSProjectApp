@@ -44,6 +44,7 @@ public class Setting {
 			preferences.putBoolean(ID3, model.isIncomingAccept());
 			preferences.putLong(ID4, model.getIncomingMaximum());
 			preferences.put(ID5, model.getOnDiconnection());
+			preferences.putInt(ID6, model.getTimeout());
 
 			// Write to file
 			outputStream = new FileOutputStream("src/resource/settings/hello.xml");
@@ -76,6 +77,7 @@ public class Setting {
 			preferences.remove(ID3);
 			preferences.remove(ID4);
 			preferences.remove(ID5);
+			preferences.remove(ID6);
 
 			// Write to file
 			outputStream = new FileOutputStream("src/resource/settings/hello.xml");
@@ -97,12 +99,5 @@ public class Setting {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		Setting test = new Setting();
-		SettingModel model = test.getPreference();
-		// test.restoreDefaults();
-		System.out.println(model.toString());
 	}
 }

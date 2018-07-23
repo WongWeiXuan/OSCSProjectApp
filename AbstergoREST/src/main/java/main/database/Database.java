@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import main.model.BluetoothDevice;
 import main.model.FileHash;
+import main.model.KeyPair;
 import main.model.Login;
 
 public class Database {
@@ -125,13 +126,59 @@ public class Database {
 	}
 	
 	public boolean updateFileHash(FileHash fileHash) throws SQLException {
-		PreparedStatement ppstmt = conn.prepareStatement("UPDATE FileHash SET FileSHA1 = ? WHERE FileName = ?;");
-//		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileHash(FileName,FileSHA1) VALUES (?,?);");
+//		PreparedStatement ppstmt = conn.prepareStatement("UPDATE FileHash SET FileSHA1 = ? WHERE FileName = ?;");
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileHash(FileName,FileSHA1) VALUES (?,?);");
 		ppstmt.setString(2, fileHash.getFileName());
 		ppstmt.setString(1, fileHash.getFileSHA1());
 		
 		System.out.println("NAME: " + fileHash.getFileName() + " > SHA: " + fileHash.getFileSHA1());
 		return executeUpdate(ppstmt);
 	}
+	
+	// KeyPair
+	public String getPrivateKey(String email) throws SQLException {
+		String privateKey = "";
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT PrivateKey FROM KeyPair WHERE Email = ?;");
+		ppstmt.setString(1, email);
+		ResultSet rs =	ppstmt.executeQuery();
+		while(rs.next()) {
+			privateKey = rs.getString("PrivateKey");
+		}
 		
+		return privateKey;
+	}
+	
+	public String getPublicKey(String email) throws SQLException {
+		String publicKey = "";
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT PublicKey FROM KeyPair WHERE Email = ?;");
+		ppstmt.setString(1, email);
+		ResultSet rs =	ppstmt.executeQuery();
+		while(rs.next()) {
+			publicKey = rs.getString("PublicKey");
+		}
+		
+		return publicKey;
+	}
+
+	public String getEncryptionKey(String email) throws SQLException {
+		String encryptionKey = "";
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT EncryptionKey FROM KeyPair WHERE Email = ?;");
+		ppstmt.setString(1, email);
+		ResultSet rs =	ppstmt.executeQuery();
+		while(rs.next()) {
+			encryptionKey = rs.getString("EncryptionKey");
+		}
+		
+		return encryptionKey;
+	}
+	
+	public boolean createKeys(KeyPair keyPair) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO KeyPair(Email, PrivateKey, PublicKey, EncryptionKey) VALUES(?,?,?,?);");
+		ppstmt.setString(1, keyPair.getEmail());
+		ppstmt.setString(2, keyPair.getPrivateKey());
+		ppstmt.setString(3, keyPair.getPublicKey());
+		ppstmt.setString(4, keyPair.getEncryptionKey());
+		
+		return executeUpdate(ppstmt);
+	}
 }

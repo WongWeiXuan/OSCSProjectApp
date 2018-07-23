@@ -1,13 +1,15 @@
 package logExtra;
 
+import java.net.InetAddress;
+
 public class Connection {
-	final private int SEARCHING = 0x01;
-	final private int SYN = 0x02;
-	final private int SYNACK = 0x03;
-	final private int ACK = 0x04;
-	final private int FILETRANSFER = 0x05;
-	final private int LISTENING = 0x06;
-	private String address;
+	final public int SEARCHING = 1;
+	final public int SYN = 2;
+	final public int SYNACK = 3;
+	final public int ACK = 4;
+	final public int FILETRANSFER = 5;
+	final public int LISTENING = 6;
+	private InetAddress address;
 	private int status;
 	private boolean valid;
 	
@@ -15,13 +17,13 @@ public class Connection {
 		this.valid = false;
 	}
 	
-	public Connection(String address, int status) {
+	public Connection(InetAddress address, int status) {
 		super();
 		this.address = address;
 		this.status = status;
 	}
 	
-	public String getAddress() {
+	public InetAddress getAddress() {
 		return address;
 	}
 
@@ -46,6 +48,10 @@ public class Connection {
 				System.out.println("Waiting...");
 				break;
 		}
+	}
+	
+	public int getStatusInt() {
+		return status;
 	}
 	
 	public boolean isValid() {

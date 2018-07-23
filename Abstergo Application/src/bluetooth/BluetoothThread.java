@@ -42,19 +42,20 @@ public class BluetoothThread implements Runnable {
 					System.out.println("Running");
 					boolean exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
 					if (!exist) {
-						//BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
+//						BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
 						System.out.println("Device not found!");
 
 						Setting setting = new Setting(); // Getting time set
 						Timer timer = new Timer();
-						timer.schedule(new TimerTask() {
-							@Override
-							public void run() {
-								BluetoothThreadModel.stopThread();
-							}
-
-						}, setting.getPreference().getTimeout()); // 15 mins btw (Default)
-
+						if(setting.getPreference().getTimeout() > 0) {
+							timer.schedule(new TimerTask() {
+								@Override
+								public void run() {
+									BluetoothThreadModel.stopThread();
+								}
+	
+							}, setting.getPreference().getTimeout()); // 15 mins btw (Default) // Now settings work so... no longer default
+						}
 						long polling = 1000;
 						while (running) {
 							boolean exist2 = LoginBluetoothModel.scanForPairedBluetoothDevice();

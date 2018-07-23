@@ -5,8 +5,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 public class Block {
-	public String hash;
-	public String previousHash;
+	private String hash;
+	private String previousHash;
 	private Transcation transcation;
 	private int nonce;
 
@@ -14,6 +14,12 @@ public class Block {
 		this.transcation = transcation;
 		this.previousHash = previousHash;
 		this.hash = calculateHash();
+	}
+	
+	public Block(Transcation transcation, String hash, String previousHash) throws NoSuchAlgorithmException {
+		this.transcation = transcation;
+		this.hash = hash;
+		this.previousHash = previousHash;
 	}
 	
 	public Block(Transcation transcation, Block previousBlock) throws NoSuchAlgorithmException {
@@ -31,7 +37,7 @@ public class Block {
 	public String calculateHash() throws NoSuchAlgorithmException {
 		String calculatedHash = StringUtil
 				.applySha256(previousHash + transcation.getUserFrom() + transcation.getUserTo()
-						+ Long.toString(transcation.getTime()) + Integer.toString(nonce) + transcation.getFileHash());
+						+ Long.toString(transcation.getTime()) + Integer.toString(nonce) + transcation.getFileHash() + transcation.isBroadcastFile());
 
 		return calculatedHash;
 	}
@@ -48,5 +54,17 @@ public class Block {
 	
 	public String getFileHash() {
 		return transcation.getFileHash();
+	}
+
+	protected String getHash() {
+		return hash;
+	}
+
+	protected String getPreviousHash() {
+		return previousHash;
+	}
+
+	protected Transcation getTranscation() {
+		return transcation;
 	}
 }

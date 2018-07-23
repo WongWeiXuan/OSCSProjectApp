@@ -22,6 +22,7 @@ import bluetooth.BluetoothDevice;
 import bluetooth.BluetoothThreadModel;
 import bluetooth.LoginBluetoothModel;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -133,6 +134,7 @@ public class LoginPageController {
 
 				@Override
 				public void handle(WorkerStateEvent event) {
+					root.setCursor(Cursor.DEFAULT);
 					if (backgroundService.getValue()) {
 						try {
 							if(BluetoothThreadModel.isRunning()) {
@@ -148,6 +150,28 @@ public class LoginPageController {
 								dialogTitleText.setText("Successful Login BUT...");
 								dialogText.setText("Linked device not found.");
 								loginDialog.show();
+								// Remember to comment/remove this // TODO
+								// Store the user logged in and "restore previous session" (if any)
+								if(cacheManager == null) {
+									cacheManager = new CacheMan();
+								}
+								Cache<String, String> userCache = cacheManager.getCacheManager().getCache("user", String.class, String.class);
+								if (userCache == null) {
+									userCache = cacheManager.getCacheManager().createCache("user", CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
+									userCache.put("User", username);
+								}
+								
+								loginDialog.setOnDialogClosed(new EventHandler<JFXDialogEvent>() {
+									@Override
+									public void handle(JFXDialogEvent event) {
+										Platform.runLater(new Runnable() {
+											@Override
+											public void run() {
+												changeToHome();
+											}
+										});
+									}
+								});
 							} else {
 								// Store the user logged in and "restore previous session" (if any)
 								if(cacheManager == null) {
@@ -191,7 +215,8 @@ public class LoginPageController {
 					loginDialog.show();
 				}
 			});
-
+			
+			root.setCursor(Cursor.WAIT);
 			// dialogText.textProperty().bind(backgroundService.messageProperty());
 			backgroundService.start();
 			loginBtn.setDisable(true);
@@ -200,6 +225,7 @@ public class LoginPageController {
 			dialogText.setText("Enter something, Bro.");
 			loginDialog.show();
 		}
+		
 	}
 
 	public static void setDeviceNotFound(boolean deviceNotFounded) {

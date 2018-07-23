@@ -13,13 +13,29 @@ public class Transcation {
 	private String userTo;
 	private long time;
 	private String fileHash;
-	// Add more pls
+	private boolean broadcastFile;
 
 	public Transcation(String userFrom, String userTo, File file) {
 		this.userFrom = userFrom;
 		this.userTo = userTo;
 		this.time = new Date().getTime();
 		this.fileHash = generateSHA(file);
+	}
+	
+	public Transcation(String userFrom, String userTo, File file, boolean broadcastFile) {
+		this.userFrom = userFrom;
+		this.userTo = userTo;
+		this.time = new Date().getTime();
+		this.fileHash = generateSHA(file);
+		this.broadcastFile = broadcastFile;
+	}
+	
+	public Transcation(String userFrom, String userTo, long time, String fileHash, boolean broadcastFile) {
+		this.userFrom = userFrom;
+		this.userTo = userTo;
+		this.time = time;
+		this.fileHash = fileHash;
+		this.broadcastFile = broadcastFile;
 	}
 
 	public static String generateSHA(File file) {
@@ -76,5 +92,9 @@ public class Transcation {
 
 	protected String getFileHash() {
 		return fileHash;
+	}
+
+	protected boolean isBroadcastFile() {
+		return broadcastFile;
 	}
 }

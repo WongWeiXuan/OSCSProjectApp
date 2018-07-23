@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -33,7 +35,8 @@ public class NavigationBarController {
     private Label logsNav;
     @FXML
     private Label settingsNav;
-
+    private boolean toggle = false;
+    
     @FXML
     void changePage(MouseEvent event) throws IOException {
     	String clicked = ((Label)event.getSource()).getId();
@@ -49,6 +52,15 @@ public class NavigationBarController {
 	@FXML
 	void toggleDrawer(MouseEvent event) {
 		jfxDrawer.toggle();
+		if(toggle) {
+			System.out.println("WADWAIDHWAID");
+			VBox.setMargin(PreLoginPageController.anchorPaneClone, new Insets(0, 120, 0, 0));
+			toggle = false;
+		} else {
+			System.out.println("WADWAtrueIDHWAID");
+			VBox.setMargin(PreLoginPageController.anchorPaneClone, new Insets(0, 252, 0, 0));
+			toggle = true;
+		}
 	}
 
 	@FXML

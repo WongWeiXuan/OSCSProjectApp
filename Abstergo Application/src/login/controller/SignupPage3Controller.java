@@ -25,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import log.LogDAO;
 import login.LoginPageModel;
 
 public class SignupPage3Controller {
@@ -71,6 +72,7 @@ public class SignupPage3Controller {
 						LoginPageModel login = new LoginPageModel(cache.get("Email"), cache.get("Password"));
 						login.setPassword(LoginPageModel.byteArrayToHexString(login.encodeHashPassword()));
 						BluetoothDevice.createLogin(login, device);
+						LogDAO.createKeys(cache.get("Email"));
 						return null;
 					}
 				};

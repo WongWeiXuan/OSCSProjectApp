@@ -7,22 +7,22 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.controller.PreLoginPageController">
+<AnchorPane style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.controller.PreLoginPageController">
    <children>
       <StackPane fx:id="stackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="navBar" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%);" visible="false">
+            <StackPane fx:id="navBar" visible="false">
                <children>
-                  <HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" />
+                  <StackPane>
                      <children>
-                        <StackPane minHeight="800.0" minWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" HBox.hgrow="NEVER">
+                        <StackPane maxWidth="252.0" minHeight="800.0" minWidth="250.0" nodeOrientation="LEFT_TO_RIGHT" StackPane.alignment="CENTER_RIGHT">
                            <children>
                               <JFXDrawer fx:id="jfxDrawer" defaultDrawerSize="250.0" minWidth="200.0" />
                               <VBox fx:id="drawerVBox" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: black;">
@@ -160,11 +160,15 @@
                               </VBox>
                            </children>
                         </StackPane>
-                        <VBox fx:id="anchorPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+                        <VBox fx:id="anchorPane" nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0">
+                           <StackPane.margin>
+                              <Insets right="102.0" />
+                           </StackPane.margin>
+                        </VBox>
                      </children>
-                  </HBox>
+                  </StackPane>
                </children>
-            </AnchorPane>
+            </StackPane>
          </children></StackPane>
    </children>
 </AnchorPane>

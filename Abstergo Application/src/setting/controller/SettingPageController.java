@@ -27,6 +27,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import login.CacheMan;
 import login.controller.LoginPageController;
@@ -36,7 +37,7 @@ import setting.SettingModel;
 
 public class SettingPageController {
 	@FXML
-    private AnchorPane root;
+	private AnchorPane root;
 	@FXML
 	private ToggleGroup timeout;
 	@FXML
@@ -52,7 +53,11 @@ public class SettingPageController {
 	@FXML
 	private JFXToggleNode timeout6;
 	@FXML
-	private JFXCheckBox incomingCheckbox;
+	private JFXCheckBox applicationCheckbox;
+	@FXML
+	private JFXCheckBox securityCheckbox;
+	@FXML
+	private JFXCheckBox systemCheckbox;
 	@FXML
 	private Rectangle greenRec;
 	@FXML
@@ -81,37 +86,62 @@ public class SettingPageController {
 		System.out.println("Slider: " + incomingSlider.getValue());
 		incomingSliderSpinner.getValueFactory().setValue((int) incomingSlider.getValue());
 	}
-	
-	@FXML
-    void applySettings(ActionEvent event) {
-		SettingModel model = setting.getPreference();
-		boolean incomingAccept = incomingCheckbox.isSelected();
-		long incomingMaximum = (long) incomingSlider.getValue();
-		String onDiconnection = onDisconnectCombo.getSelectionModel().getSelectedItem().getText();
-		//int timeoutTime = Integer.parseInt( ( (ToggleButton)timeout.getSelectedToggle().getUserData()).getText() );
-		Toggle toggle = timeout.getSelectedToggle();
-		JFXToggleNode node = (JFXToggleNode) toggle.getUserData();
-		String text = node.getId();
-		System.out.println(text);
-		// TODO
-		//SettingModel model2 = new SettingModel(model.getLogFile(), model.getLogDisplay(), );
-		//setting.setPreference(model);
-    }
 
-    @FXML
-    void restoreSettings(ActionEvent event) {
-    	setting.restoreDefaults();
-    }
+	@FXML
+	void applySettings(ActionEvent event) {
+		SettingModel model = setting.getPreference();
+		
+		// LogFile
+		ArrayList<String> logsArray = new ArrayList<String>();
+		if(applicationCheckbox.isSelected()) {
+			logsArray.add("Application");
+		}
+		if(securityCheckbox.isSelected()) {
+			logsArray.add("Security");
+		}
+		if(systemCheckbox.isSelected()) {
+			logsArray.add("System");
+		}
+		model.setLogFile(logsArray);
+		
+		// IncomingMaximum
+		long incomingMaximum = (long) incomingSlider.getValue();
+		model.setIncomingMaximum(incomingMaximum);
+		
+		// OnDisconnection
+		String onDiconnection = onDisconnectCombo.getSelectionModel().getSelectedItem().getText();
+		model.setOnDiconnection(onDiconnection);
+		
+		// Timeout
+		Toggle toggle = timeout.getSelectedToggle();
+		String toStringLine = toggle.toString();
+		String timeout = toStringLine.substring(69, toStringLine.length() - 1);
+		if("15".equals(timeout) || "30".equals(timeout) || "60".equals(timeout) || "120".equals(timeout)) {
+			model.setTimeout(Integer.parseInt(timeout));
+		} else if("Immediate".equals(timeout)) {
+			model.setTimeout(0);
+		} else if("Forever".equals(timeout)) {
+			model.setTimeout(-1);
+		}
+		
+		setting.setPreference(model);
+	}
+
+	@FXML
+	void restoreSettings(ActionEvent event) {
+		setting.restoreDefaults();
+	}
 
 	@FXML
 	void initialize() throws IOException {
 		CacheMan cacheManager = LoginPageController.cacheManager;
 		Cache<String, String> userCache = null;
-		if(cacheManager != null) {
+		if (cacheManager != null) {
 			userCache = cacheManager.getCacheManager().getCache("user", String.class, String.class);
 		}
 		if (userCache == null) {
-			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
+			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change
+																											// scene
 			toBeChanged.setOpacity(1);
 			PreLoginPageController.stackPaneClone.getChildren().remove(0);
 			PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
@@ -120,7 +150,7 @@ public class SettingPageController {
 		} else {
 			userCache.put("Last", "/setting/view/SettingPage.fxml");
 		}
-		
+
 		// Setting
 		setting = new Setting();
 		SettingModel settingModel = setting.getPreference();
@@ -165,7 +195,17 @@ public class SettingPageController {
 			timeout2.setSelected(true);
 		}
 
-		incomingCheckbox.setSelected(settingModel.isIncomingAccept());
+		for(String s : settingModel.getLogFile()) {
+			if("Application".equals(s)) {
+				applicationCheckbox.setSelected(true);
+			}
+			if("Security".equals(s)) {
+				securityCheckbox.setSelected(true);
+			}
+			if("System".equals(s)) {
+				systemCheckbox.setSelected(true);
+			}
+		}
 
 		File file = new File(".").getAbsoluteFile();
 		File root = file.getParentFile();

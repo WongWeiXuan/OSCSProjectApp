@@ -25,11 +25,13 @@ login\controller\SignupPageController$1.class
 setting\controller\SettingPageController.class
 log\controller\LogPageController$7.class
 login\controller\LoginPageController.class
+logExtra\KeyPairGen.class
 navigation\controller\NavigationBarController.class
 login\controller\SignupPageController$2.class
 login\controller\SignupPage2Controller$1$1$1.class
 validation\controller\ValidationPageController$1$7.class
 log\controller\LogPageController$8.class
+logExtra\FileTransferThread.class
 login\controller\LoginPageController$1.class
 login\controller\SignupPage2Controller$2.class
 log\controller\LogPageController$2.class
@@ -46,6 +48,7 @@ login\controller\SignupPageController$3.class
 logExtra\BlockChain.class
 log\controller\LogPageController$1.class
 log\controller\LogPageController.class
+log\LogModelThread.class
 log\LogDetailsTree.class
 log\AbstergoLogModel.class
 log\controller\LogPageController$6.class
@@ -53,7 +56,7 @@ login\controller\SignupPage2Controller$1.class
 login\controller\SignupPage2Controller$1$2.class
 log\controller\LogPageController$3.class
 login\LoginDAO.class
-logExtra\DiscoveryThread.class
+login\controller\LoginPageController$2$2$1.class
 setting\controller\SettingPageController$1.class
 validation\controller\ValidationPageController$1.class
 login\controller\SignupPage3Controller$1.class
@@ -72,6 +75,7 @@ bluetooth\BluetoothThread$1.class
 validation\controller\ValidationPageController$1$3.class
 login\controller\SignupPage2Controller$2$1.class
 bluetooth\BluetoothThread.class
+login\controller\LoginPageController$2$2.class
 log\controller\LogPageController$4.class
 login\controller\SignupPageController$5.class
 login\controller\SignupPage3Controller$2.class
@@ -79,6 +83,7 @@ log\controller\LogPageController$9$1.class
 setting\Setting.class
 validation\FileHash.class
 login\controller\LoginPageController$2$1.class
+logExtra\HandshakeThread.class
 validation\controller\ValidationPageController$1$4.class
 setting\SettingModel.class
 logExtra\Connection.class

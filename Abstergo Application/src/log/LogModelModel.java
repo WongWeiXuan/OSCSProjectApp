@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Scanner;
@@ -12,8 +13,10 @@ import java.util.logging.Logger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
+import org.ehcache.Cache;
 
 import logExtra.AESEncryption;
+import login.controller.LoginPageController;
 
 // My previous LogModel is too messy, didn't feel like changing it so make this to simplify it
 public class LogModelModel {
@@ -28,9 +31,8 @@ public class LogModelModel {
 		File file = fileSelection(select);
 		if(file != null) {
 			// Get user private key to decrypt
-			// TODO
-			String key = "l2nMvmLRUqY7JeQZgD9nHQ=="; // REMOVE THIS
-			byte [] keyByte = Base64.getDecoder().decode(key.getBytes(StandardCharsets.UTF_8));
+			Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+			byte [] keyByte = Base64.getDecoder().decode(LogDAO.getEncryptionKey(userCache.get("User")));
 			AESEncryption aes = new AESEncryption(keyByte);
 			File decryptedFile = aes.decryptFile(file);
 			return processFile(decryptedFile);
@@ -102,5 +104,24 @@ public class LogModelModel {
 		}
 		
 		return null;
+	}
+	
+	public static File getFile(String logFileName) {
+		return new File("src/resource/logs/" + logFileName + "Log.txt");
+	}
+	
+	public static void updateOrGetLogs(String logName) {
+		// Retrieve user
+		Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+		String username = userCache.get("User");
+		// Retrieve key
+		String key = LogDAO.getEncryptionKey(username);
+		LogModel log = new LogModel(logName);
+		log.openEventLog();
+		File file = log.read(key);
+		AESEncryption aes = new AESEncryption(Base64.getDecoder().decode(key.getBytes(StandardCharsets.UTF_8)));
+		File encrypted = aes.encryptFile(file);
+		file.delete();
+		LogDAO.writeToFile(encrypted, "src/resource/logs/" + logName + "Log.txt");
 	}
 }

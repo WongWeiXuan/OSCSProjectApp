@@ -14,12 +14,13 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 <AnchorPane fx:id="root" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="setting.controller.SettingPageController">
    <children>
       <HBox nodeOrientation="RIGHT_TO_LEFT" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="20.0" style="-fx-background-color: linear-gradient(to bottom, #4dd5a6 0%, #65b398 80%, #71a292 100%); -fx-background-image: url(&quot;/resource/pictures/arches.png&quot;); -fx-background-repeat: repeat;" HBox.hgrow="ALWAYS">
+            <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
                      <font>
@@ -27,21 +28,53 @@
                      </font>
                   </Text>
                   <JFXComboBox fx:id="onDisconnectCombo" />
-                  <HBox>
+                  <VBox spacing="10.0">
                      <children>
-                        <JFXToggleNode fx:id="timeout1" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="Immediate" textFill="WHITE">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="timeout" />
-                           </toggleGroup>
-                        </JFXToggleNode>
-                        <JFXToggleNode fx:id="timeout2" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="15" textFill="WHITE" toggleGroup="$timeout" />
-                        <JFXToggleNode fx:id="timeout3" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="30" textFill="WHITE" toggleGroup="$timeout" />
-                        <JFXToggleNode fx:id="timeout4" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="60" textFill="WHITE" toggleGroup="$timeout" />
-                        <JFXToggleNode fx:id="timeout5" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="120" textFill="WHITE" toggleGroup="$timeout" />
-                        <JFXToggleNode fx:id="timeout6" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="Forever" textFill="WHITE" toggleGroup="$timeout" />
+                        <TextFlow>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Login reconnection time">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
+                        <HBox>
+                           <children>
+                              <JFXToggleNode fx:id="timeout1" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="Immediate" textFill="WHITE">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="timeout" />
+                                 </toggleGroup>
+                              </JFXToggleNode>
+                              <JFXToggleNode fx:id="timeout2" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="15" textFill="WHITE" toggleGroup="$timeout" />
+                              <JFXToggleNode fx:id="timeout3" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="30" textFill="WHITE" toggleGroup="$timeout" />
+                              <JFXToggleNode fx:id="timeout4" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="60" textFill="WHITE" toggleGroup="$timeout" />
+                              <JFXToggleNode fx:id="timeout5" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="120" textFill="WHITE" toggleGroup="$timeout" />
+                              <JFXToggleNode fx:id="timeout6" style="-jfx-untoggle-color: #a69b97; -jfx-toggle-color: #81d4fa;" text="Forever" textFill="WHITE" toggleGroup="$timeout" />
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
-                  <JFXCheckBox fx:id="incomingCheckbox" />
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <TextFlow>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Logs to store">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
+                        <HBox alignment="CENTER_LEFT" spacing="40.0">
+                           <children>
+                              <JFXCheckBox fx:id="applicationCheckbox" text="Application" />
+                              <JFXCheckBox fx:id="securityCheckbox" text="Security" />
+                              <JFXCheckBox fx:id="systemCheckbox" text="System" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                   <VBox spacing="10.0">
                      <children>
                         <HBox fillHeight="false">

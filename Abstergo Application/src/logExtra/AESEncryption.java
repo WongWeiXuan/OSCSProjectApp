@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
@@ -186,21 +187,26 @@ public class AESEncryption {
 	public void clearMemory() {
 		Arrays.fill(key, (byte) 0);
 	}
+	
+	protected byte[] getKey() {
+		return key;
+	}
 
-	/*
-	 * public static void main(String[] args) throws IOException { AESEncryption aes
-	 * = new AESEncryption();
-	 * System.out.println(Base64.getEncoder().encodeToString(aes.iv));
-	 * System.out.println(Base64.getEncoder().encodeToString(aes.key));
-	 * //aes.encryptFile(new File("ApplicationAES.txt"));
-	 * 
-	 * Scanner sc = new Scanner(System.in); sc.nextLine(); sc.close();
-	 * 
-	 * File file = aes.decryptFile(new File("ApplicationAES.txt"));
-	 * writeToFile(file, "ApplicationDECRYPTED.txt"); //
-	 * System.out.println("Encrypted String: " + encryptedString); //
-	 * System.out.println("Decrypted String: " + decryptedString);
-	 * 
-	 * aes.clearMemory(); }
-	 */
+	public static void main(String[] args) throws IOException {
+		AESEncryption aes = new AESEncryption();
+		System.out.println(Base64.getEncoder().encodeToString(aes.iv));
+		System.out.println(Base64.getEncoder().encodeToString(aes.key).length());
+		// aes.encryptFile(new File("ApplicationAES.txt"));
+
+//		Scanner sc = new Scanner(System.in);
+//		sc.nextLine();
+//		sc.close();
+//
+//		File file = aes.decryptFile(new File("ApplicationAES.txt"));
+//		writeToFile(file, "ApplicationDECRYPTED.txt"); //
+//		System.out.println("Encrypted String: " + encryptedString); //
+//		System.out.println("Decrypted String: " + decryptedString);
+//
+//		aes.clearMemory();
+	}
 }

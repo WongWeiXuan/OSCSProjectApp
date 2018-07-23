@@ -78,11 +78,11 @@ public class SettingModel {
 		return timeout;
 	}
 
-	protected void setLogFile(ArrayList<String> logFile) {
+	public void setLogFile(ArrayList<String> logFile) {
 		this.logFile = logFile;
 	}
 
-	protected void setLogFile(String logFile) {
+	public void setLogFile(String logFile) {
 		ArrayList<String> returnArray = new ArrayList<String>();
 		Scanner sc = new Scanner(logFile);
 		sc.useDelimiter(";");
@@ -95,11 +95,11 @@ public class SettingModel {
 		this.logFile = returnArray;
 	}
 
-	protected void setLogDisplay(ArrayList<String> logDisplay) {
+	public void setLogDisplay(ArrayList<String> logDisplay) {
 		this.logDisplay = logDisplay;
 	}
 
-	protected void setLogDisplay(String logDisplay) {
+	public void setLogDisplay(String logDisplay) {
 		ArrayList<String> returnArray = new ArrayList<String>();
 		Scanner sc = new Scanner(logDisplay);
 		sc.useDelimiter(";");
@@ -112,19 +112,22 @@ public class SettingModel {
 		this.logDisplay = returnArray;
 	}
 
-	protected void setIncomingAccept(boolean incomingAccept) {
+	public void setIncomingAccept(boolean incomingAccept) {
 		this.incomingAccept = incomingAccept;
 	}
 
-	protected void setIncomingMaximum(long incomingMaximum) {
+	public void setIncomingMaximum(long incomingMaximum) {
 		this.incomingMaximum = incomingMaximum;
 	}
 
-	protected void setOnDiconnection(String onDiconnection) {
+	public void setOnDiconnection(String onDiconnection) {
 		this.onDiconnection = onDiconnection;
 	}
 
-	protected void setTimeout(int timeout) {
+	public void setTimeout(int timeout) {
+		if(timeout > 0) {
+			timeout *= 60 * 1000;
+		}
 		this.timeout = timeout;
 	}
 
@@ -143,7 +146,7 @@ public class SettingModel {
 				return -1;
 			}
 		case 1:
-			if ("Immediate".equals(name)) {
+			if ("0".equals(name)) {
 				return 0;
 			} else if ("15".equals(name)) {
 				return 1;
@@ -153,7 +156,7 @@ public class SettingModel {
 				return 3;
 			} else if ("120".equals(name)) {
 				return 4;
-			} else if ("Forever".equals(name)) {
+			} else if ("-1".equals(name)) {
 				return 5;
 			} else {
 				return -1;
