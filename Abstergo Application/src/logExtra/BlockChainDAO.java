@@ -16,16 +16,27 @@ import java.util.Scanner;
 import log.LogDetailsModel;
 
 public class BlockChainDAO {
-	public static ArrayList<Block> readBlocks(File file) {
+	public static ArrayList<Block> readBlocks(File file, String address) {
 		try {
 			ArrayList<Block> blockArray = new ArrayList<Block>();
+			if(!file.exists()) {
+				file.createNewFile();
+			}
 			Scanner sc = new Scanner(file);
 			while(sc.hasNextLine()) {
-				Scanner sc1 = new Scanner(sc.nextLine());
-				sc1.useDelimiter("String ");
+				String line = sc.nextLine();
+				if(line.isEmpty()) {
+					continue;
+				}
+				Scanner sc1 = new Scanner(line);
+				sc1.useDelimiter("~");
 				String hash 				= sc1.next();
 				String previousHash			= sc1.next();
+				int nonce					= sc1.nextInt();
 				String userFrom				= sc1.next();
+				if(!address.isEmpty() && !address.equals(userFrom)) {
+					continue;
+				}
 				String userTo				= sc1.next();
 				String time					= sc1.next();
 				String fileHash				= sc1.next();
@@ -33,7 +44,7 @@ public class BlockChainDAO {
 				sc1.close();
 				
 				Transcation trans = new Transcation(userFrom, userTo, Long.parseLong(time), fileHash, broadcastFileHash);
-				blockArray.add(new Block(trans, hash, previousHash));
+				blockArray.add(new Block(trans, hash, previousHash, nonce));
 			}
 			sc.close();
 			
@@ -41,6 +52,8 @@ public class BlockChainDAO {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -61,6 +74,7 @@ public class BlockChainDAO {
 			PrintWriter out = new PrintWriter(bw);
 			out.append(block.getHash());
 			out.append("~" + block.getPreviousHash());
+			out.append("~" + block.getNonce());
 			out.append("~" + block.getTranscation().getUserFrom());
 			out.append("~" + block.getTranscation().getUserTo());
 			out.append("~" + block.getTranscation().getTime());

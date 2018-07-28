@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
@@ -22,12 +21,25 @@
          <children>
             <VBox nodeOrientation="LEFT_TO_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Settings">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Settings">
                      <font>
-                        <Font size="24.0" />
+                        <Font size="36.0" />
                      </font>
                   </Text>
-                  <JFXComboBox fx:id="onDisconnectCombo" />
+                  <VBox>
+                     <children>
+                        <TextFlow>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="On device out-of-range">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
+                        <JFXComboBox fx:id="onDisconnectCombo" />
+                     </children>
+                  </VBox>
                   <VBox spacing="10.0">
                      <children>
                         <TextFlow>
@@ -68,22 +80,15 @@
                         </TextFlow>
                         <HBox alignment="CENTER_LEFT" spacing="40.0">
                            <children>
-                              <JFXCheckBox fx:id="applicationCheckbox" text="Application" />
-                              <JFXCheckBox fx:id="securityCheckbox" text="Security" />
-                              <JFXCheckBox fx:id="systemCheckbox" text="System" />
+                              <JFXCheckBox fx:id="applicationCheckbox" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Application" />
+                              <JFXCheckBox fx:id="securityCheckbox" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Security" />
+                              <JFXCheckBox fx:id="systemCheckbox" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="System" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
                   <VBox spacing="10.0">
                      <children>
-                        <HBox fillHeight="false">
-                           <children>
-                              <Rectangle fx:id="greenRec" arcHeight="5.0" arcWidth="5.0" fill="#13d61e" height="20.0" stroke="BLACK" strokeType="INSIDE" width="10.0" HBox.hgrow="ALWAYS" />
-                              <Rectangle fx:id="yellowRec" arcHeight="5.0" arcWidth="5.0" fill="#ffe41f" height="20.0" stroke="BLACK" strokeType="INSIDE" width="30.0" />
-                              <Rectangle fx:id="redRec" arcHeight="5.0" arcWidth="5.0" fill="#ff1f1f" height="20.0" stroke="BLACK" strokeType="INSIDE" width="30.0" />
-                           </children>
-                        </HBox>
                         <HBox spacing="20.0">
                            <children>
                               <JFXSlider fx:id="incomingSlider" majorTickUnit="30.0" max="2048.0" minorTickCount="1" onDragDone="#setSpinner" prefHeight="14.0" prefWidth="483.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" HBox.hgrow="ALWAYS" />
@@ -92,8 +97,8 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <JFXButton fx:id="applyBtn" onAction="#applySettings" text="Apply" />
-                  <JFXButton fx:id="restoreBtn" onAction="#restoreSettings" text="Restore to default" />
+                  <JFXButton fx:id="applyBtn" onAction="#applySettings" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Apply" />
+                  <JFXButton fx:id="restoreBtn" onAction="#restoreSettings" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Restore to default" />
                </children>
                <padding>
                   <Insets bottom="20.0" left="10.0" right="10.0" top="20.0" />

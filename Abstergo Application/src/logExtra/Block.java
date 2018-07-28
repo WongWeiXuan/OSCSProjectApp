@@ -2,6 +2,7 @@ package logExtra;
 
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class Block {
@@ -13,19 +14,18 @@ public class Block {
 	public Block(Transcation transcation, String previousHash) throws NoSuchAlgorithmException {
 		this.transcation = transcation;
 		this.previousHash = previousHash;
-		this.hash = calculateHash();
 	}
 	
-	public Block(Transcation transcation, String hash, String previousHash) throws NoSuchAlgorithmException {
+	public Block(Transcation transcation, String hash, String previousHash, int nonce) throws NoSuchAlgorithmException {
 		this.transcation = transcation;
 		this.hash = hash;
 		this.previousHash = previousHash;
+		this.nonce = nonce;
 	}
 	
 	public Block(Transcation transcation, Block previousBlock) throws NoSuchAlgorithmException {
 		this.transcation = transcation;
-		this.previousHash = previousBlock.hash;
-		this.hash = calculateHash();
+		this.previousHash = previousBlock.getHash();
 	}
 
 	public Block(String userFrom, String userTo, File file, String previousHash) throws NoSuchAlgorithmException {
@@ -44,15 +44,18 @@ public class Block {
 
 	public void mineBlock(int difficulty) throws NoSuchAlgorithmException {
 		String target = new String(new char[difficulty]).replace('\0', '0');
+		this.hash = calculateHash();
 		while (!hash.substring(0, difficulty).equals(target)) {
-			Random rd = new Random();
-			nonce = rd.nextInt();
+			nonce++;
 			hash = calculateHash();
 		}
 		System.out.println("Mined block hash: " + hash);
 	}
 	
 	public String getFileHash() {
+		if(transcation.getFileHash().equals(".")) {
+			return "";
+		}
 		return transcation.getFileHash();
 	}
 
@@ -61,7 +64,14 @@ public class Block {
 	}
 
 	protected String getPreviousHash() {
+		if(previousHash.isEmpty()) {
+			return ".";
+		}
 		return previousHash;
+	}
+	
+	protected int getNonce() {
+		return nonce;
 	}
 
 	protected Transcation getTranscation() {

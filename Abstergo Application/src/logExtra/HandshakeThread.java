@@ -22,15 +22,19 @@ import java.util.Scanner;
 
 import org.ehcache.Cache;
 
+import log.LogModelThread;
 import login.controller.LoginPageController;
 
 public class HandshakeThread implements Runnable {
+	public static Lock lock = new Lock();
+	public static Lock lock2 = new Lock();
 	public static Map<String, Connection> connectionList;
 	private volatile boolean running;
 	private static String logName;
 	private String userName;
 	private static DatagramSocket socket;
 	private static boolean broadcasted;
+	public static boolean request;
 
 	public HandshakeThread() {
 		connectionList = new HashMap<String, Connection>();
@@ -38,6 +42,7 @@ public class HandshakeThread implements Runnable {
 		logName = null;
 		socket = null;
 		broadcasted = false;
+		request = false;
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class HandshakeThread implements Runnable {
 				}
 
 				if ("YOUALIVE?".equals(packetData)) {
-					System.out.println("SYN RECEIVED: " + packetAddress + ", " + c.getStatusInt());
+//					System.out.println("SYN RECEIVED: " + packetAddress + ", " + c.getStatusInt());
 					byte[] responseBuffer;
 
 					// Setting SYN established
@@ -86,7 +91,7 @@ public class HandshakeThread implements Runnable {
 					c.setStatus(3);
 					connectionList.replace(packetAddress, c);
 				} else if ("YEA,I'MALIVE.HOWABOUTYOU?".equals(packetData)) {
-					System.out.println("SYNACK RECEIVED: " + packetAddress + ", " + c.getStatusInt());
+//					System.out.println("SYNACK RECEIVED: " + packetAddress + ", " + c.getStatusInt());
 					byte[] responseBuffer;
 					if (c.getStatusInt() == 2 || broadcasted) {
 						// Setting SYNACK established
@@ -123,7 +128,7 @@ public class HandshakeThread implements Runnable {
 						socket.send(sendPacket);
 					}
 				} else if (packetData.contains("FILETRANSFER:")) {
-					System.out.println("FT REQUEST RECEIVED");
+					System.out.println("FT REQUEST RECEIVED: " + packetData);
 					byte[] responseBuffer = null;
 
 					if (c.isValid()) {
@@ -137,7 +142,12 @@ public class HandshakeThread implements Runnable {
 						logName = sc.next();
 						userName = sc.next();
 						byte[] signature = Base64.getDecoder().decode(sc.next());
-						new Thread(new FileTransferThread(c, logName, userName, signature)).start();
+						sc.close();
+						String logNAME = logName;
+						String userNAME = userName;
+						byte[] sIGNATURE = signature.clone();
+						lock.lock();
+						new Thread(new FileTransferThread(c, logNAME, userNAME, sIGNATURE, request)).start();
 						responseBuffer = "FILETRANSFERREADY".getBytes(StandardCharsets.UTF_8);
 					} else {
 						System.out.println("SENDING RESET");
@@ -150,7 +160,7 @@ public class HandshakeThread implements Runnable {
 					socket.send(sendPacket);
 				} else if (packetData.equals("FILETRANSFERREADY")) {
 					System.out.println("FT CONNECTION RECEIVED");
-
+//					System.out.println(packetAddress);
 					if (c.getStatusInt() == 5) {
 						activateFileTransfer(packetAddress, 9653);
 					} else {
@@ -165,10 +175,13 @@ public class HandshakeThread implements Runnable {
 					System.out.println("REQUEST FOR FILE RECEIVED");
 
 					if (c.isValid()) {
-						String logFileName = packetData.substring(15);
-						if(checkWhetherGotFile(packetAddress, logFileName)) {
-							userName = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class).get("User");
-							String signature = Base64.getEncoder().encodeToString(KeyPairGen.signFile(getFile(packetAddress, logFileName), userName));
+						logName = packetData.substring(15);
+						if(checkWhetherGotFile(packetAddress, logName)) {
+//							userName = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class).get("User");
+							userName = "Wolf";
+							File file = getFile(packetAddress, logName);
+							String signature = Base64.getEncoder().encodeToString(KeyPairGen.signFile(file, userName));
+							request = true;
 							sendFileTransferRequest(logName, userName, signature);
 						} else {
 							System.out.println("FILE NOT FOUND!");
@@ -196,6 +209,8 @@ public class HandshakeThread implements Runnable {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			} finally {
 				if (socket != null) {
 					socket.close();
@@ -206,7 +221,7 @@ public class HandshakeThread implements Runnable {
 	}
 
 	private boolean checkWhetherGotFile(String address, String logFileName) {
-		File file = new File("src/resource/logs/" + logFileName + "/" + address);
+		File file = new File("src/resource/logs/" + logFileName + "/" + address + ".txt");
 		if(file.exists()) { 
 		   return true;
 		} else {
@@ -221,14 +236,18 @@ public class HandshakeThread implements Runnable {
 	private void activateFileTransfer(String address, int port) {
 		try {
 			Socket socket = new Socket(address, port);
-
-			File file = new File("src/resource/logs/" + logName + "Log.txt");
+			File file;
+			if(request) {
+				file = new File("src/resource/logs/" + logName + "/" + address + ".txt");
+			} else {
+				file = new File("src/resource/logs/" + logName + "Log.txt");
+			}
 
 			byte[] buffer = new byte[(int) file.length()];
 			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 			inputStream.read(buffer, 0, buffer.length);
 
-			System.out.println("Sending Files...");
+			System.out.println("Sending Files... " + logName);
 			OutputStream os = socket.getOutputStream();
 			os.write(buffer, 0, buffer.length);
 
@@ -245,21 +264,25 @@ public class HandshakeThread implements Runnable {
 			// Add new block to array
 			// Mine block
 			// Store/Upload block array
-			BlockChain blockChain = new BlockChain(logName, false);
-			if(blockChain.isChainValid()) {
-				Transcation trans = new Transcation(socket.getInetAddress().getHostAddress(), socket.getLocalAddress().getHostAddress(), file);
-				blockChain.addBlock(trans);
-			} else {
-				// IF fails
-				// Ask file from someone
-				requestFileTransferRequest(logName);
-				System.out.println("Integrity check Failed. How is this possible?");
+			if(!request) {
+				BlockChain blockChain = new BlockChain(logName, address, false);
+				if(blockChain.isChainValid()) {
+					Transcation trans = new Transcation(socket.getLocalAddress().getHostAddress(), socket.getInetAddress().getHostAddress(), file, false);
+					blockChain.addBlock(trans);
+				} else {
+					// IF fails
+					// Ask file from someone
+					requestFileTransferRequest(logName);
+					System.out.println("Integrity check Failed. How is this possible?");
+				}
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		request = false;
+		LogModelThread.lock.unlock();
 	}
 
 	protected void sendFileTransferRequest(String logName1, String username, String signature) {
@@ -298,6 +321,7 @@ public class HandshakeThread implements Runnable {
 						connectionList.replace(address.getAddress().getHostAddress(), address);
 					}
 				}
+				request = true;
 			} else {
 				// GET FROM DB
 			}
@@ -308,6 +332,7 @@ public class HandshakeThread implements Runnable {
 	
 	protected static void sendPacket() {
 		try {
+			lock2.lock();
 			byte[] responseBuffer = "YOUALIVE?".getBytes(StandardCharsets.UTF_8);
 
 			// Broadcast to all the network interfaces
@@ -337,6 +362,7 @@ public class HandshakeThread implements Runnable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		lock2.unlock();
 	}
 
 	public static void setLogName(String logName) {

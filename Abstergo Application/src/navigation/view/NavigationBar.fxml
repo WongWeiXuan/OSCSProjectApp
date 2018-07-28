@@ -117,7 +117,7 @@
                                  <graphic>
                                     <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../../resource/pictures/log.png" />
+                                          <Image url="@../../resource/pictures/logs.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -127,7 +127,7 @@
                               <Insets left="30.0" />
                            </padding>
                         </TextFlow>
-                        <TextFlow>
+                        <TextFlow VBox.vgrow="ALWAYS">
                            <children>
                               <Label fx:id="settingsNav" graphicTextGap="30.0" onMouseClicked="#changePage" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Settings" textFill="WHITE">
                                  <font>
@@ -148,6 +148,31 @@
                            <padding>
                               <Insets left="30.0" />
                            </padding>
+                        </TextFlow>
+                        <TextFlow>
+                           <children>
+                              <Label fx:id="logoutNav" graphicTextGap="30.0" onMouseClicked="#changePage" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Logout" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <ImageView fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../resource/pictures/exit.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Label>
+                           </children>
+                           <padding>
+                              <Insets left="30.0" />
+                           </padding>
+                           <VBox.margin>
+                              <Insets bottom="20.0" />
+                           </VBox.margin>
                         </TextFlow>
                      </children>
                      <padding>

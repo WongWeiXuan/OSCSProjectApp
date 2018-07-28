@@ -15,11 +15,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Properties;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.io.FileUtils;
 
@@ -50,6 +49,7 @@ public class LogDAO {
 
 	public static void writeToFile(File input, String name) {
 		File output = new File(name);
+		System.out.println(output.getAbsolutePath());
 		try {
 			FileUtils.copyFile(input, output);
 		} catch (IOException e) {
@@ -60,9 +60,8 @@ public class LogDAO {
 	public static PrivateKey getPrivateKey(String user) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("https://localhost/AbstergoREST/rest/KeyPair/private/" + user);
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/KeyPair/private/" + user);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -103,9 +102,8 @@ public class LogDAO {
 	public static PublicKey getPublicKey(String user) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("https://localhost/AbstergoREST/rest/KeyPair/public/" + user);
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/KeyPair/public/" + user);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -122,7 +120,7 @@ public class LogDAO {
 				inputStream.close();
 				connection.disconnect();
 
-				PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(output));
+				X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(output));
 				KeyFactory factory = KeyFactory.getInstance("RSA");
 				return factory.generatePublic(spec);
 			}
@@ -146,9 +144,8 @@ public class LogDAO {
 	public static String getEncryptionKey(String username) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("https://localhost/AbstergoREST/rest/KeyPair/encryption/" + username);
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/KeyPair/encryption/" + username);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -184,9 +181,8 @@ public class LogDAO {
 		BufferedReader br = null;
 		try {
 			// Open Connection to REST Server
-			URL url = new URL("https://localhost/AbstergoREST/rest/KeyPair");
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/KeyPair");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("POST");

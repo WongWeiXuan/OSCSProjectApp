@@ -10,7 +10,7 @@
         <entry key="IncomingAccept" value="true"/>
         <entry key="IncomingMaximum" value="90"/>
         <entry key="OnDisconnect" value="Logout"/>
-        <entry key="Timeout" value="-1"/>
+        <entry key="Timeout" value="900000"/>
       </map>
     </node>
   </root>

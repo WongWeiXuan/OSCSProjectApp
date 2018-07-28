@@ -1,111 +1,32 @@
 package logExtra;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BlockChain {
 	private ArrayList<Block> blockArray = new ArrayList<Block>();
-	private int difficulty = 4;
+	private int difficulty = 2;
 	private String logName;
 	
-	public BlockChain(String logName, boolean remote) {
+	public BlockChain(String logName, String address, boolean remote) {
 		this.logName = logName;
 		if(remote) {
-			getRemoteChain();
+			getRemoteChain(address);
 		} else {
 			getChain();
 		}
 	}
 	
 	private void getChain() {
-		try {
-			// Retrieve block chain
-			// TODO
-			File file = new File("src/resource/chain/" + logName + "Chain.txt"); // FileNotFoundException cause I deleted it // To demostrate the BlockChain is working and checks
-			
-			Transcation trans = new Transcation("User1", "User2", file);
-			Block block = new Block(trans, "");
-			block.mineBlock(difficulty);
-			
-			blockArray.add(block);
-			// FileStream
-			FileOutputStream fos = new FileOutputStream(file, true);
-			Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-			BufferedWriter bw = new BufferedWriter(writer);
-			bw.append("\n Hello");
-			bw.flush();
-			
-			Transcation trans2 = new Transcation("User1", "User2", file);
-			Block block2 = new Block(trans2, block);
-			block2.mineBlock(difficulty);
-			
-			blockArray.add(block2);
-			
-			bw.append("\n bye");
-			bw.flush();
-			
-			Transcation trans3 = new Transcation("User1", "User2", file);
-			Block block3 = new Block(trans3, block2);
-			block3.mineBlock(difficulty);
-			
-			blockArray.add(block3);
-			bw.close();
-			writer.close();
-			fos.close();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Retrieve block chain
+		this.blockArray = BlockChainDAO.readBlocks(new File("src/resource/chain/" + logName + "Chain.txt"), "");
 	}
 	
-	private void getRemoteChain() {
-		try {
-			// Retrieve block chain
-			// TODO
-			File file = new File("src/resource/chain/" + logName + "Chain.txt"); // FileNotFoundException cause I deleted it // To demostrate the BlockChain is working and checks
-			Transcation trans = new Transcation("User1", "User2", file);
-			Block block = new Block(trans, "");
-			block.mineBlock(difficulty);
-			
-			blockArray.add(block);
-			// FileStream
-			FileOutputStream fos = new FileOutputStream(file, true);
-			Writer writer = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-			BufferedWriter bw = new BufferedWriter(writer);
-			bw.append("\n Hello");
-			bw.flush();
-			
-			Transcation trans2 = new Transcation("User1", "User2", file);
-			Block block2 = new Block(trans2, block);
-			block2.mineBlock(difficulty);
-			
-			blockArray.add(block2);
-			
-			bw.append("\n bye");
-			bw.flush();
-			
-			Transcation trans3 = new Transcation("User1", "User2", file);
-			Block block3 = new Block(trans3, block2);
-			block3.mineBlock(difficulty);
-			
-			blockArray.add(block3);
-			bw.close();
-			writer.close();
-			fos.close();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private void getRemoteChain(String address) {
+		// Retrieve block chain
+		this.blockArray = BlockChainDAO.readBlocks(new File("src/resource/chain/" + logName + "ChainRemote.txt"), address);
 	}
 	
 	public Boolean isChainValid() {
@@ -150,7 +71,11 @@ public class BlockChain {
 			if(trans.isBroadcastFile()) {
 				remote = true;
 			}
-			Block block = new Block(trans, getLastHash());
+			String lastHash = getLastHash();
+			if(lastHash == null) {
+				lastHash = "";
+			}
+			Block block = new Block(trans, lastHash);
 			block.mineBlock(difficulty);
 			blockArray.add(block);
 			
@@ -161,11 +86,21 @@ public class BlockChain {
 	}
 	
 	public String getLastHash() {
-		return blockArray.get(blockArray.size()-1).getFileHash();
+		if(blockArray.size() > 0) {
+			return blockArray.get(blockArray.size()-1).getHash();
+		}
+		return null;
+	}
+	
+	public String getLastFileHash() {
+		if(blockArray.size() > 0) {
+			return blockArray.get(blockArray.size()-1).getFileHash();
+		}
+		return null;
 	}
 	
 	public static void main(String[] arg0) {
-		BlockChain bc = new BlockChain("Application", false);
+		BlockChain bc = new BlockChain("Application", "", false);
 		System.out.println("Valid: " + bc.isChainValid());
 		
 		Scanner sc = new Scanner(System.in);

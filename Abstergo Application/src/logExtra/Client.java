@@ -2,28 +2,30 @@ package logExtra;
 
 public class Client {
 	private HandshakeThread handshake;
-	private String logName;
+	private Thread thread;
 
 	public Client(String logName) {
 		handshake = new HandshakeThread();
-		Thread thread = new Thread(handshake);
+		thread = new Thread(handshake);
 		thread.start();
-		this.logName = logName;
 	}
 
 	public void getListOfAvailableNetwork() {
 		HandshakeThread.sendPacket();
 	}
 	
-	public void sendFileTransferRequest(String username, String signature) {
+	public void sendFileTransferRequest(String logName, String username, String signature) {
+		getListOfAvailableNetwork();
 		handshake.sendFileTransferRequest(logName, username, signature);
 	}
 	
-	public void requestFileTransferRequest() {
+	public void requestFileTransferRequest(String logName) {
+		getListOfAvailableNetwork();
 		handshake.requestFileTransferRequest(logName);
 	}
 	
 	public void close() {
 		handshake.stop();
+		thread.stop();
 	}
 }

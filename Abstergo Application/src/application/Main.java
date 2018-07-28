@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import log.LogModelThread;
+import log.controller.LogPageController;
 import validation.controller.ValidationPageController;
 
 public class Main extends Application {
@@ -39,6 +41,10 @@ public class Main extends Application {
 			    public void handle(WindowEvent event) {
 			    	if(BluetoothThreadModel.isRunning())
 			    		BluetoothThreadModel.stopThread();
+			    	if(LogModelThread.isRunning()) {
+		    			LogModelThread.stop();
+		    			LogPageController.thread.stop();
+		    		}
 			    	if(ValidationPageController.task.isRunning())
 			    		ValidationPageController.task.cancel();
 			    	Platform.exit();
@@ -62,8 +68,6 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		System.setProperty("javax.net.ssl.trustStore","src/resource/WolfsKeystore");
-		System.setProperty("javax.net.ssl.trustStorePassword","password");
 		launch(args);
 	}
 }

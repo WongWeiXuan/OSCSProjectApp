@@ -8,19 +8,19 @@ public class SettingModel {
 	private ArrayList<String> logDisplay;
 	private boolean incomingAccept;
 	private long incomingMaximum;
-	private String onDiconnection;
+	private String onDisconnection;
 	private int timeout;
 
 	public SettingModel() {
 	}
 
 	public SettingModel(ArrayList<String> logFile, ArrayList<String> logDisplay, boolean incomingAccept,
-			long incomingMaximum, String onDiconnection, int timeout) {
+			long incomingMaximum, String onDisconnection, int timeout) {
 		this.logFile = logFile;
 		this.logDisplay = logDisplay;
 		this.incomingAccept = incomingAccept;
 		this.incomingMaximum = incomingMaximum;
-		this.onDiconnection = onDiconnection;
+		this.onDisconnection = onDisconnection;
 		this.timeout = timeout;
 	}
 
@@ -70,8 +70,8 @@ public class SettingModel {
 		return incomingMaximum;
 	}
 
-	public String getOnDiconnection() {
-		return onDiconnection;
+	public String getOnDisconnection() {
+		return onDisconnection;
 	}
 
 	public int getTimeout() {
@@ -120,8 +120,8 @@ public class SettingModel {
 		this.incomingMaximum = incomingMaximum;
 	}
 
-	public void setOnDiconnection(String onDiconnection) {
-		this.onDiconnection = onDiconnection;
+	public void setOnDiconnection(String onDisconnection) {
+		this.onDisconnection = onDisconnection;
 	}
 
 	public void setTimeout(int timeout) {
@@ -169,6 +169,6 @@ public class SettingModel {
 	@Override
 	public String toString() {
 		return "SettingModel [logFile=" + logFile + ", logDisplay=" + logDisplay + ", incomingAccept=" + incomingAccept
-				+ ", incomingMaximum=" + incomingMaximum + ", onDiconnection=" + onDiconnection + "]";
+				+ ", incomingMaximum=" + incomingMaximum + ", onDisconnection=" + onDisconnection + "]";
 	}
 }

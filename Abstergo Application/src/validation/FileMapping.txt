@@ -23,6 +23,7 @@ FileTransferThread.java;src/logExtra/FileTransferThread.java
 HandshakeThread.java;src/logExtra/HandshakeThread.java
 KeyPair.java;src/logExtra/KeyPair.java
 KeyPairGen.java;src/logExtra/KeyPairGen.java
+Lock.java;src/logExtra/Lock.java
 StringUtil.java;src/logExtra/StringUtil.java
 Transcation.java;src/logExtra/Transcation.java
 CacheMan.java;src/login/CacheMan.java

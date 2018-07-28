@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import javax.net.ssl.HttpsURLConnection;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,9 +40,8 @@ public class ApplicationValidationDAO {
 	public static JsonArray getFileHashes() {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("https://localhost/AbstergoREST/rest/FileHash/get");
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileHash/get");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -80,9 +77,8 @@ public class ApplicationValidationDAO {
 	protected static JsonObject getFileHashFromFileName(String fileName) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("https://localhost/AbstergoREST/rest/FileHash/get/" + getFileMapping(fileName));
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileHash/get/" + getFileMapping(fileName));
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -121,9 +117,8 @@ public class ApplicationValidationDAO {
 		OutputStream outputStream = null;
 		try {
 			String line = getFileMapping(name).replace("/", "~");
-			URL url = new URL("https://localhost/AbstergoREST/rest/Download/" + line);
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/Download/" + line);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("GET");
@@ -291,9 +286,8 @@ public class ApplicationValidationDAO {
 		BufferedReader br = null;
 		try {
 			// Open Connection to REST Server
-			URL url = new URL("https://localhost/AbstergoREST/rest/FileHash");
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setHostnameVerifier((hostname, session) -> true);
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileHash");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
 			connection.setRequestMethod("POST");
@@ -363,8 +357,6 @@ public class ApplicationValidationDAO {
 	}
 
 	public static void main(String[] arg0) {
-		System.setProperty("javax.net.ssl.trustStore","src/resource/WolfsKeystore");
-		System.setProperty("javax.net.ssl.trustStorePassword","password");
 		ApplicationValidationDAO.clearFileMap();
 		updateFileHashes(ApplicationValidationDAO.getFileHashMap());
 	}

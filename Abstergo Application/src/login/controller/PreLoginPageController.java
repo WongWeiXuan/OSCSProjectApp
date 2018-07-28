@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
+import bluetooth.BluetoothThreadModel;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -23,6 +24,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import log.LogModelThread;
+import log.controller.LogPageController;
+import logExtra.HandshakeThread;
 
 public class PreLoginPageController {
 	// Navigation bar
@@ -41,6 +45,8 @@ public class PreLoginPageController {
 	@FXML
 	private Label settingsNav;
 	@FXML
+    private Label logoutNav;
+	@FXML
 	private VBox anchorPane;
 	private boolean toggle = false;
 	public static VBox anchorPaneClone;
@@ -48,14 +54,38 @@ public class PreLoginPageController {
 
 	@FXML
 	void changePage(MouseEvent event) throws IOException {
-		String clicked = ((Label) event.getSource()).getId();
-		AnchorPane toBeChanged = null;
-		if ("logsNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
-		} else if ("settingsNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
-		}
-		PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
+		String clicked = ((Label)event.getSource()).getId();
+    	AnchorPane toBeChanged = null;
+    	if("logsNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("settingsNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("logoutNav".equals(clicked)) {
+    		// Stopping some Threads
+    		if(BluetoothThreadModel.isRunning())
+    			BluetoothThreadModel.stopThread();
+    		if(LogModelThread.isRunning()) {
+    			LogModelThread.stop();
+    			LogPageController.thread.stop();
+    			LogPageController.logThread = null;
+    			// Unlocking locks just in case
+    			LogModelThread.lock.unlock();
+    			HandshakeThread.lock.unlock();
+    			HandshakeThread.lock2.unlock();
+    		}
+    		
+    		// Removing Cache
+    		LoginPageController.cacheManager.getCacheManager().removeCache("user");
+    		
+    		// Changing Scene
+    		anchorPane.getChildren().clear();
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
+    		toBeChanged.setOpacity(1);
+			stackPane.getChildren().add(0, toBeChanged);
+			navBar.setVisible(false);
+    	}
 	}
 
 	@FXML

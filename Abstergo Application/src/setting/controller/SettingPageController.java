@@ -161,7 +161,7 @@ public class SettingPageController {
 			onDisconnectCombo.getItems().add(new Label(s));
 		}
 
-		int disconnectSetting = settingModel.preProcess(0, settingModel.getOnDiconnection());
+		int disconnectSetting = settingModel.preProcess(0, settingModel.getOnDisconnection());
 		if (disconnectSetting >= 0) {
 			onDisconnectCombo.getSelectionModel().select(disconnectSetting);
 		} else {

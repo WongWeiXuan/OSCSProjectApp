@@ -8,6 +8,7 @@ C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\naviga
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\PreLoginPageController.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\FileTransferThread.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\HandshakeThread.java
+C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\KeyPair.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModel.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThreadModel.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPage3Controller.java
@@ -31,9 +32,11 @@ C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\FileHash.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDetailsTree.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\AESEncryption.java
+C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BlockChainDAO.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Client.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPageController.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Transcation.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\controller\LogPageController.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothDevice.java
+C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Lock.java
 C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\LoginPageController.java

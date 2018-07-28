@@ -25,7 +25,7 @@ public class Setting {
 	public SettingModel getPreference() {
 		// Getting values and setting defaults
 		SettingModel model = new SettingModel();
-		model.setLogFile(preferences.get(ID1, "Application;Abstergo"));
+		model.setLogFile(preferences.get(ID1, "Application"));
 		model.setLogDisplay(preferences.get(ID2, "Event Source;Event Type;Event ID;Event Time Generated"));
 		model.setIncomingAccept(preferences.getBoolean(ID3, true));
 		model.setIncomingMaximum(preferences.getLong(ID4, 50));
@@ -43,7 +43,7 @@ public class Setting {
 			preferences.put(ID2, model.getLogDisplayString());
 			preferences.putBoolean(ID3, model.isIncomingAccept());
 			preferences.putLong(ID4, model.getIncomingMaximum());
-			preferences.put(ID5, model.getOnDiconnection());
+			preferences.put(ID5, model.getOnDisconnection());
 			preferences.putInt(ID6, model.getTimeout());
 
 			// Write to file

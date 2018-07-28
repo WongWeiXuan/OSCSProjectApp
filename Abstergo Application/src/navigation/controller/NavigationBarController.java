@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
+import bluetooth.BluetoothThreadModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -16,7 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import log.LogModelThread;
+import login.controller.LoginPageController;
 import login.controller.PreLoginPageController;
+import login.controller.SignupPageController;
 
 public class NavigationBarController {
 	@FXML
@@ -35,19 +39,37 @@ public class NavigationBarController {
     private Label logsNav;
     @FXML
     private Label settingsNav;
+    @FXML
+    private Label logoutNav;
     private boolean toggle = false;
     
     @FXML
-    void changePage(MouseEvent event) throws IOException {
-    	String clicked = ((Label)event.getSource()).getId();
+	void changePage(MouseEvent event) throws IOException {
+		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
     	if("logsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
+    		PreLoginPageController.stackPaneClone.getChildren().setAll(toBeChanged);
     	} else if("settingsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
+    		PreLoginPageController.stackPaneClone.getChildren().setAll(toBeChanged);
+    	} else if("logoutNav".equals(clicked)) {
+    		// Stopping some Threads
+    		if(BluetoothThreadModel.isRunning())
+    			BluetoothThreadModel.stopThread();
+    		if(LogModelThread.isRunning())
+	    		LogModelThread.stop();
+    		
+    		// Removing Cache
+    		LoginPageController.cacheManager.getCacheManager().removeCache("user");
+    		
+    		// Changing Scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
+    		toBeChanged.setOpacity(1);
+    		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
+    		PreLoginPageController.navBarClone.setVisible(false);
     	}
-    	PreLoginPageController.stackPaneClone.getChildren().setAll(toBeChanged);
-    }
+	}
     
 	@FXML
 	void toggleDrawer(MouseEvent event) {
