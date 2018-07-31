@@ -14,6 +14,7 @@ public class Transcation {
 	private long time;
 	private String fileHash;
 	private boolean broadcastFile;
+	private boolean deleted;
 
 	public Transcation(String userFrom, String userTo, File file) {
 		this.userFrom = userFrom;
@@ -30,12 +31,13 @@ public class Transcation {
 		this.broadcastFile = broadcastFile;
 	}
 	
-	public Transcation(String userFrom, String userTo, long time, String fileHash, boolean broadcastFile) {
+	public Transcation(String userFrom, String userTo, long time, String fileHash, boolean broadcastFile, boolean deleted) {
 		this.userFrom = userFrom;
 		this.userTo = userTo;
 		this.time = time;
 		this.fileHash = fileHash;
 		this.broadcastFile = broadcastFile;
+		this.deleted = deleted;
 	}
 
 	public static String generateSHA(File file) {
@@ -96,5 +98,9 @@ public class Transcation {
 
 	protected boolean isBroadcastFile() {
 		return broadcastFile;
+	}
+
+	protected boolean isDeleted() {
+		return deleted;
 	}
 }

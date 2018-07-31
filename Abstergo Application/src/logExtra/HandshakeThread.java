@@ -14,20 +14,22 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.ehcache.Cache;
-
 import log.LogModelThread;
+import log.controller.LogNetworkPageController;
 import login.controller.LoginPageController;
 
 public class HandshakeThread implements Runnable {
 	public static Lock lock = new Lock();
 	public static Lock lock2 = new Lock();
+	public static Lock lock3 = new Lock();
 	public static Map<String, Connection> connectionList;
 	private volatile boolean running;
 	private static String logName;
@@ -177,8 +179,8 @@ public class HandshakeThread implements Runnable {
 					if (c.isValid()) {
 						logName = packetData.substring(15);
 						if(checkWhetherGotFile(packetAddress, logName)) {
-//							userName = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class).get("User");
-							userName = "Wolf";
+							userName = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class).get("User");
+//							userName = "Wolf";
 							File file = getFile(packetAddress, logName);
 							String signature = Base64.getEncoder().encodeToString(KeyPairGen.signFile(file, userName));
 							request = true;
@@ -199,6 +201,37 @@ public class HandshakeThread implements Runnable {
 								packet.getAddress(), packet.getPort());
 						socket.send(sendPacket);
 					}
+				} else if("BEEP".equals(packetData)) {
+					byte[] responseBuffer = "BOOP".getBytes(StandardCharsets.UTF_8);
+					// Send response
+					DatagramPacket sendPacket = new DatagramPacket(responseBuffer, responseBuffer.length, packet.getAddress(), packet.getPort());
+					socket.send(sendPacket);
+				} else if ("BOOP".equals(packetData)) {
+					LogNetworkPageController.boop(packetAddress);
+				} else if ("DELETE".equals(packetData)) {
+					ArrayList<String> logArray = deleteLogFiles(packetAddress);
+					if(!logArray.isEmpty()) {
+						for(String s : logArray) {
+							String toBeSent = "DELETED:" + s;
+							byte[] responseBuffer = toBeSent.getBytes(StandardCharsets.UTF_8);
+							// Send response
+							DatagramPacket sendPacket = new DatagramPacket(responseBuffer, responseBuffer.length, packet.getAddress(), packet.getPort());
+							socket.send(sendPacket);
+						}
+					}
+				} else if (packetData.contains("DELETED:")) {
+					System.out.println("DELETED RECEIVED");
+					Scanner sc = new Scanner(packetData);
+					sc.useDelimiter(":");
+					sc.next();
+					while(sc.hasNext()) {
+						String logName3 = sc.next();
+						BlockChain chain = new BlockChain(logName3, "", false);
+						Transcation trans = new Transcation("0.0.0.0", packetAddress, new Date().getTime(), chain.getLastFileHash(), false, true);
+						chain.addBlock(trans);
+					}
+					sc.close();
+					LogNetworkPageController.deletedCall();
 				} else if ("WHOAREYOU?".equals(packetData)) {
 					System.out.println("RESET RECEIVED");
 					connectionList.remove(packetAddress);
@@ -220,6 +253,55 @@ public class HandshakeThread implements Runnable {
 		stop();
 	}
 
+	private ArrayList<String> deleteLogFiles(String packetAddress) {
+		 ArrayList<String> exist = new  ArrayList<String>();
+		
+		File file1 = new File("src/resource/logs/Application/" + packetAddress + ".txt");
+		File file2 = new File("src/resource/logs/Security/" + packetAddress + ".txt");
+		File file3 = new File("src/resource/logs/System/" + packetAddress + ".txt");
+		
+		if(file1.exists()) {
+			file1.delete();
+			exist.add("Application");
+		}
+		if(file2.exists()) {
+			file2.delete();
+			exist.add("Security");
+		}
+		if(file3.exists()) {
+			file3.delete();
+			exist.add("System");
+		}
+		
+		return exist;
+	}
+	
+	public static void sendDelete(String address) {
+		try {
+			byte[] responseBuffer = "DELETE".getBytes(StandardCharsets.UTF_8);
+			// Send response
+			DatagramPacket sendPacket = new DatagramPacket(responseBuffer, responseBuffer.length, InetAddress.getByName(address), 9653);
+			socket.send(sendPacket);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void sendBeeps(String address) {
+		try {
+			byte[] responseBuffer = "BEEP".getBytes(StandardCharsets.UTF_8);
+			// Send response
+			DatagramPacket sendPacket = new DatagramPacket(responseBuffer, responseBuffer.length, InetAddress.getByName(address), 9653);
+			socket.send(sendPacket);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private boolean checkWhetherGotFile(String address, String logFileName) {
 		File file = new File("src/resource/logs/" + logFileName + "/" + address + ".txt");
 		if(file.exists()) { 
@@ -243,6 +325,12 @@ public class HandshakeThread implements Runnable {
 				file = new File("src/resource/logs/" + logName + "Log.txt");
 			}
 
+			// No time find the bug... hopefully its will work
+			// The request is broken, rip my logic
+			if(!file.exists()) {
+				file = new File("src/resource/logs/" + logName + "Log.txt");
+			}
+			
 			byte[] buffer = new byte[(int) file.length()];
 			BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
 			inputStream.read(buffer, 0, buffer.length);
@@ -264,21 +352,23 @@ public class HandshakeThread implements Runnable {
 			// Add new block to array
 			// Mine block
 			// Store/Upload block array
-			if(!request) {
-				BlockChain blockChain = new BlockChain(logName, address, false);
-				if(blockChain.isChainValid()) {
-					Transcation trans = new Transcation(socket.getLocalAddress().getHostAddress(), socket.getInetAddress().getHostAddress(), file, false);
-					blockChain.addBlock(trans);
-				} else {
-					// IF fails
-					// Ask file from someone
-					requestFileTransferRequest(logName);
-					System.out.println("Integrity check Failed. How is this possible?");
-				}
+			lock3.lock();
+			BlockChain blockChain = new BlockChain(logName, address, false);
+			if(blockChain.isChainValid()) {
+				Transcation trans = new Transcation(socket.getLocalAddress().getHostAddress(), socket.getInetAddress().getHostAddress(), file, false);
+				blockChain.addBlock(trans);
+				lock3.unlock();
+			} else {
+				// IF fails
+				// Ask file from someone
+				requestFileTransferRequest(logName);
+				System.out.println("Integrity check Failed. How is this possible?");
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		request = false;

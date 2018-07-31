@@ -72,7 +72,7 @@ public class BluetoothThread implements Runnable {
 									polling *= 1.5;
 							}
 						} else if("Signout".equals(howToDC)) {
-							Runtime.getRuntime().exec("shutdown -l -p");
+							Runtime.getRuntime().exec("shutdown -l -f");
 							System.exit(0);
 						} else if("Sleep".equals(howToDC)) {
 							Runtime.getRuntime().exec("psshutdown -d -p");

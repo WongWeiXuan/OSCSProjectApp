@@ -41,6 +41,7 @@ public class LogModelThread implements Runnable{
 			while(!sleeping) {
 				Setting setting = new Setting();
 				for(String s : setting.getPreference().getLogFile()) {
+					System.out.println("SETTING: " + s);
 					try {
 						lock.lock();
 						logName = s;

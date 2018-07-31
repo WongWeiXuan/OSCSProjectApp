@@ -37,7 +37,7 @@ public class Block {
 	public String calculateHash() throws NoSuchAlgorithmException {
 		String calculatedHash = StringUtil
 				.applySha256(previousHash + transcation.getUserFrom() + transcation.getUserTo()
-						+ Long.toString(transcation.getTime()) + Integer.toString(nonce) + transcation.getFileHash() + transcation.isBroadcastFile());
+						+ Long.toString(transcation.getTime()) + Integer.toString(nonce) + transcation.getFileHash() + transcation.isBroadcastFile() + transcation.isDeleted());
 
 		return calculatedHash;
 	}

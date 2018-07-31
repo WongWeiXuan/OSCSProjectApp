@@ -14,7 +14,9 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import log.LogModelThread;
+import log.controller.LogNetworkPageController;
 import log.controller.LogPageController;
+import logExtra.BeepThread;
 import validation.controller.ValidationPageController;
 
 public class Main extends Application {
@@ -37,7 +39,8 @@ public class Main extends Application {
 			primaryStage.setMinWidth(1280);
 			primaryStage.setMinHeight(850);
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() { // Stop all the Threads when closing window (Sometimes it doesnt stops if "reconnected" device)
-			    @Override
+			    @SuppressWarnings("deprecation")
+				@Override
 			    public void handle(WindowEvent event) {
 			    	if(BluetoothThreadModel.isRunning())
 			    		BluetoothThreadModel.stopThread();
@@ -47,6 +50,12 @@ public class Main extends Application {
 		    		}
 			    	if(ValidationPageController.task.isRunning())
 			    		ValidationPageController.task.cancel();
+			    	if(BeepThread.isRunning())
+			    		BeepThread.stop();
+			    	if(LogNetworkPageController.t.isAlive())
+			    		LogNetworkPageController.t.stop();
+			    	if(LogNetworkPageController.beepThread.isAlive())
+			    		LogNetworkPageController.beepThread.stop();
 			    	Platform.exit();
 			    }
 			});

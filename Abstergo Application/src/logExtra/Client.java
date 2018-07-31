@@ -1,7 +1,7 @@
 package logExtra;
 
 public class Client {
-	private HandshakeThread handshake;
+	public HandshakeThread handshake;
 	private Thread thread;
 
 	public Client(String logName) {

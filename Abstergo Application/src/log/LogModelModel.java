@@ -18,6 +18,7 @@ import org.ehcache.Cache;
 
 import logExtra.AESEncryption;
 import logExtra.BlockChain;
+import logExtra.HandshakeThread;
 import logExtra.Transcation;
 import login.controller.LoginPageController;
 
@@ -165,6 +166,7 @@ public class LogModelModel {
 		String username = userCache.get("User");
 		
 		if(getFile(logName) == null) {
+			System.out.println("CREATING FILE: " + logName);
 			// Retrieve key
 			String key = LogDAO.getEncryptionKey(username);
 			LogModel log = new LogModel(logName);
@@ -194,6 +196,20 @@ public class LogModelModel {
 			file.delete();
 			LogDAO.writeToFile(encrypted, "src/resource/logs/" + logName + "Log.txt");
 			
+			try {
+				HandshakeThread.lock3.lock();
+				// Write to blockchain
+				BlockChain blockChain = new BlockChain(logName, "0.0.0.0", false);
+				if(blockChain.isChainValid()) {
+					Transcation trans = new Transcation("0.0.0.0", "0.0.0.0", encrypted, false);
+					blockChain.addBlock(trans);
+				} else {
+					return false;
+				}
+				HandshakeThread.lock3.unlock();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			return true;
 		} else {
 			System.out.println("\nHASH DONT EQUALS: " + hash + " ; " + chainHash);

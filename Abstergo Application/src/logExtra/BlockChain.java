@@ -99,6 +99,23 @@ public class BlockChain {
 		return null;
 	}
 	
+	public ArrayList<String> getListOfNetwork() {
+		ArrayList<String> arrayList = new ArrayList<String>();
+		for(Block b : blockArray) {
+			String addressTo = b.getTranscation().getUserTo();
+			if(b.getTranscation().isDeleted() || (!arrayList.contains(addressTo) && !"0.0.0.0".equals(addressTo))) {
+				if(b.getTranscation().isDeleted()) {
+					arrayList.remove(addressTo);
+				} else {
+					arrayList.add(addressTo);
+				}
+			}
+			
+		}
+		
+		return arrayList;
+	}
+	
 	public static void main(String[] arg0) {
 		BlockChain bc = new BlockChain("Application", "", false);
 		System.out.println("Valid: " + bc.isChainValid());

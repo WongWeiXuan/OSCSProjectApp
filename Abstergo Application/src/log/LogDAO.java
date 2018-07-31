@@ -49,7 +49,6 @@ public class LogDAO {
 
 	public static void writeToFile(File input, String name) {
 		File output = new File(name);
-		System.out.println(output.getAbsolutePath());
 		try {
 			FileUtils.copyFile(input, output);
 		} catch (IOException e) {

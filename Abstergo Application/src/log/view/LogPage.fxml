@@ -8,9 +8,13 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -23,29 +27,225 @@
          <children>
             <VBox spacing="20.0">
                <children>
-                  <TextFlow textAlignment="CENTER">
+                  <TextFlow>
                      <children>
-                        <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="A very ugly log page">
+                        <Label style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Log page" textFill="WHITE">
                            <font>
                               <Font size="36.0" />
                            </font>
                         </Label>
                      </children>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
                   </TextFlow>
-                  <HBox spacing="20.0" VBox.vgrow="ALWAYS">
+                  <GridPane vgap="20.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="212.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="176.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Past 24 hours" />
+                        <VBox alignment="CENTER" GridPane.columnIndex="1">
+                           <children>
+                              <Text fx:id="newProc24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New processes created" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="2">
+                           <children>
+                              <Text fx:id="accLoged24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account logged in" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="3">
+                           <children>
+                              <Text fx:id="shareFol24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Share folder accessed" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="4">
+                           <children>
+                              <Text fx:id="connectionPro24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Firewall connection by processes" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="5">
+                           <children>
+                              <Text fx:id="newServ24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New service installed" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="6">
+                           <children>
+                              <Text fx:id="audit24" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Files audit" />
+                           </children>
+                        </VBox>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Past week" GridPane.rowIndex="1" />
+                        <VBox alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="newProc7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New processes created" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="accLoged7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account logged in" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="shareFol7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Share folder accessed" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="connectionPro7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Firewall connection by processes" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="5" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="newServ7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-text-fill: yellow;" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="New service installed" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                           <children>
+                              <Text fx:id="audit7" onMouseClicked="#showEventIDLogs" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Files audit" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+                  <HBox prefHeight="500.0" spacing="20.0" VBox.vgrow="ALWAYS">
                      <children>
                         <HBox HBox.hgrow="ALWAYS">
                            <children>
-                              <JFXTreeTableView fx:id="logTable" maxWidth="1.7976931348623157E308" prefHeight="644.0" prefWidth="770.0" HBox.hgrow="ALWAYS" />
+                              <JFXTreeTableView fx:id="logTable" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
-                        <VBox spacing="10.0">
+                        <VBox minWidth="200.0" spacing="10.0">
                            <children>
-                              <JFXComboBox fx:id="filterCombo" onAction="#changeLogView" prefHeight="31.0" prefWidth="169.0" />
-                              <JFXTextField fx:id="filterInput" />
-                              <JFXButton fx:id="updateBtn" onAction="#updateAndGetLogs" text="Get / Update" />
-                              <JFXButton fx:id="filterBtn" onAction="#filterLogs" text="Filter" />
-                              <JFXButton fx:id="downloadBtn" onAction="#establishFileTransfer" text="Download Logs" />
+                              <TextFlow>
+                                 <children>
+                                    <JFXComboBox fx:id="filterCombo" onAction="#changeLogView" prefHeight="31.0" prefWidth="169.0" />
+                                 </children>
+                              </TextFlow>
+                              <TextFlow>
+                                 <children>
+                                    <JFXTextField fx:id="filterInput" />
+                                 </children>
+                              </TextFlow>
+                              <TextFlow VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <JFXButton fx:id="updateBtn" buttonType="RAISED" onAction="#updateAndGetLogs" text="Get / Update" />
+                                 </children>
+                              </TextFlow>
+                              <TextFlow>
+                                 <children>
+                                    <JFXButton fx:id="infoBtn" buttonType="RAISED" onAction="#changeToInfo" text="Logs Info" />
+                                 </children>
+                              </TextFlow>
                            </children>
                            <HBox.margin>
                               <Insets />
@@ -56,7 +256,7 @@
                         <Insets />
                      </VBox.margin>
                      <padding>
-                        <Insets bottom="10.0" left="20.0" right="20.0" />
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </HBox>
                </children>

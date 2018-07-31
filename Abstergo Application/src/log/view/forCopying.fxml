@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="log.controller.forCopyingController">
+   <children>
+      <StackPane>
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1c202e" height="90.0" stroke="BLACK" strokeType="INSIDE" width="130.0" />
+            <ImageView fitHeight="150.0" fitWidth="200.0" onMouseClicked="#showRightClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resource/pictures/laptop.png" />
+               </image>
+            </ImageView>
+         </children>
+      </StackPane>
+   </children>
+</VBox>

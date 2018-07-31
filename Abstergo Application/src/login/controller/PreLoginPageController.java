@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import log.LogModelThread;
 import log.controller.LogPageController;
+import logExtra.BeepThread;
 import logExtra.HandshakeThread;
 
 public class PreLoginPageController {
@@ -54,6 +55,10 @@ public class PreLoginPageController {
 
 	@FXML
 	void changePage(MouseEvent event) throws IOException {
+		// Stop beep after changing view
+		if(BeepThread.isRunning())
+    		BeepThread.stop();
+		
 		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
     	if("logsNav".equals(clicked)) {

@@ -41,9 +41,10 @@ public class BlockChainDAO {
 				String time					= sc1.next();
 				String fileHash				= sc1.next();
 				boolean broadcastFileHash	= Boolean.parseBoolean(sc1.next());
+				boolean deleted	= Boolean.parseBoolean(sc1.next());
 				sc1.close();
 				
-				Transcation trans = new Transcation(userFrom, userTo, Long.parseLong(time), fileHash, broadcastFileHash);
+				Transcation trans = new Transcation(userFrom, userTo, Long.parseLong(time), fileHash, broadcastFileHash, deleted);
 				blockArray.add(new Block(trans, hash, previousHash, nonce));
 			}
 			sc.close();
@@ -80,6 +81,7 @@ public class BlockChainDAO {
 			out.append("~" + block.getTranscation().getTime());
 			out.append("~" + block.getTranscation().getFileHash());
 			out.append("~" + String.valueOf(block.getTranscation().isBroadcastFile()));
+			out.append("~" + String.valueOf(block.getTranscation().isDeleted()));
 			out.append("\n");
 			out.flush();
 			out.close();

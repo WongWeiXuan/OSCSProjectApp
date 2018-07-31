@@ -5,6 +5,8 @@ BluetoothThread.java;src/bluetooth/BluetoothThread.java
 BluetoothThreadModel.java;src/bluetooth/BluetoothThreadModel.java
 LoginBluetoothModel.java;src/bluetooth/LoginBluetoothModel.java
 AbstergoLogModel.java;src/log/AbstergoLogModel.java
+forCopyingController.java;src/log/controller/forCopyingController.java
+LogNetworkPageController.java;src/log/controller/LogNetworkPageController.java
 LogPageController.java;src/log/controller/LogPageController.java
 LogDAO.java;src/log/LogDAO.java
 LogDetailsModel.java;src/log/LogDetailsModel.java
@@ -12,8 +14,11 @@ LogDetailsTree.java;src/log/LogDetailsTree.java
 LogModel.java;src/log/LogModel.java
 LogModelModel.java;src/log/LogModelModel.java
 LogModelThread.java;src/log/LogModelThread.java
+forCopying.fxml;src/log/view/forCopying.fxml
+LogNetworkPage.fxml;src/log/view/LogNetworkPage.fxml
 LogPage.fxml;src/log/view/LogPage.fxml
 AESEncryption.java;src/logExtra/AESEncryption.java
+BeepThread.java;src/logExtra/BeepThread.java
 Block.java;src/logExtra/Block.java
 BlockChain.java;src/logExtra/BlockChain.java
 BlockChainDAO.java;src/logExtra/BlockChainDAO.java

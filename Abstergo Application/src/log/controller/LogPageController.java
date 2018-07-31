@@ -1,7 +1,10 @@
 package log.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,6 +24,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -36,6 +40,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -57,9 +62,31 @@ public class LogPageController {
 	@FXML
 	private JFXButton updateBtn;
 	@FXML
-	private JFXButton downloadBtn;
+    private JFXButton infoBtn;
 	@FXML
-	private JFXButton filterBtn;
+    private Text newProc24;
+    @FXML
+    private Text accLoged24;
+    @FXML
+    private Text shareFol24;
+    @FXML
+    private Text connectionPro24;
+    @FXML
+    private Text newServ24;
+    @FXML
+    private Text audit24;
+    @FXML
+    private Text newProc7;
+    @FXML
+    private Text accLoged7;
+    @FXML
+    private Text shareFol7;
+    @FXML
+    private Text connectionPro7;
+    @FXML
+    private Text newServ7;
+    @FXML
+    private Text audit7;
 	@FXML
 	private JFXTreeTableView<LogDetailsTree> logTable;
 	@FXML
@@ -100,6 +127,7 @@ public class LogPageController {
 					@Override
 					protected Void call() {
 						logThread.updateLogs();
+						processLogs();
 						return null;
 					}
 				};
@@ -124,7 +152,12 @@ public class LogPageController {
 				logDetailsTree.addAll(model.getLogsDetails(select));
 				
 				final TreeItem<LogDetailsTree> root = new RecursiveTreeItem<LogDetailsTree>(logDetailsTree, RecursiveTreeObject::getChildren);
-				logTable.setRoot(root);
+				Platform.runLater(new Runnable() {
+					@Override
+					public void run() {
+						logTable.setRoot(root);
+					}
+				});
 				jfxDialog.close();
 			}
 		});
@@ -143,54 +176,205 @@ public class LogPageController {
 		
     }
     
+    @FXML
+    void changeToInfo(ActionEvent event) throws IOException {
+    	AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogNetworkPage.fxml")); // Change scene
+		PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
+    }
+    
 	@FXML
-	void establishFileTransfer(ActionEvent event) {
-		// Just in case something else overwritten the logname
-		final String LOGNAME = filterCombo.getSelectionModel().getSelectedItem().getText();
-    	HandshakeThread.setLogName(LOGNAME); // Setting logName
-    	LogModelThread.setLogName(LOGNAME); // Setting logName
-		logThread.requestFileTransferRequest();
-	}
+    void showEventIDLogs(MouseEvent event) {
+		backgroundService = new Service<Void>() {
 
-	@FXML
-	void filterLogs(ActionEvent event) {
-		Map<String, Integer> mapping24Hours = new HashMap<String, Integer>();
-		Map<String, Integer> mapping1Week = new HashMap<String, Integer>();
-		
-		LogModelModel model = new LogModelModel();
-		Setting setting = new Setting();
-		for(String s : setting.getPreference().getLogFile()) {
-			Map<String, Integer> map24Hours = null;
-			Map<String, Integer> map1Week = null;
-			
-			if("Application".equals(s)) {
-				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(0), 0); // You have to wonder why I never create a "Model" method -.-
-				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(0), 0);
-			} else if("System".equals(s)) {
-				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(1), 1);
-				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(1), 1);
-			} else if("Security".equals(s)) {
-				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(2), 2);
-				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(2), 2);
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+
+					@Override
+					protected Void call() {
+						final String NODEID = ((Text) event.getSource()).getId();
+						int select = 0;
+						if("newProc24".equals(NODEID)) {
+							select = 2;
+						} else if("accLoged24".equals(NODEID)) {
+							select = 2;
+						} else if("shareFol24".equals(NODEID)) {
+							select = 1;
+						}else if("connectionPro24".equals(NODEID)) {
+							select = 1;
+						}else if("newServ24".equals(NODEID)) {
+							select = 1;
+						}else if("audit24".equals(NODEID)) {
+							select = 1;
+						}else if("newProc7".equals(NODEID)) {
+							select = 2;
+						}else if("accLoged7".equals(NODEID)) {
+							select = 2;
+						}else if("shareFol7".equals(NODEID)) {
+							select = 1;
+						}else if("connectionPro7".equals(NODEID)) {
+							select = 1;
+						}else if("newServ7".equals(NODEID)) {
+							select = 1;
+						}else if("audit7".equals(NODEID)) {
+							select = 1;
+						}
+						
+						if(filterCombo.getSelectionModel().getSelectedIndex() != select) {
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									int select = 0;
+									if("newProc24".equals(NODEID)) {
+										select = 2;
+									} else if("accLoged24".equals(NODEID)) {
+										select = 2;
+									} else if("shareFol24".equals(NODEID)) {
+										select = 1;
+									}else if("connectionPro24".equals(NODEID)) {
+										select = 1;
+									}else if("newServ24".equals(NODEID)) {
+										select = 1;
+									}else if("audit24".equals(NODEID)) {
+										select = 1;
+									}else if("newProc7".equals(NODEID)) {
+										select = 2;
+									}else if("accLoged7".equals(NODEID)) {
+										select = 2;
+									}else if("shareFol7".equals(NODEID)) {
+										select = 1;
+									}else if("connectionPro7".equals(NODEID)) {
+										select = 1;
+									}else if("newServ7".equals(NODEID)) {
+										select = 1;
+									}else if("audit7".equals(NODEID)) {
+										select = 1;
+									}
+									
+									String logName = "";
+									if(1 == select) {
+										logName = "Application";
+									} else if(2 == select) {
+										logName = "Security";
+									} else if(3 == select) {
+										logName = "System";
+									}
+									
+									for(int i = 0; i < filterCombo.getItems().size(); i++) {
+										if(filterCombo.getItems().get(i).getText().equals(logName)) {
+											filterCombo.getSelectionModel().select(i);
+										}
+									}
+								}
+							});
+							LogModelModel model = new LogModelModel();
+							ObservableList<LogDetailsTree> logDetailsTree = FXCollections.observableArrayList();
+							logDetailsTree.addAll(model.getLogsDetails(select));
+							
+							final TreeItem<LogDetailsTree> root = new RecursiveTreeItem<LogDetailsTree>(logDetailsTree, RecursiveTreeObject::getChildren);
+							Platform.runLater(new Runnable() {
+								@Override
+								public void run() {
+									logTable.setRoot(root);
+								}
+							});
+						}
+						
+						logTable.setPredicate(new Predicate<TreeItem<LogDetailsTree>>() {
+							@Override
+							public boolean test(TreeItem<LogDetailsTree> t) {
+								ArrayList<String> eventToBe = new ArrayList<String>();
+								long dayToBe = 0;
+								
+								if("newProc24".equals(NODEID)) {
+									eventToBe.add("4688");
+									eventToBe.add("592");
+									dayToBe = 86400000;
+								} else if("accLoged24".equals(NODEID)) {
+									eventToBe.add("4624");
+									eventToBe.add("528");
+									eventToBe.add("540");
+									dayToBe = 86400000;
+								} else if("shareFol24".equals(NODEID)) {
+									eventToBe.add("5140");
+									eventToBe.add("560");
+									dayToBe = 86400000;
+								}else if("connectionPro24".equals(NODEID)) {
+									eventToBe.add("5156");
+									dayToBe = 86400000;
+								}else if("newServ24".equals(NODEID)) {
+									eventToBe.add("7045");
+									eventToBe.add("601");
+									dayToBe = 86400000;
+								}else if("audit24".equals(NODEID)) {
+									eventToBe.add("4663");
+									eventToBe.add("567");
+									dayToBe = 86400000;
+								}else if("newProc7".equals(NODEID)) {
+									eventToBe.add("4688");
+									eventToBe.add("592");
+									dayToBe = 604800000;
+								}else if("accLoged7".equals(NODEID)) {
+									eventToBe.add("4624");
+									eventToBe.add("528");
+									eventToBe.add("540");
+									dayToBe = 604800000;
+								}else if("shareFol7".equals(NODEID)) {
+									eventToBe.add("5140");
+									eventToBe.add("560");
+									dayToBe = 604800000;
+								}else if("connectionPro7".equals(NODEID)) {
+									eventToBe.add("5156");
+									dayToBe = 604800000;
+								}else if("newServ7".equals(NODEID)) {
+									eventToBe.add("7045");
+									eventToBe.add("601");
+									dayToBe = 604800000;
+								}else if("audit7".equals(NODEID)) {
+									eventToBe.add("4663");
+									eventToBe.add("567");
+									dayToBe = 604800000;
+								}
+								long time = (System.currentTimeMillis() - dayToBe) / 1000;
+								
+								String eventID = t.getValue().getEventID().getValue().substring(0, t.getValue().getEventID().getValue().length() - 1);
+								Boolean a = false;
+								for(String s : eventToBe) {
+									if(eventID.equals(s)) {
+										a = true;
+									}
+								}
+								String timeA = t.getValue().getEventTimeGenerated().getValue();
+								timeA = timeA.substring(0, timeA.length() - 1);
+								Boolean b = Long.parseLong(timeA) > time;
+								
+								if(a && b) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+							
+						});
+						return null;
+					}
+				};
 			}
-			
-			for(Map.Entry<String, Integer> e : map24Hours.entrySet()) {
-				mapping24Hours.merge(e.getKey(), e.getValue(), Integer::sum);
+		};
+
+		backgroundService.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+
+			@Override
+			public void handle(WorkerStateEvent event) {
+				jfxDialog.close();
 			}
-			
-			for(Map.Entry<String, Integer> e : map1Week.entrySet()) {
-				mapping1Week.merge(e.getKey(), e.getValue(), Integer::sum);
-			}
-		}
-		
-		for(Entry<String, Integer> i : mapping24Hours.entrySet()) {
-			System.out.println("Key: " + i.getKey() + ", Value: " + i.getValue());
-		}
-		System.out.println("\nWeek");
-		for(Entry<String, Integer> i : mapping1Week.entrySet()) {
-			System.out.println("Key: " + i.getKey() + ", Value: " + i.getValue());
-		}
-	}
+		});
+		jfxDialog.setDialogContainer(logStackPane);
+		jfxDialog.setContent(jfxDialogLayout);
+		jfxDialog.setTransitionType(DialogTransition.CENTER);
+		jfxDialog.show();
+		backgroundService.start();
+    }
 
 	@FXML
 	void updateAndGetLogs(ActionEvent event) {
@@ -202,7 +386,8 @@ public class LogPageController {
 
 					@Override
 					protected Void call() {
-						LogModelModel.updateOrGetLogs("Application");
+						logThread.updateLogs();
+						processLogs();
 						return null;
 					}
 				};
@@ -248,6 +433,107 @@ public class LogPageController {
 		});
 	}
 	
+	private void processLogs() {
+		// Process and show logs info / summary
+		Map<String, Integer> mapping24Hours = new HashMap<String, Integer>();
+		Map<String, Integer> mapping1Week = new HashMap<String, Integer>();
+		
+		LogModelModel model = new LogModelModel();
+		Setting setting = new Setting();
+		for(String s : setting.getPreference().getLogFile()) {
+			Map<String, Integer> map24Hours = null;
+			Map<String, Integer> map1Week = null;
+			
+			if("Application".equals(s)) {
+				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(0), 0); // You have to wonder why I never create a "Model" method -.-
+				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(0), 0);
+			} else if("System".equals(s)) {
+				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(1), 1);
+				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(1), 1);
+			} else if("Security".equals(s)) {
+				map24Hours = LogModelModel.processAndGetSummary24Hours(model.getLogsDetailsModel(2), 2);
+				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(2), 2);
+			}
+			
+			for(Map.Entry<String, Integer> e : map24Hours.entrySet()) {
+				mapping24Hours.merge(e.getKey(), e.getValue(), Integer::sum);
+			}
+			
+			for(Map.Entry<String, Integer> e : map1Week.entrySet()) {
+				mapping1Week.merge(e.getKey(), e.getValue(), Integer::sum);
+			}
+		}
+		
+		for(Entry<String, Integer> i : mapping24Hours.entrySet()) {
+			String key = i.getKey();
+			int value = i.getValue();
+			Text text = getIDFromKey(key, true);
+			text.setText(String.valueOf(value));
+			if("logged".equals(key) && value > 0) {
+				text.setStyle("-fx-fill: #84E7D8;");
+			}else {
+				if(value >= 5) {
+					text.setStyle("-fx-fill: #FF5D53;");
+				}else if(value >= 2) {
+					text.setStyle("-fx-fill: #E8DA4D;");
+				}else {
+					text.setStyle("-fx-fill: black;");
+				}
+			}
+		}
+		
+		for(Entry<String, Integer> i : mapping1Week.entrySet()) {
+			String key = i.getKey();
+			int value = i.getValue();
+			Text text = getIDFromKey(key, false);
+			text.setText(String.valueOf(value));
+			if("logged".equals(key) && value > 0) {
+				text.setStyle("-fx-fill: #84E7D8;");
+			}else {
+				if(value >= 5) {
+					text.setStyle("-fx-fill: #FF5D53;");
+				}else if(value >= 2) {
+					text.setStyle("-fx-fill: #E8DA4D;");
+				}else {
+					text.setStyle("-fx-fill: black;");
+				}
+			}
+		}
+	}
+	
+	private Text getIDFromKey(String key, boolean isIt24) {
+		if(isIt24) {
+			if("process".equals(key)) {
+				return newProc24;
+			} else if("logged".equals(key)) {
+				return accLoged24;
+			} else if("share".equals(key)) {
+				return shareFol24;
+			}else if("connection".equals(key)) {
+				return connectionPro24;
+			}else if("service".equals(key)) {
+				return newServ24;
+			}else if("file".equals(key)) {
+				return audit24;
+			}
+		} else {
+			if("process".equals(key)) {
+				return newProc7;
+			}else if("logged".equals(key)) {
+				return accLoged7;
+			}else if("share".equals(key)) {
+				return shareFol7;
+			}else if("connection".equals(key)) {
+				return connectionPro7;
+			}else if("service".equals(key)) {
+				return newServ7;
+			}else if("file".equals(key)) {
+				return audit7;
+			}
+		}
+		return null;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@FXML
 	void initialize() throws IOException, InterruptedException {
@@ -276,7 +562,13 @@ public class LogPageController {
 						for(String s : logList) {
 							filterCombo.getItems().add(new Label(s));
 						}
-						filterCombo.getSelectionModel().select(0); //Display whatever is the first log
+						
+						Platform.runLater(new Runnable() {
+							@Override
+							public void run() {
+								filterCombo.getSelectionModel().select(0); //Display whatever is the first log
+							}
+						});
 						
 						final String LOGNAME = logList.get(0);
 						// Starting the LogThread
@@ -348,7 +640,11 @@ public class LogPageController {
 
 							@Override
 							public ObservableValue<String> call(CellDataFeatures<LogDetailsTree, String> param) {
-								return param.getValue().getValue().getEventTimeGenerated();
+								String timeGen = param.getValue().getValue().getEventTimeGenerated().getValue();
+								timeGen = timeGen.substring(0, timeGen.length() - 1);
+								Date date = new Date(Long.parseLong(timeGen) * 1000);
+								String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+								return new SimpleStringProperty(time);
 							}
 							
 						});
@@ -359,7 +655,11 @@ public class LogPageController {
 
 							@Override
 							public ObservableValue<String> call(CellDataFeatures<LogDetailsTree, String> param) {
-								return param.getValue().getValue().getEventTimeWritten();
+								String timeGen = param.getValue().getValue().getEventTimeWritten().getValue();
+								timeGen = timeGen.substring(0, timeGen.length() - 1);
+								Date date = new Date(Long.parseLong(timeGen) * 1000);
+								String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+								return new SimpleStringProperty(time);
 							}
 							
 						});
@@ -405,13 +705,26 @@ public class LogPageController {
 								logTable.setPredicate(new Predicate<TreeItem<LogDetailsTree>>() {
 									@Override
 									public boolean test(TreeItem<LogDetailsTree> t) {
-										Boolean returnValue = t.getValue().getEventID().getValue().substring(0, t.getValue().getEventID().getValue().length() - 1).contains(newValue);
-										return returnValue;
+										Boolean a = t.getValue().getRecordNumber().getValue().contains(newValue);
+										Boolean b = t.getValue().getEventType().getValue().contains(newValue);
+										Boolean c = t.getValue().getEventTimeGenerated().getValue().contains(newValue);
+										Boolean d = t.getValue().getEventData().getValue().contains(newValue);
+										Boolean e = t.getValue().getEventCategory().getValue().contains(newValue);
+										Boolean f = t.getValue().getEventSource().getValue().contains(newValue);
+										Boolean g = t.getValue().getEventTimeWritten().getValue().contains(newValue);
+										Boolean i = t.getValue().getEventID().getValue().contains(newValue);
+										
+										if(a || b || c || d || e || f || g || i) {
+											return true;
+										} else {
+											return false;
+										}
 									}
 									
 								});
 							}
 						});
+						processLogs();
 						
 						return null;
 					}
