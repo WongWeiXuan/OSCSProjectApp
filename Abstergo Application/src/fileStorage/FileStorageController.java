@@ -73,7 +73,7 @@ public class FileStorageController {
 		nameCol.prefWidthProperty().bind(fileTable.widthProperty().divide(2));
 		nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorage, String> param) -> {
 			if (nameCol.validateValue(param)) {
-				return param.getValue().getValue().fileNameProperty();
+				return param.getValue().getValue().nameProperty();
 			}
 		    else {
 		    	return nameCol.getComputedValue(param);
@@ -85,7 +85,7 @@ public class FileStorageController {
 		typeCol.prefWidthProperty().bind(fileTable.widthProperty().divide(4));
 		typeCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorage, String> param) -> {
 			if (typeCol.validateValue(param)) {
-				return param.getValue().getValue().fileTypeProperty();
+				return param.getValue().getValue().typeProperty();
 			}
 		    else {
 		    	return typeCol.getComputedValue(param);

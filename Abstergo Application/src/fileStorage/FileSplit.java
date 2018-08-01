@@ -100,12 +100,15 @@ public class FileSplit {
 		String keyNum = keyStr.substring(keyStr.lastIndexOf('.') + 1);
 		
 		byte[] parBlock = null;
+		String parNum = null;
 		int missingPartNum = 0;
 		
 		//If no split files are missing, no need for parity block
 		if (Integer.parseInt(keyNum) - files.length == 2) {
 			File parBlockFile = oneOfFiles.getParentFile().listFiles((File dir, String name) -> name.startsWith(destFileName) && name.endsWith(".parblock"))[0];
 			parBlock = Files.readAllBytes(parBlockFile.toPath());
+			String parStr = parBlockFile.getName().substring(parBlockFile.getName().indexOf(destFileName), parBlockFile.getName().lastIndexOf('.'));
+			parNum = parStr.substring(parStr.lastIndexOf('.') + 1);
 			
 			//Find the missing file, then create an empty file
 			int partCounter = 1;
@@ -136,21 +139,24 @@ public class FileSplit {
 			if (b1 == null) {
 				alpha = Files.readAllBytes(f.toPath());
 				b1 = FileSecure.hash(alpha);
+				//System.out.println(Base64.getEncoder().encodeToString(alpha));
 			}
 			else if (b2 == null) {
 				beta = Files.readAllBytes(f.toPath());
 				b2 = FileSecure.hash(beta);
+				//System.out.println(Base64.getEncoder().encodeToString(beta));
 			}
 			else if (b3 == null) {
 				charlie = Files.readAllBytes(f.toPath());
 				b3 = FileSecure.hash(charlie);
+				//System.out.println(Base64.getEncoder().encodeToString(charlie));
 			}
 			else if (b4 == null) {
 				delta = Files.readAllBytes(f.toPath());
 				b4 = FileSecure.hash(delta);
 			}
 		}
-		
+		//System.out.println(delta);
 		if (parBlock != null) {
 			if (missingPartNum == 1) {
 				alpha = FileSecure.getMissingBlockByXOR(parBlock, beta, charlie, delta);
@@ -183,7 +189,7 @@ public class FileSplit {
 		byte[] encKeyBytes = FileSecure.getEncKeyByXOR(b1, b2, b3, b4, keyBlock);
 		String encKey = new String(encKeyBytes, "UTF-8");
 		
-		System.out.println("Decryption key: " + encKey);
+		//System.out.println("Decryption key: " + encKey);
 		
 		for (File f : files) {
 			file = f;

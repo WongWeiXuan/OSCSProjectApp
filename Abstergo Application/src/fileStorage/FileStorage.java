@@ -1,59 +1,47 @@
 package fileStorage;
 
-import java.io.File;
-
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class FileStorage extends RecursiveTreeObject<FileStorage> {
-	private String username;
-	private StringProperty fileName;
-	private StringProperty fileType;
+	private StringProperty name;
+	private StringProperty type;
 	private StringProperty dateCreated;
-	private File file;
 	
 	public FileStorage() {
 		
 	}
 
-	public FileStorage(String fileName, String fileType, String dateCreated) {
-		this.fileName = new SimpleStringProperty(fileName);
-		this.fileType = new SimpleStringProperty(fileType);
+	public FileStorage(String name, String type, String dateCreated) {
+		this.name = new SimpleStringProperty(name);
+		this.type = new SimpleStringProperty(type);
 		this.dateCreated = new SimpleStringProperty(dateCreated);
 	}
 	
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public StringProperty fileNameProperty() {
-		return this.fileName;
+	public StringProperty nameProperty() {
+		return this.name;
 	}
 	
-	public String getFileName() {
-		return fileName.get();
+	public String getName() {
+		return name.get();
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName.set(fileName);
+	public void setName(String name) {
+		this.name.set(name);
 	}
 	
-	public StringProperty fileTypeProperty() {
-		return this.fileType;
+	public StringProperty typeProperty() {
+		return this.type;
 	}
 
-	public String getFileType() {
-		return fileType.get();
+	public String getType() {
+		return type.get();
 	}
 
-	public void setFileType(String fileType) {
-		this.fileType.set(fileType);
+	public void setType(String type) {
+		this.type.set(type);
 	}
 	
 	public StringProperty dateCreatedProperty() {
@@ -66,14 +54,6 @@ public class FileStorage extends RecursiveTreeObject<FileStorage> {
 
 	public void setDateCreated(String dateCreated) {
 		this.dateCreated.set(dateCreated);
-	}
-
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
 	}
 
 	public static void main(String[] args) {
