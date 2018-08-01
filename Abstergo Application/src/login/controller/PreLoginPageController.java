@@ -2,10 +2,13 @@ package login.controller;
 
 import java.io.IOException;
 
+import javax.naming.OperationNotSupportedException;
+
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import bluetooth.BluetoothThreadModel;
+import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -54,14 +57,17 @@ public class PreLoginPageController {
 	public static StackPane navBarClone;
 
 	@FXML
-	void changePage(MouseEvent event) throws IOException {
+	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view
 		if(BeepThread.isRunning())
     		BeepThread.stop();
 		
 		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
-    	if("logsNav".equals(clicked)) {
+    	if("emailNav".equals(clicked)) {
+    		toBeChanged = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("logsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("settingsNav".equals(clicked)) {

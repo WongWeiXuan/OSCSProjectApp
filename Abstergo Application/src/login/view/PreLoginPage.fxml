@@ -42,7 +42,7 @@
                                     <Line endX="125.0" startX="-125.0" stroke="WHITE" strokeLineCap="ROUND" strokeWidth="2.0" />
                                     <TextFlow>
                                        <children>
-                                          <Label fx:id="emailNav" graphicTextGap="30.0" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email" textFill="WHITE">
+                                          <Label fx:id="emailNav" graphicTextGap="30.0" onMouseClicked="#changePage" style="-fx-font-family: &quot;Source Sans Pro&quot;;" text="Email" textFill="WHITE">
                                              <font>
                                                 <Font size="24.0" />
                                              </font>

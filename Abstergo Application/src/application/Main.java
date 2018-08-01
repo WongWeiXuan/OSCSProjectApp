@@ -3,6 +3,7 @@ package application;
 import com.jfoenix.controls.JFXDecorator;
 
 import bluetooth.BluetoothThreadModel;
+import email.view.ViewFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -27,10 +28,12 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			stage = primaryStage;
+//			Parent root = ViewFactory.defaultFactory.getMainScene();
 			Parent root = FXMLLoader.load(getClass().getResource("/login/view/PreLoginPage.fxml"));
 			JFXDecorator decorator = new JFXDecorator(stage, root);
 			decorator.setCustomMaximize(true);
 			Scene scene = new Scene(decorator);
+			//testing
 			primaryStage.setScene(scene);
 			primaryStage.getIcons().add(new Image("resource/pictures/abstergo-industries-logo-only.png"));
 			primaryStage.setTitle("Abstergo Security Suite");
@@ -48,13 +51,13 @@ public class Main extends Application {
 		    			LogModelThread.stop();
 		    			LogPageController.thread.stop();
 		    		}
-			    	if(ValidationPageController.task.isRunning())
+			    	if(ValidationPageController.task != null && ValidationPageController.task.isRunning())
 			    		ValidationPageController.task.cancel();
 			    	if(BeepThread.isRunning())
 			    		BeepThread.stop();
 			    	if(LogNetworkPageController.t != null && LogNetworkPageController.t.isAlive())
 			    		LogNetworkPageController.t.stop();
-			    	if(LogNetworkPageController.beepThread.isAlive())
+			    	if(LogNetworkPageController.beepThread != null && LogNetworkPageController.beepThread.isAlive())
 			    		LogNetworkPageController.beepThread.stop();
 			    	Platform.exit();
 			    }
@@ -66,6 +69,19 @@ public class Main extends Application {
 					System.out.println("NULL font family");
 				}
 			}
+			
+//			if(ViewFactory.defaultFactory.getPersistenceAcess().validPersistencefound()){
+//				scene = ViewFactory.defaultFactory.getMainScene();
+//			} 
+//			//check the DB for existing account
+//			else if(1 == 1) {
+//				scene = ViewFactory.defaultFactory.getMainScene();
+//			}
+//			
+//			else{
+//				scene = ViewFactory.defaultFactory.getAddAccountScene();
+//			}
+
 			primaryStage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
