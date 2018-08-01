@@ -42,6 +42,10 @@ public class PreLoginPageController {
 	@FXML
 	private Label emailNav;
 	@FXML
+    private Label fileNav;
+    @FXML
+    private Label backupNav;
+	@FXML
 	private Label logsNav;
 	@FXML
 	private Label settingsNav;
@@ -61,7 +65,16 @@ public class PreLoginPageController {
 		
 		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
-    	if("logsNav".equals(clicked)) {
+    	if("emailNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/kkk.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+		} else if("fileNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("backupNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/NonexistentBackup.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("logsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("settingsNav".equals(clicked)) {
