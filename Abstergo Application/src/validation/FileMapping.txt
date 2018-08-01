@@ -4,6 +4,12 @@ BluetoothDevice.java;src/bluetooth/BluetoothDevice.java
 BluetoothThread.java;src/bluetooth/BluetoothThread.java
 BluetoothThreadModel.java;src/bluetooth/BluetoothThreadModel.java
 LoginBluetoothModel.java;src/bluetooth/LoginBluetoothModel.java
+FileSecure.java;src/fileStorage/FileSecure.java
+FileSplit.java;src/fileStorage/FileSplit.java
+FileStorage.css;src/fileStorage/FileStorage.css
+FileStorage.fxml;src/fileStorage/FileStorage.fxml
+FileStorage.java;src/fileStorage/FileStorage.java
+FileStorageController.java;src/fileStorage/FileStorageController.java
 AbstergoLogModel.java;src/log/AbstergoLogModel.java
 forCopyingController.java;src/log/controller/forCopyingController.java
 LogNetworkPageController.java;src/log/controller/LogNetworkPageController.java
