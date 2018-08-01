@@ -1,47 +1,59 @@
 package fileStorage;
 
+import java.io.File;
+
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class FileStorage extends RecursiveTreeObject<FileStorage> {
-	private StringProperty name;
-	private StringProperty type;
+	private String username;
+	private StringProperty fileName;
+	private StringProperty fileType;
 	private StringProperty dateCreated;
+	private File file;
 	
 	public FileStorage() {
 		
 	}
 
-	public FileStorage(String name, String type, String dateCreated) {
-		this.name = new SimpleStringProperty(name);
-		this.type = new SimpleStringProperty(type);
+	public FileStorage(String fileName, String fileType, String dateCreated) {
+		this.fileName = new SimpleStringProperty(fileName);
+		this.fileType = new SimpleStringProperty(fileType);
 		this.dateCreated = new SimpleStringProperty(dateCreated);
 	}
 	
-	public StringProperty nameProperty() {
-		return this.name;
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public StringProperty fileNameProperty() {
+		return this.fileName;
 	}
 	
-	public String getName() {
-		return name.get();
+	public String getFileName() {
+		return fileName.get();
 	}
 
-	public void setName(String name) {
-		this.name.set(name);
+	public void setFileName(String fileName) {
+		this.fileName = new SimpleStringProperty(fileName);
 	}
 	
-	public StringProperty typeProperty() {
-		return this.type;
+	public StringProperty fileTypeProperty() {
+		return this.fileType;
 	}
 
-	public String getType() {
-		return type.get();
+	public String getFileType() {
+		return fileType.get();
 	}
 
-	public void setType(String type) {
-		this.type.set(type);
+	public void setFileType(String fileType) {
+		this.fileType.set(fileType);
 	}
 	
 	public StringProperty dateCreatedProperty() {
@@ -54,6 +66,14 @@ public class FileStorage extends RecursiveTreeObject<FileStorage> {
 
 	public void setDateCreated(String dateCreated) {
 		this.dateCreated.set(dateCreated);
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 	public static void main(String[] args) {

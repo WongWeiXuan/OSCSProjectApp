@@ -341,7 +341,21 @@ public class FileSecure {
 	}
 
 	public static void main(String[] args) throws Exception {
+		byte[] b1 = Files.readAllBytes(new File("D:\\FileTest\\Sora.png.001").toPath());
+		byte[] b2 = Files.readAllBytes(new File("D:\\FileTest\\Sora.png.002").toPath());
+		byte[] b3 = Files.readAllBytes(new File("D:\\FileTest\\Sora.png.003").toPath());
+		byte[] b4 = Files.readAllBytes(new File("D:\\FileTest\\Sora.png.004").toPath());
+		byte[] parBlock = FileSecure.getXORParBlock(b1, b2, b3, b4);
 		
+		byte[] mb1 = FileSecure.getMissingBlockByXOR(b2, b3, b4, parBlock);
+		byte[] mb2 = FileSecure.getMissingBlockByXOR(b1, b3, b4, parBlock);
+		byte[] mb3 = FileSecure.getMissingBlockByXOR(b1, b2, b4, parBlock);
+		byte[] mb4 = FileSecure.getMissingBlockByXOR(b1, b2, b3, parBlock);
+		
+		System.out.println(Arrays.equals(b1, mb1));
+		System.out.println(Arrays.equals(b2, mb2));
+		System.out.println(Arrays.equals(b3, mb3));
+		System.out.println(Arrays.equals(b4, mb4));
 	}
 
 }

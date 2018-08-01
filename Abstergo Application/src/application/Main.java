@@ -52,7 +52,7 @@ public class Main extends Application {
 			    		ValidationPageController.task.cancel();
 			    	if(BeepThread.isRunning())
 			    		BeepThread.stop();
-			    	if(LogNetworkPageController.t.isAlive())
+			    	if(LogNetworkPageController.t != null && LogNetworkPageController.t.isAlive())
 			    		LogNetworkPageController.t.stop();
 			    	if(LogNetworkPageController.beepThread.isAlive())
 			    		LogNetworkPageController.beepThread.stop();

@@ -9,14 +9,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
 public class FileSplit {
 	
-	public void splitFile(File f) throws Exception {
+	public static void splitFile(File f) throws Exception {
 		int partCounter = 1;
 
 		int sizeOfFiles = (int) (f.length() / 3);
@@ -89,7 +88,7 @@ public class FileSplit {
 		FileUtils.writeByteArrayToFile(parBlockFile, parBlock);
 	}
 
-	public List<File> listOfFilesToMerge(File oneOfFiles) throws IOException, Exception {
+	public static List<File> listOfFilesToMerge(File oneOfFiles) throws IOException, Exception {
 		String tmpName = oneOfFiles.getName();
 		String destFileName = tmpName.substring(0, tmpName.lastIndexOf('.'));
 		File[] files = oneOfFiles.getParentFile().listFiles((File dir, String name) -> name.matches(destFileName + "[.]\\d+"));
@@ -194,7 +193,7 @@ public class FileSplit {
 		return fileList;
 	}
 
-	public void mergeFiles(List<File> files, File into) throws Exception {
+	public static File mergeFiles(List<File> files, File into) throws Exception {
 		try (FileOutputStream fos = new FileOutputStream(into);
 				BufferedOutputStream mergingStream = new BufferedOutputStream(fos)) {
 			
@@ -254,24 +253,14 @@ public class FileSplit {
 			File parBlockFile = new File("D:\\FileTest\\", parBlockFileName);
 			FileUtils.writeByteArrayToFile(parBlockFile, parBlock);
 		}
+		
+		return into;
 	}
 	
 	public static void main(String[] args) throws Exception {
-		FileSplit fs = new FileSplit();
-		
-		//fs.splitFile(new File("D:\\Software Application Manual\\Notebook_SWmanual_v3.1.pdf"));
-		//fs.mergeFiles(fs.listOfFilesToMerge(new File("D:\\FileTest\\Notebook_SWmanual_v3.1.pdf.001")), new File("D:\\FileTest\\Notebook_SWmanual_v3.1.pdf"));
-
-		fs.splitFile(new File("C:\\Users\\serwe\\Pictures\\Saved Pictures\\Sora.png"));
-		fs.mergeFiles(fs.listOfFilesToMerge(new File("D:\\FileTest\\Sora.png.001")), new File("D:\\FileTest\\Sora.png"));
+		FileSplit.splitFile(new File("C:\\Users\\serwe\\Pictures\\Saved Pictures\\Sora.png"));
+		FileSplit.mergeFiles(FileSplit.listOfFilesToMerge(new File("D:\\FileTest\\Sora.png.001")), new File("D:\\FileTest\\Sora.png"));
 		System.out.println("Is merged picture same as original: " + FileUtils.contentEquals(new File("C:\\Users\\serwe\\Pictures\\Saved Pictures\\Sora.png"), new File("D:\\FileTest\\Sora.png")));
-		
-		//fs.splitFile(new File("D:\\Hello World.txt"));
-		//fs.mergeFiles(fs.listOfFilesToMerge(new File("D:\\FileTest\\Hello World.txt.001")), new File("D:\\FileTest\\Hello World.txt"));
-		//System.out.println("Is merged file same as original: " + FileUtils.contentEquals(new File("D:\\Hello World.txt"), new File("D:\\FileTest\\Hello World.txt")));
-		
-		//fs.splitFile(new File("C:\\Users\\serwe\\Desktop\\HombaseReturn_OutpostIntro.mp4"));
-		//fs.mergeFiles(fs.listOfFilesToMerge(new File("D:\\FileTest\\HombaseReturn_OutpostIntro.mp4.001")), new File("D:\\FileTest\\HombaseReturn_OutpostIntro.mp4"));
 	}
 
 }
