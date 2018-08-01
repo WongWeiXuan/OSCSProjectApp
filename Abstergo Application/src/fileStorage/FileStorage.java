@@ -41,7 +41,7 @@ public class FileStorage extends RecursiveTreeObject<FileStorage> {
 	}
 
 	public void setFileName(String fileName) {
-		this.fileName.set(fileName);
+		this.fileName = new SimpleStringProperty(fileName);
 	}
 	
 	public StringProperty fileTypeProperty() {
@@ -53,7 +53,7 @@ public class FileStorage extends RecursiveTreeObject<FileStorage> {
 	}
 
 	public void setFileType(String fileType) {
-		this.fileType.set(fileType);
+		this.fileType = new SimpleStringProperty(fileType);
 	}
 	
 	public StringProperty dateCreatedProperty() {

@@ -72,10 +72,16 @@ public class FileStorageDAO {
 	
 	public static void main(String[] args) {
 		FileStorage fs = new FileStorage();
+<<<<<<< HEAD
 		fs.setFileName("Hello World");
 		fs.setFileType("TXT");
 		fs.setDateCreated("1/8/2018");
 		fs.setFile(new File("D:\\Hello World.txt"));
+=======
+		fs.setFile(new File("D:\\Hello World.txt"));
+		fs.setFileName("Hi");
+		fs.setFileType("Helo");
+>>>>>>> master
 		System.out.println(fs.getFileName());
 	}
 }
