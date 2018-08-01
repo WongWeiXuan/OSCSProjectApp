@@ -1,0 +1,4 @@
+#fileTable .column-header {
+	-fx-border-style: hidden hidden solid hidden;
+	-fx-border-width: 3px;
+}
