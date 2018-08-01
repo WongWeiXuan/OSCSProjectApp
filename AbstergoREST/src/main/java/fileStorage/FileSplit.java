@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import AbstergoREST.main.database.Database;
+
 public class FileSplit {
 	
 	public static void splitFile(File f) throws Exception {
@@ -21,7 +23,6 @@ public class FileSplit {
 		int sizeOfFiles = (int) (f.length() / 3);
 		byte[] buffer = new byte[sizeOfFiles];
 
-		String fileName = f.getName();
 		String encKey = FileSecure.generateEncKey();
 		
 		byte[] b1 = null, b2 = null, b3 = null, b4 = null;
@@ -34,192 +35,20 @@ public class FileSplit {
 			System.out.println("Encryption key: " + encKey);
 
 			while ((bytesAmount = bis.read(buffer)) != -1) {
-				String filePartName = String.format("%s.%03d", fileName, partCounter++);
-				File newFile = new File("D:\\FileTest\\", filePartName);
-				
-				try (FileOutputStream out = new FileOutputStream(newFile)) {
-					byte[] block = FileSecure.encrypt(Arrays.copyOfRange(buffer, 0, bytesAmount), encKey);
-					out.write(block);
-					
-					if (b1 == null) {
-						b1 = FileSecure.hash(block);
-					}
-					else if (b2 == null) {
-						b2 = FileSecure.hash(block);
-					}
-					else if (b3 == null) {
-						b3 = FileSecure.hash(block);
-					}
-					else if (b4 == null) {
-						b4 = FileSecure.hash(block);
-					}
-					
-					if (alpha == null) {
-						alpha = block;
-					}
-					else if (beta == null) {
-						beta = block;
-					}
-					else if (charlie == null) {
-						charlie = block;
-					}
-					else if (delta == null) {
-						delta = block;
-					}
-				}
-			}
-		}
-		
-		//XOR hash blocks with encryption key
-		byte[] encKeyBytes = encKey.getBytes("UTF-8");
-		byte[] keyBlock = FileSecure.getXORKeyBlock(b1, b2, b3, b4, encKeyBytes);
-		
-		//Write key block to file
-		String keyBlockFileName = String.format("%s.%03d.%s", fileName, partCounter++, "keyblock");
-		File keyBlockFile = new File("D:\\FileTest\\", keyBlockFileName);
-		FileUtils.writeByteArrayToFile(keyBlockFile, keyBlock);
-		
-		//XOR to get parity block
-		byte[] parBlock = FileSecure.getXORParBlock(alpha, beta, charlie, delta);
-		
-		//Write parity block to file
-		String parBlockFileName = String.format("%s.%03d.%s", fileName, partCounter++, "parblock");
-		File parBlockFile = new File("D:\\FileTest\\", parBlockFileName);
-		FileUtils.writeByteArrayToFile(parBlockFile, parBlock);
-	}
-
-	public static List<File> listOfFilesToMerge(File oneOfFiles) throws IOException, Exception {
-		String tmpName = oneOfFiles.getName();
-		String destFileName = tmpName.substring(0, tmpName.lastIndexOf('.'));
-		File[] files = oneOfFiles.getParentFile().listFiles((File dir, String name) -> name.matches(destFileName + "[.]\\d+"));
-		
-		File keyBlockFile = oneOfFiles.getParentFile().listFiles((File dir, String name) -> name.startsWith(destFileName) && name.endsWith(".keyblock"))[0];
-		byte[] keyBlock = Files.readAllBytes(keyBlockFile.toPath());
-		String keyStr = keyBlockFile.getName().substring(keyBlockFile.getName().indexOf(destFileName), keyBlockFile.getName().lastIndexOf('.'));
-		String keyNum = keyStr.substring(keyStr.lastIndexOf('.') + 1);
-		
-		byte[] parBlock = null;
-		int missingPartNum = 0;
-		
-		//If no split files are missing, no need for parity block
-		if (Integer.parseInt(keyNum) - files.length == 2) {
-			File parBlockFile = oneOfFiles.getParentFile().listFiles((File dir, String name) -> name.startsWith(destFileName) && name.endsWith(".parblock"))[0];
-			parBlock = Files.readAllBytes(parBlockFile.toPath());
-			
-			//Find the missing file, then create an empty file
-			int partCounter = 1;
-			for (File f : files) {
-				int partNum = Integer.parseInt(f.getName().substring(f.getName().lastIndexOf('.') + 1));
+				byte[] block = FileSecure.encrypt(Arrays.copyOfRange(buffer, 0, bytesAmount), encKey);
 				partCounter++;
-				if (partNum != partCounter) {
-					missingPartNum = partCounter;
-					System.out.println("missingPartNum = partCounter = " + partCounter);
-				}
-			}
-			if (missingPartNum == 0) {
-				missingPartNum = 1;
-			}
-			String missingFileName = String.format("%s.%03d", destFileName, missingPartNum);
-			File missingFile = new File("D:\\FileTest\\", missingFileName);
-			files = Arrays.copyOf(files, files.length + 1);
-			files[files.length - 1] = missingFile;
-			missingFile.createNewFile();
-		}
-		
-		Arrays.sort(files);
-		
-		byte[] alpha = null, beta = null, charlie = null, delta = null;
-		byte[] b1 = null, b2 = null, b3 = null, b4 = null;
-		
-		for (File f : files) {
-			if (b1 == null) {
-				alpha = Files.readAllBytes(f.toPath());
-				b1 = FileSecure.hash(alpha);
-			}
-			else if (b2 == null) {
-				beta = Files.readAllBytes(f.toPath());
-				b2 = FileSecure.hash(beta);
-			}
-			else if (b3 == null) {
-				charlie = Files.readAllBytes(f.toPath());
-				b3 = FileSecure.hash(charlie);
-			}
-			else if (b4 == null) {
-				delta = Files.readAllBytes(f.toPath());
-				b4 = FileSecure.hash(delta);
-			}
-		}
-		
-		if (parBlock != null) {
-			if (missingPartNum == 1) {
-				alpha = FileSecure.getMissingBlockByXOR(parBlock, beta, charlie, delta);
-				File f = new File("D:\\FileTest\\", destFileName + ".001");
-				FileUtils.writeByteArrayToFile(f, alpha);
-				b1 = FileSecure.hash(alpha);
-			}
-			else if (missingPartNum == 2) {
-				beta = FileSecure.getMissingBlockByXOR(alpha, parBlock, charlie, delta);
-				File f = new File("D:\\FileTest\\", destFileName + ".002");
-				FileUtils.writeByteArrayToFile(f, beta);
-				b2 = FileSecure.hash(beta);
-			}
-			else if (missingPartNum == 3) {
-				charlie = FileSecure.getMissingBlockByXOR(alpha, beta, parBlock, delta);
-				File f = new File("D:\\FileTest\\", destFileName + ".003");
-				FileUtils.writeByteArrayToFile(f, charlie);
-				b3 = FileSecure.hash(charlie);
-			}
-			else if (missingPartNum == 4) {
-				delta = FileSecure.getMissingBlockByXOR(alpha, beta, charlie, parBlock);
-				File f = new File("D:\\FileTest\\", destFileName + ".004");
-				FileUtils.writeByteArrayToFile(f, delta);
-				b4 = FileSecure.hash(delta);
-			}
-		}
-		
-		File file;
-		List<File> fileList = new ArrayList<File>();
-		byte[] encKeyBytes = FileSecure.getEncKeyByXOR(b1, b2, b3, b4, keyBlock);
-		String encKey = new String(encKeyBytes, "UTF-8");
-		
-		System.out.println("Decryption key: " + encKey);
-		
-		for (File f : files) {
-			file = f;
-			FileUtils.writeByteArrayToFile(file, FileSecure.decrypt(Files.readAllBytes(file.toPath()), encKey));
-			fileList.add(file);
-		}
-		
-		return fileList;
-	}
-
-	public static File mergeFiles(List<File> files, File into) throws Exception {
-		try (FileOutputStream fos = new FileOutputStream(into);
-				BufferedOutputStream mergingStream = new BufferedOutputStream(fos)) {
-			
-			String fileName = files.get(0).getName();
-			String destFileName = fileName.substring(0, fileName.lastIndexOf('.'));
-			String encKey = FileSecure.generateEncKey();
-			
-			byte[] b1 = null, b2 = null, b3 = null, b4 = null;
-			byte[] alpha = null, beta = null, charlie = null, delta = null;
-			
-			for (File f : files) {
-				Files.copy(f.toPath(), mergingStream);
-				byte[] block = FileSecure.encrypt(Files.readAllBytes(f.toPath()), encKey);
-				FileUtils.writeByteArrayToFile(f, block);
 				
 				if (b1 == null) {
-					b1 = FileSecure.hash(Files.readAllBytes(f.toPath()));
+					b1 = FileSecure.hash(block);
 				}
 				else if (b2 == null) {
-					b2 = FileSecure.hash(Files.readAllBytes(f.toPath()));
+					b2 = FileSecure.hash(block);
 				}
 				else if (b3 == null) {
-					b3 = FileSecure.hash(Files.readAllBytes(f.toPath()));
+					b3 = FileSecure.hash(block);
 				}
 				else if (b4 == null) {
-					b4 = FileSecure.hash(Files.readAllBytes(f.toPath()));
+					b4 = FileSecure.hash(block);
 				}
 				
 				if (alpha == null) {
@@ -235,32 +64,117 @@ public class FileSplit {
 					delta = block;
 				}
 			}
+		}
+		
+		final Database DB = new Database();
+		
+		//TODO: Write noOfFiles to database
+		
+		//XOR hash blocks with encryption key
+		byte[] encKeyBytes = encKey.getBytes("UTF-8");
+		byte[] keyBlock = FileSecure.getXORKeyBlock(b1, b2, b3, b4, encKeyBytes);
+		
+		//TODO: Write keyBlock to database
+		partCounter++;
+		
+		//XOR to get parBlock
+		byte[] parBlock = FileSecure.getXORParBlock(alpha, beta, charlie, delta);
+		
+		//TODO: Write keyBlock to database
+		partCounter++;
+		
+	}
+
+	public static void listOfFilesToMerge(String username, String fileName) throws IOException, Exception {
+		/*
+		 * TODO:
+		 * Get split files, keyBlock, parBlock and noOfFiles from database
+		 * 
+		 * Check if any split files missing, get missing file if there is:
+		 * if (noOfFiles == 3) {
+		 * 		if (splitFile1 == null || splitFile2 == null || splitFile3 == null) {
+		 * 			if (splitFile1 == null) {
+		 * 				splitFile1 = FileSecure.getMissingBlockByXOR(parBlock, splitFile2, splitFile3, splitFile4);
+		 * 			}
+		 * 			else if (splitFile2 == null) {
+		 * 				splitFile2 = FileSecure.getMissingBlockByXOR(splitFile1, parBlock, splitFile3, splitFile4);
+		 * 			}
+		 * 			else if (splitFile3 == null) {
+		 * 				splitFile3 = FileSecure.getMissingBlockByXOR(splitFile1, splitFile2, parBlock, splitFile4);
+		 * 			}
+		 * 		}
+		 * }
+		 * else if (noOfFiles == 4 {
+		 * 		if (splitFile1 == null || splitFile2 == null || splitFile3 == null || splitFile4 == null) {
+		 * 			if (splitFile1 == null) {
+		 * 				splitFile1 = FileSecure.getMissingBlockByXOR(parBlock, splitFile2, splitFile3, splitFile4);
+		 * 			}
+		 * 			else if (splitFile2 == null) {
+		 * 				splitFile2 = FileSecure.getMissingBlockByXOR(splitFile1, parBlock, splitFile3, splitFile4);
+		 * 			}
+		 * 			else if (splitFile3 == null) {
+		 * 				splitFile3 = FileSecure.getMissingBlockByXOR(splitFile1, splitFile2, parBlock, splitFile4);
+		 * 			}
+		 * 			else if (delta == null) {
+		 * 				splitFile4 = FileSecure.getMissingBlockByXOR(splitFile1, splitFile2, splitFile3, parBlock);
+		 * 			}
+		 * 		}
+		 * }
+		 * 
+		 * Calculate hash values of split files from database:
+		 * byte[] b1 = null, b2 = null, b3 = null, b4 = null;
+		 * b1 = FileSecure.hash(splitFile1);
+		 * b2 = FileSecure.hash(splitFile2);
+		 * b3 = FileSecure.hash(splitFile3);
+		 * b4 = FileSecure.hash(splitFile4);
+		 * 
+		 * Get encryption key from keyBlock:
+		 * byte[] encKeyBytes = FileSecure.getEncKeyByXOR(b1, b2, b3, b4);
+		 * String encKey = new String(encKeyBytes, "UTF-8");
+		 * 
+		 * Decrypt the split files:
+		 * byte[] decryptedFile1 = FileSecure.decrypt(splitFile1, encKey);
+		 * byte[] decryptedFile2 = FileSecure.decrypt(splitFile2, encKey);
+		 * byte[] decryptedFile3 = FileSecure.decrypt(splitFile3, encKey);
+		 * byte[] decryptedFile4 = FileSecure.decrypt(splitFile4, encKey);
+		 * 
+		 * Write to temporary files:
+		 * File file1 = File.createTempFile("File1", ".tmp");
+		 * File file2 = File.createTempFile("File2", ".tmp");
+		 * File file3 = File.createTempFile("File3", ".tmp");
+		 * File file4 = File.createTempFile("File4", ".tmp");
+		 * 
+		 * Store in a list of files:
+		 * List<File> listOfFiles = new ArrayList<File>();
+		 * listOfFiles.add(file1);
+		 * listOfFiles.add(file2);
+		 * listOfFiles.add(file3);
+		 * listOfFiles.add(file4);
+		 * 
+		 * return listOfFiles
+		 */
+		
+	}
+
+	public static File mergeFiles(List<File> files, File into) throws Exception {
+		try (FileOutputStream fos = new FileOutputStream(into);
+				BufferedOutputStream mergingStream = new BufferedOutputStream(fos)) {
 			
-			//XOR hash blocks with encryption key
-			byte[] encKeyBytes = encKey.getBytes("UTF-8");
-			byte[] keyBlock = FileSecure.getXORKeyBlock(b1, b2, b3, b4, encKeyBytes);
-			
-			//Write key block to file
-			String keyBlockFileName = String.format("%s.%03d.%s", destFileName, files.size() + 1, "keyblock");
-			File keyBlockFile = new File("D:\\FileTest\\", keyBlockFileName);
-			FileUtils.writeByteArrayToFile(keyBlockFile, keyBlock);
-			
-			//XOR to get parity block
-			byte[] parBlock = FileSecure.getXORParBlock(alpha, beta, charlie, delta);
-			
-			//Write parity block to file
-			String parBlockFileName = String.format("%s.%03d.%s", destFileName, files.size() + 2, "parblock");
-			File parBlockFile = new File("D:\\FileTest\\", parBlockFileName);
-			FileUtils.writeByteArrayToFile(parBlockFile, parBlock);
+			for (File f : files) {
+				Files.copy(f.toPath(), mergingStream);
+				
+				/*
+				 * TODO: Delete temp files from list of files:
+				 * f.delete();
+				 */
+			}
 		}
 		
 		return into;
 	}
 	
 	public static void main(String[] args) throws Exception {
-		FileSplit.splitFile(new File("C:\\Users\\serwe\\Pictures\\Saved Pictures\\Sora.png"));
-		FileSplit.mergeFiles(FileSplit.listOfFilesToMerge(new File("D:\\FileTest\\Sora.png.001")), new File("D:\\FileTest\\Sora.png"));
-		System.out.println("Is merged picture same as original: " + FileUtils.contentEquals(new File("C:\\Users\\serwe\\Pictures\\Saved Pictures\\Sora.png"), new File("D:\\FileTest\\Sora.png")));
+		
 	}
 
 }

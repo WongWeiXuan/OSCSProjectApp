@@ -65,7 +65,7 @@ public class FileStorage extends RecursiveTreeObject<FileStorage> {
 	}
 
 	public void setDateCreated(String dateCreated) {
-		this.dateCreated.set(dateCreated);
+		this.dateCreated = new SimpleStringProperty(dateCreated);
 	}
 
 	public File getFile() {

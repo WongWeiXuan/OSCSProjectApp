@@ -21,7 +21,7 @@ public class FileStorageDAO {
 		BufferedReader br = null;
 		try {
 			// Open Connection to REST Server
-			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage");
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/uploadfile");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
@@ -72,16 +72,10 @@ public class FileStorageDAO {
 	
 	public static void main(String[] args) {
 		FileStorage fs = new FileStorage();
-<<<<<<< HEAD
 		fs.setFileName("Hello World");
 		fs.setFileType("TXT");
 		fs.setDateCreated("1/8/2018");
 		fs.setFile(new File("D:\\Hello World.txt"));
-=======
-		fs.setFile(new File("D:\\Hello World.txt"));
-		fs.setFileName("Hi");
-		fs.setFileType("Helo");
->>>>>>> master
-		System.out.println(fs.getFileName());
+		System.out.println(uploadFile(fs));
 	}
 }
