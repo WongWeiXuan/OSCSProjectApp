@@ -8,7 +8,7 @@
         <entry key="LogFile" value="Application;Security"/>
         <entry key="LogDisplay" value="Event Source;Event Type;Event ID;Event Time Generated"/>
         <entry key="IncomingAccept" value="true"/>
-        <entry key="IncomingMaximum" value="90"/>
+        <entry key="IncomingMaximum" value="50"/>
         <entry key="OnDisconnect" value="Logout"/>
         <entry key="Timeout" value="900000"/>
       </map>
