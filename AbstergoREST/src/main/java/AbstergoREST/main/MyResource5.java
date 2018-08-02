@@ -10,12 +10,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import AbstergoREST.main.database.Database;
-import AbstergoREST.main.model.BluetoothDevice;
 import AbstergoREST.main.model.Email;
-import AbstergoREST.main.model.KeyPair;
 
 @Path("/Email") // "http://abstergorest.appspot.com/rest/Email"
 public class MyResource5 {

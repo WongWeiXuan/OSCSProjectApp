@@ -5,23 +5,25 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import email.controller.EmailDAO;
+
 public class test {
-	public static void main(String [] args) {
-		File filename2 = new File("src/util/Directory.txt");
-		String path = "";
-		try (BufferedReader br = new BufferedReader(new FileReader(filename2))) {
-
-			String sCurrentLine;
-
-			while ((sCurrentLine = br.readLine()) != null) {
-				//System.out.println(sCurrentLine);
-				path = sCurrentLine;
-			}
-
-		} catch (IOException ee) {
-			ee.printStackTrace();
+	public static void main(String [] args) throws JsonProcessingException {
+		Email e2 = new Email("abstergoapp@gmail.com", "abstergoapp@gmail.com", "@bsterg0@pp");
+		//EmailDAO.createEmail(e2);
+		
+		
+		JsonArray json = EmailDAO.getdetails("abstergoapp@gmail.com");
+		for(JsonElement e : json) {
+			JsonObject object = e.getAsJsonObject();
+			System.out.println(object.get("address").getAsString());
+			System.out.println(object.get("password").getAsString());
 		}
-		path = path.replace(";","");
-		System.out.println(path);
 	}
 }

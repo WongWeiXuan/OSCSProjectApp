@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 
 import javax.mail.Flags;
 
+import org.ehcache.Cache;
+
 import com.jfoenix.controls.JFXDecorator;
 
 import email.controller.services.CreateAndRegisterEmailAccountService;
@@ -47,6 +49,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import login.controller.LoginPageController;
 import util.LastVisitedDirectory;
 
 public class MainController extends AbstractController implements Initializable{
@@ -90,8 +93,16 @@ public class MainController extends AbstractController implements Initializable{
     private Button btnED;
     @FXML
     protected TextField pathTextField;
+    
     protected Stage primaryStage;
 
+    
+    Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+	String username = userCache.get("User");
+	
+    
+    
+    
     public void openED(ActionEvent event) throws IOException {
     	Parent parent = ViewFactory.defaultFactory.getEncryptionScene();
     	Stage stage = new Stage();
@@ -184,6 +195,7 @@ public class MainController extends AbstractController implements Initializable{
     
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		System.out.println(username);
 		downloadAttachBtn.setDisable(true);
 		attachementsLabel.setText("");
 		saveAttachmentsService = new SaveAttachmentsService(attachProgress, downAttachLabel);
