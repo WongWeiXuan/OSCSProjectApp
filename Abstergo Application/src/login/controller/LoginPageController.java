@@ -89,7 +89,8 @@ public class LoginPageController {
 	@FXML
 	void openSignup(MouseEvent event) throws IOException {
 		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage.fxml")); // Change scene
-		((StackPane) root.getParent()).getChildren().setAll(toBeChanged);
+		PreLoginPageController.stackPaneClone.getChildren().remove(0);
+		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 	}
 
 	@FXML
@@ -152,26 +153,26 @@ public class LoginPageController {
 								loginDialog.show();
 								// Remember to comment/remove this // TODO
 								// Store the user logged in and "restore previous session" (if any)
-								if(cacheManager == null) {
-									cacheManager = new CacheMan();
-								}
-								Cache<String, String> userCache = cacheManager.getCacheManager().getCache("user", String.class, String.class);
-								if (userCache == null) {
-									userCache = cacheManager.getCacheManager().createCache("user", CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
-									userCache.put("User", username);
-								}
-								
-								loginDialog.setOnDialogClosed(new EventHandler<JFXDialogEvent>() {
-									@Override
-									public void handle(JFXDialogEvent event) {
-										Platform.runLater(new Runnable() {
-											@Override
-											public void run() {
-												changeToHome();
-											}
-										});
-									}
-								});
+//								if(cacheManager == null) {
+//									cacheManager = new CacheMan();
+//								}
+//								Cache<String, String> userCache = cacheManager.getCacheManager().getCache("user", String.class, String.class);
+//								if (userCache == null) {
+//									userCache = cacheManager.getCacheManager().createCache("user", CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, String.class, ResourcePoolsBuilder.heap(2)));
+//									userCache.put("User", username);
+//								}
+//								
+//								loginDialog.setOnDialogClosed(new EventHandler<JFXDialogEvent>() {
+//									@Override
+//									public void handle(JFXDialogEvent event) {
+//										Platform.runLater(new Runnable() {
+//											@Override
+//											public void run() {
+//												changeToHome();
+//											}
+//										});
+//									}
+//								});
 							} else {
 								// Store the user logged in and "restore previous session" (if any)
 								if(cacheManager == null) {

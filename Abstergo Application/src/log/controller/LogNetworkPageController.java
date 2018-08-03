@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+import org.ehcache.Cache;
+
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -22,6 +25,8 @@ import javafx.scene.text.TextFlow;
 import logExtra.BeepThread;
 import logExtra.BlockChain;
 import logExtra.HandshakeThread;
+import login.controller.LoginPageController;
+import login.controller.PreLoginPageController;
 
 public class LogNetworkPageController {
 	@FXML
@@ -168,6 +173,18 @@ public class LogNetworkPageController {
 	
 	@FXML
 	void initialize() throws IOException {
+		Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+		if (userCache == null) {
+			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/Login.fxml")); // Change scene
+			toBeChanged.setOpacity(1);
+			PreLoginPageController.stackPaneClone.getChildren().remove(0);
+			PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
+			PreLoginPageController.anchorPaneClone.getChildren().clear();
+			PreLoginPageController.navBarClone.setVisible(false);
+		} else {
+			userCache.put("Last", "/log/view/LogNetworkPage.fxml");
+		}
+		
 		rightClickClone = rightClick;
 		setGridPane();
 		
