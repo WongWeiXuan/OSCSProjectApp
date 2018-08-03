@@ -1,42 +1,79 @@
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModelThread.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\LoginBluetoothModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\StringUtil.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\ApplicationValidation.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\KeyPairGen.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\controller\ValidationPageController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\navigation\controller\NavigationBarController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\PreLoginPageController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\FileTransferThread.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\HandshakeThread.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\KeyPair.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThreadModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPage3Controller.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\application\Main.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModelModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\SettingModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Block.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPage2Controller.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThread.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Connection.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDetailsModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginDAO.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginPageModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\AbstergoLogModel.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\controller\SettingPageController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDAO.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\Setting.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\ApplicationValidationDAO.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BlockChain.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\CacheMan.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\FileHash.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDetailsTree.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\AESEncryption.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BlockChainDAO.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Client.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPageController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Transcation.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\controller\LogPageController.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothDevice.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Lock.java
-C:\Users\WeiXuan\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\LoginPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginDAO.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\FetchFoldersService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\MessageRendererService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\LoginBluetoothModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\SaveAttachmentsService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\controller\ValidationPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\persistence\PersistenceAcess.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\AESEncryption.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Block.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\FetchMessagesOnFolderService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThread.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\LoginPageModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\controller\LogPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\EncryptionProgress.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\folder\EmailFolderBean.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\FileTransferThread.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\LoginPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\controller\SettingPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\AddAccountController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\util\LastVisitedDirectory.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\CreateAndRegisterEmailAccountService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BlockChainDAO.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\Setting.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\table\AbstractTableItem.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\ApplicationValidationDAO.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\FileEncryptionException.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Client.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\application\Main.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\persistence\ValidAccount.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPage2Controller.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\MainController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\EncryptionController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\haha.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\controller\LogNetworkPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\EmailConstants.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPage3Controller.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\AlertWindow.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\FolderUpdaterService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\Encryption.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\AbstractController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\ApplicationValidation.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\DecryptionController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BeepThread.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\ComposeEmailController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\table\BoldableRowFactory.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\AbstergoLogModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\view\ViewFactory.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Connection.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\KeyPair.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\Password.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModelModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDAO.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothDevice.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\HandshakeThread.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\validation\FileHash.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\KeyPairGen.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\StringUtil.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\ModelAccess.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\CacheMan.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDetailsTree.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\bluetooth\BluetoothThreadModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogModelThread.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\table\FormatableInteger.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\BlockChain.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\services\EmailSenderService.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\controller\forCopyingController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\controller\EmailDetailsController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\navigation\controller\NavigationBarController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\EmailMessageBean.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\customEmail.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Lock.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\logExtra\Transcation.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\SignupPageController.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\setting\SettingModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\log\LogDetailsModel.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\EmailAccountBean.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\email\model\test.java
+C:\Users\Xuan Zheng\Documents\GitHub\OSCSProjectApp\Abstergo Application\src\login\controller\PreLoginPageController.java

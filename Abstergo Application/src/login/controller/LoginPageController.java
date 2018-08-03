@@ -74,6 +74,9 @@ public class LoginPageController {
 		try {
 			AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
 			PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
+			for(Node n : PreLoginPageController.stackPaneClone.getChildren()) {
+				System.out.println("WDHWUD: " + n.getId());
+			}
 			PreLoginPageController.stackPaneClone.getChildren().remove(0);
 			PreLoginPageController.navBarClone.setVisible(true);
 		} catch (IOException e) {
