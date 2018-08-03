@@ -23,7 +23,7 @@ import javafx.stage.FileChooser;
 
 public class FileStorageController {
 	@FXML
-	private JFXTreeTableView<FileStorage> fileTable;
+	private JFXTreeTableView<FileStorageModel> fileTable;
 	@FXML
 	private HBox tableWrap;
 	@FXML
@@ -50,7 +50,7 @@ public class FileStorageController {
 	@FXML
 	public void initialize() {
 		fileTable.setRowFactory(tv -> {
-			TreeTableRow<FileStorage> row = new TreeTableRow<>();
+			TreeTableRow<FileStorageModel> row = new TreeTableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (!row.isEmpty()) {
 					newWrap.setVisible(false);
@@ -69,9 +69,9 @@ public class FileStorageController {
 			return row;
 		});
 		
-		JFXTreeTableColumn<FileStorage, String> nameCol = new JFXTreeTableColumn<>("Name");
+		JFXTreeTableColumn<FileStorageModel, String> nameCol = new JFXTreeTableColumn<>("Name");
 		nameCol.prefWidthProperty().bind(fileTable.widthProperty().divide(2));
-		nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorage, String> param) -> {
+		nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorageModel, String> param) -> {
 			if (nameCol.validateValue(param)) {
 				return param.getValue().getValue().fileNameProperty();
 			}
@@ -81,9 +81,9 @@ public class FileStorageController {
 		});
 		nameCol.setResizable(false);
 		
-		JFXTreeTableColumn<FileStorage, String> typeCol = new JFXTreeTableColumn<>("Type");
+		JFXTreeTableColumn<FileStorageModel, String> typeCol = new JFXTreeTableColumn<>("Type");
 		typeCol.prefWidthProperty().bind(fileTable.widthProperty().divide(4));
-		typeCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorage, String> param) -> {
+		typeCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorageModel, String> param) -> {
 			if (typeCol.validateValue(param)) {
 				return param.getValue().getValue().fileTypeProperty();
 			}
@@ -93,9 +93,9 @@ public class FileStorageController {
 		});
 		typeCol.setResizable(false);
 		
-		JFXTreeTableColumn<FileStorage, String> dateCol = new JFXTreeTableColumn<>("Date Created");
+		JFXTreeTableColumn<FileStorageModel, String> dateCol = new JFXTreeTableColumn<>("Date Created");
 		dateCol.prefWidthProperty().bind(fileTable.widthProperty().divide(4));
-		dateCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorage, String> param) -> {
+		dateCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<FileStorageModel, String> param) -> {
 			if (dateCol.validateValue(param)) {
 				return param.getValue().getValue().dateCreatedProperty();
 			}
@@ -105,14 +105,9 @@ public class FileStorageController {
 		});
 		dateCol.setResizable(false);
 		
-		ObservableList<FileStorage> fileStorage = FXCollections.observableArrayList();
-		fileStorage.add(new FileStorage("A certain word document", "Document", "23/5/2018"));
-		fileStorage.add(new FileStorage("Hello World", "Document", "24/5/2018"));
-		fileStorage.add(new FileStorage("World Hello", "Document", "25/5/2018"));
-		fileStorage.add(new FileStorage("The fourth one", "Document", "26/5/2018"));
-		fileStorage.add(new FileStorage("Fifth", "Document", "27/5/2018"));
+		ObservableList<FileStorageModel> fileStorage = FXCollections.observableArrayList();
 		
-		final TreeItem<FileStorage> root = new RecursiveTreeItem<FileStorage>(fileStorage, RecursiveTreeObject::getChildren);
+		final TreeItem<FileStorageModel> root = new RecursiveTreeItem<FileStorageModel>(fileStorage, RecursiveTreeObject::getChildren);
 		fileTable.setRoot(root);
 		fileTable.setShowRoot(false);
 		fileTable.getColumns().add(nameCol);

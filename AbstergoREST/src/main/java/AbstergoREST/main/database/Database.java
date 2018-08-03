@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import AbstergoREST.main.model.BluetoothDevice;
 import AbstergoREST.main.model.Email;
 import AbstergoREST.main.model.FileHash;
+import AbstergoREST.main.model.FileStorage;
 import AbstergoREST.main.model.KeyPair;
 import AbstergoREST.main.model.Login;
 
@@ -180,6 +182,61 @@ public class Database {
 		return executeUpdate(ppstmt);
 	}
 	
+	public ArrayList<FileStorage> getUserFiles(String username, String fileName) throws SQLException {
+		ArrayList<FileStorage> fileList = new ArrayList<FileStorage>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(FileType, DateCreated) WHERE Username = ? AND FileName = ?;");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String fileType = rs.getString("FileType");
+			String dateCreated = rs.getString("DateCreated");
+			
+			fileList.add(new FileStorage(username, fileName, fileType, dateCreated));
+			
+			return fileList;
+		}
+		return null;
+	}
+	
+	public boolean uploadFile(byte[] splitFile1, byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileStorage(SplitFile1, SplitFile2, SplitFile3, SplitFile4, KeyBlock, ParBlock, NoOfFiles) VALUES(?,?,?,?,?,?,?);");
+		ppstmt.setBytes(1, splitFile1);
+		ppstmt.setBytes(2, splitFile2);
+		ppstmt.setBytes(3, splitFile3);
+		ppstmt.setBytes(4, splitFile4);
+		ppstmt.setBytes(5, keyBlock);
+		ppstmt.setBytes(6, parBlock);
+		ppstmt.setInt(7, noOfFiles);
+		
+		return executeUpdate(ppstmt);
+	}
+	
+	public FileStorage downloadFile(String username, String fileName) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(FileType, DateCreated, SplitFile1, SplitFile2, SplitFile3, SplitFile4, KeyBlock, ParBlock, NoOfFiles) WHERE Username = ? AND FileName = ?;");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String fileType = rs.getString("FileType");
+			String dateCreated = rs.getString("DateCreated");
+			byte[] splitFile1 = rs.getBytes("SplitFile1");
+			byte[] splitFile2 = rs.getBytes("SplitFile2");
+			byte[] splitFile3 = rs.getBytes("SplitFile3");
+			byte[] splitFile4 = rs.getBytes("SplitFile4");
+			byte[] keyBlock = rs.getBytes("KeyBlock");
+			byte[] parBlock = rs.getBytes("ParBlock");
+			int noOfFiles = rs.getInt("NoOfFiles");
+			
+			FileStorage fs = new FileStorage(username, fileName, fileType, dateCreated, splitFile1, splitFile2, splitFile3, splitFile4, keyBlock, parBlock, noOfFiles);
+			
+			return fs;
+		}
+		return null;
+	}
+	
 	// Xuan Zheng's part
 	public ArrayList<Email> getEmails(String address) throws SQLException {
 		ArrayList<Email> em = new ArrayList<Email>();
@@ -202,5 +259,4 @@ public class Database {
 		
 		executeUpdate(ppstmt);
 	}
-	
 }

@@ -18,7 +18,7 @@
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="70.0" prefWidth="1280.0" style="-fx-background-color: rgb(113,163,146);">
+            <HBox style="-fx-background-color: rgb(113,163,146);">
                <children>
                   <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -32,7 +32,6 @@
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <JFXTreeTableView fx:id="fileTable" style="-fx-border-color: transparent;" HBox.hgrow="ALWAYS" />
                   <VBox prefHeight="650.0" prefWidth="250.0">
                      <children>
                         <StackPane>
@@ -155,6 +154,7 @@
                         </StackPane>
                      </children>
                   </VBox>
+                  <JFXTreeTableView fx:id="fileTable" style="-fx-border-color: transparent;" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>
