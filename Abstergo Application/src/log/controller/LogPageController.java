@@ -547,7 +547,7 @@ public class LogPageController {
 			PreLoginPageController.anchorPaneClone.getChildren().clear();
 			PreLoginPageController.navBarClone.setVisible(false);
 		} else {
-			userCache.put("Last", "/setting/view/SettingPage.fxml");
+			userCache.put("Last", "/log/view/LogPage.fxml");
 		}
 		
 		backgroundService = new Service<Void>() {

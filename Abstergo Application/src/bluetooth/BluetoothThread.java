@@ -42,44 +42,49 @@ public class BluetoothThread implements Runnable {
 					System.out.println("Running");
 					boolean exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
 					if (!exist) {
-//						BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
-						System.out.println("Device not found!");
+						System.out.println("Device not found! - First pass");
+						Thread.sleep(3000);
+						exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
+						if(!exist) {
+							BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
+							System.out.println("Device not found! - Final pass");
 
-						Setting setting = new Setting(); // Getting time set
-						String howToDC = setting.getPreference().getOnDisconnection();
-						if("Logout".equals(howToDC)) {
-							Timer timer = new Timer();
-							if(setting.getPreference().getTimeout() > 0) {
-								timer.schedule(new TimerTask() {
-									@Override
-									public void run() {
-										BluetoothThreadModel.stopThread();
-									}
-		
-								}, setting.getPreference().getTimeout()); // 15 mins btw (Default) // Now settings work so... no longer default
-							}
-							long polling = 1000;
-							while (running) {
-								boolean exist2 = LoginBluetoothModel.scanForPairedBluetoothDevice();
-								System.out.println("WHILE: " + exist2);
-								if (exist2) {
-									timer.cancel();
-									logBackIn();
-									break;
+							Setting setting = new Setting(); // Getting time set
+							String howToDC = setting.getPreference().getOnDisconnection();
+							if("Logout".equals(howToDC)) {
+								Timer timer = new Timer();
+								if(setting.getPreference().getTimeout() > 0) {
+									timer.schedule(new TimerTask() {
+										@Override
+										public void run() {
+											BluetoothThreadModel.stopThread();
+										}
+			
+									}, setting.getPreference().getTimeout()); // 15 mins btw (Default) // Now settings work so... no longer default
 								}
-								Thread.sleep(polling);
-								if (polling < 15000)
-									polling *= 1.5;
+								long polling = 1000;
+								while (running) {
+									boolean exist2 = LoginBluetoothModel.scanForPairedBluetoothDevice();
+									System.out.println("WHILE: " + exist2);
+									if (exist2) {
+										timer.cancel();
+										logBackIn();
+										break;
+									}
+									Thread.sleep(polling);
+									if (polling < 15000)
+										polling *= 1.5;
+								}
+							} else if("Signout".equals(howToDC)) {
+								Runtime.getRuntime().exec("shutdown -l -f");
+								System.exit(0);
+							} else if("Sleep".equals(howToDC)) {
+								Runtime.getRuntime().exec("psshutdown -d -p");
+								System.exit(0);
+							} else if("Shutdown".equals(howToDC)) {
+								Runtime.getRuntime().exec("shutdown -s -p");
+								System.exit(0);
 							}
-						} else if("Signout".equals(howToDC)) {
-							Runtime.getRuntime().exec("shutdown -l -f");
-							System.exit(0);
-						} else if("Sleep".equals(howToDC)) {
-							Runtime.getRuntime().exec("psshutdown -d -p");
-							System.exit(0);
-						} else if("Shutdown".equals(howToDC)) {
-							Runtime.getRuntime().exec("shutdown -s -p");
-							System.exit(0);
 						}
 					}
 					Thread.sleep(3000);
