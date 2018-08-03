@@ -2,10 +2,13 @@ package login.controller;
 
 import java.io.IOException;
 
+import javax.naming.OperationNotSupportedException;
+
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import bluetooth.BluetoothThreadModel;
+import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -42,15 +45,15 @@ public class PreLoginPageController {
 	@FXML
 	private Label emailNav;
 	@FXML
-    private Label fileNav;
-    @FXML
-    private Label backupNav;
+  private Label fileNav;
+  @FXML
+  private Label backupNav;
 	@FXML
 	private Label logsNav;
 	@FXML
 	private Label settingsNav;
 	@FXML
-    private Label logoutNav;
+  private Label logoutNav;
 	@FXML
 	private VBox anchorPane;
 	private boolean toggle = false;
@@ -58,7 +61,7 @@ public class PreLoginPageController {
 	public static StackPane navBarClone;
 
 	@FXML
-	void changePage(MouseEvent event) throws IOException {
+	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view
 		if(BeepThread.isRunning())
     		BeepThread.stop();
@@ -66,9 +69,9 @@ public class PreLoginPageController {
 		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
     	if("emailNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/kkk.fxml")); // Change scene
+    		toBeChanged = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
-		} else if("fileNav".equals(clicked)) {
+		  } else if("fileNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("backupNav".equals(clicked)) {

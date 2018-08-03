@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import AbstergoREST.main.model.BluetoothDevice;
+import AbstergoREST.main.model.Email;
 import AbstergoREST.main.model.FileHash;
 import AbstergoREST.main.model.FileStorage;
 import AbstergoREST.main.model.KeyPair;
@@ -234,5 +235,28 @@ public class Database {
 			return fs;
 		}
 		return null;
+	}
+	
+	// Xuan Zheng's part
+	public ArrayList<Email> getEmails(String address) throws SQLException {
+		ArrayList<Email> em = new ArrayList<Email>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM Email WHERE Username = ?;");
+		ppstmt.setString(1, address);
+		ResultSet rs =	ppstmt.executeQuery();
+		while(rs.next()) {
+			em.add(new Email(rs.getString("username"), rs.getString("address"), rs.getString("password")));
+		}
+		
+		return em;
+		
+	}
+	
+	public void insertEmail(String username, String map, String pass) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO Email(Username, Address, Password) VALUES(?,?,?);");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, map);
+		ppstmt.setString(3, pass);
+		
+		executeUpdate(ppstmt);
 	}
 }

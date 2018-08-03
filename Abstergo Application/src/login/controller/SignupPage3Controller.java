@@ -56,6 +56,7 @@ public class SignupPage3Controller {
 
 	@FXML
 	void goToLogin(ActionEvent event) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+		System.out.println("1st");
 		final Stage STAGE = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
 		backgroundService = new Service<Void>() {
@@ -66,13 +67,19 @@ public class SignupPage3Controller {
 
 					@Override
 					protected Void call() throws Exception {
+						System.out.println("2nd");
 						// Create user to DB
 						BluetoothDevice device = new BluetoothDevice(cache2.get("BluetoothAddress"),
 								cache2.get("DeviceName"), cache2.get("MajorClass"));
+						System.out.println("3rd");
 						LoginPageModel login = new LoginPageModel(cache.get("Email"), cache.get("Password"));
+						System.out.println("4th");
 						login.setPassword(LoginPageModel.byteArrayToHexString(login.encodeHashPassword()));
+						System.out.println("5th");
 						BluetoothDevice.createLogin(login, device);
+						System.out.println("6th");
 						LogDAO.createKeys(cache.get("Email"));
+						System.out.println("7th");
 						return null;
 					}
 				};
@@ -84,13 +91,15 @@ public class SignupPage3Controller {
 			@Override
 			public void handle(WorkerStateEvent event) {
 				try {
+					System.out.println("8rd");
 					STAGE.getScene().setCursor(Cursor.DEFAULT);
 					SignupPageController.cacheManager.getCacheManager().removeCache("preConfigured");
 					SignupPageController.cacheManager.getCacheManager().close();
 
 					Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/LoginPage.fxml")); // Change scene
 					toBeChanged.setOpacity(1);
-					((StackPane)root.getParent()).getChildren().setAll(toBeChanged);
+					PreLoginPageController.stackPaneClone.getChildren().remove(0);
+					PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

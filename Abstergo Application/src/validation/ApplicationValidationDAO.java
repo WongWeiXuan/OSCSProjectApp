@@ -111,7 +111,7 @@ public class ApplicationValidationDAO {
 		return null;
 	}
 
-	protected static void getFile(String name) {
+	public static void getFile(String name) {
 		BufferedReader br = null;
 		InputStream inputStream = null;
 		OutputStream outputStream = null;
