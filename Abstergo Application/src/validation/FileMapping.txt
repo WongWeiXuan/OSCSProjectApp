@@ -10,6 +10,7 @@ FileStorage.css;src/fileStorage/FileStorage.css
 FileStorage.fxml;src/fileStorage/FileStorage.fxml
 FileStorage.java;src/fileStorage/FileStorage.java
 FileStorageController.java;src/fileStorage/FileStorageController.java
+FileStorageDAO.java;src/fileStorage/FileStorageDAO.java
 AbstergoLogModel.java;src/log/AbstergoLogModel.java
 forCopyingController.java;src/log/controller/forCopyingController.java
 LogNetworkPageController.java;src/log/controller/LogNetworkPageController.java

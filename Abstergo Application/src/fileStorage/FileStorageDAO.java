@@ -9,13 +9,59 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.time.Instant;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class FileStorageDAO {
+	
+	public static JsonObject getUserFiles(String username, String fileName) {
+		BufferedReader br = null;
+		try {
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/getuserfiles" + username + fileName);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			br = new BufferedReader(input); // Getting the response from the webservice
+
+			String output = br.readLine();
+			br.close();
+			input.close();
+			inputStream.close();
+			connection.disconnect();
+			if (output != null) {
+				br.close();
+				connection.disconnect();
+				JsonElement jelement = new JsonParser().parse(output);
+				return jelement.getAsJsonObject();
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	
 	public static String uploadFile(FileStorage fs) {
 		BufferedReader br = null;
@@ -30,9 +76,12 @@ public class FileStorageDAO {
 
 			// Convert Object to Json
 			ObjectMapper mapper = new ObjectMapper();
+			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			String jsonInString = mapper.writeValueAsString(fs);
-
+			
+			System.out.println(jsonInString);
+			
 			// Pass in the Json Object to REST Server
 			OutputStream os = connection.getOutputStream();
 			os.write(jsonInString.getBytes(StandardCharsets.UTF_8));
@@ -70,12 +119,87 @@ public class FileStorageDAO {
 		return null;
 	}
 	
-	public static void main(String[] args) {
+	public static void downloadFile(String username, String fileName, File into) {
+		BufferedReader br = null;
+		try {
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/downloadfile" + username + fileName + into);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			br = new BufferedReader(input); // Getting the response from the webservice
+
+			File fileToDownload = into;
+			FileUtils.copyInputStreamToFile(inputStream, fileToDownload);
+			
+			String output = br.readLine();
+			br.close();
+			input.close();
+			inputStream.close();
+			connection.disconnect();
+			if (output != null) {
+				br.close();
+				connection.disconnect();
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static JsonObject getSplitFiles(String username, String fileName) {
+		BufferedReader br = null;
+		try {
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/getsplitfiles" + username + fileName);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			br = new BufferedReader(input); // Getting the response from the webservice
+
+			String output = br.readLine();
+			br.close();
+			input.close();
+			inputStream.close();
+			connection.disconnect();
+			if (output != null) {
+				br.close();
+				connection.disconnect();
+				JsonElement jelement = new JsonParser().parse(output);
+				return jelement.getAsJsonObject();
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	public static void main(String[] args) throws Exception {
 		FileStorage fs = new FileStorage();
-		fs.setFileName("Hello World");
-		fs.setFileType("TXT");
-		fs.setDateCreated("1/8/2018");
-		fs.setFile(new File("D:\\Hello World.txt"));
+		fs.setUsername("test@example.com");
+		FileSplit.splitFile(new File("D:\\Hello World.txt"), fs);
+		
 		System.out.println(uploadFile(fs));
 	}
 }
