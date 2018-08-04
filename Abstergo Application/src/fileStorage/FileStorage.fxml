@@ -5,8 +5,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
@@ -20,14 +18,18 @@
          <children>
             <HBox style="-fx-background-color: rgb(113,163,146);">
                <children>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../resource/pictures/abstergo-industries-logo.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="10.0" top="5.0" />
-                     </HBox.margin>
-                  </ImageView>
+                  <TextFlow HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="File Storage" textFill="WHITE">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </TextFlow>
                </children>
             </HBox>
             <HBox VBox.vgrow="ALWAYS">
@@ -40,7 +42,7 @@
                                  <children>
                                     <TextFlow textAlignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="newBtn" alignment="CENTER" onAction="#showNewBtn" prefWidth="200.0" style="-fx-background-color: #0070e0;" text="New" textAlignment="CENTER" textFill="WHITE">
+                                          <JFXButton fx:id="newBtn" alignment="CENTER" onAction="#uploadFile" prefWidth="200.0" style="-fx-background-color: #0070e0;" text="New" textAlignment="CENTER" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -50,47 +52,13 @@
                                           </JFXButton>
                                        </children>
                                     </TextFlow>
-                                    <VBox fx:id="newList" disable="true" maxWidth="200.0" spacing="5.0" visible="false">
-                                       <children>
-                                          <Label text="Folder">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
-                                          <Label fx:id="fileUploadOpt" onMouseClicked="#fileUpload" text="File upload">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
-                                          <Label text="Folder upload">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
-                                       </children>
-                                       <VBox.margin>
-                                          <Insets top="5.0" />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets left="5.0" />
-                                       </padding>
-                                    </VBox>
                                  </children>
                               </VBox>
                               <VBox fx:id="downloadWrap" alignment="CENTER" disable="true" visible="false">
                                  <children>
                                     <TextFlow textAlignment="CENTER">
                                        <children>
-                                          <JFXButton fx:id="downloadBtn" alignment="CENTER" prefWidth="200.0" style="-fx-background-color: #0070e0;" text="Download" textFill="WHITE">
+                                          <JFXButton fx:id="downloadBtn" alignment="CENTER" onAction="#downloadFile" prefWidth="200.0" style="-fx-background-color: #0070e0;" text="Download" textFill="WHITE">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>
@@ -102,30 +70,6 @@
                                     </TextFlow>
                                     <VBox maxWidth="200.0" spacing="5.0">
                                        <children>
-                                          <Label fx:id="historyOpt" text="Version history">
-                                             <font>
-                                                <Font name="System Bold" size="18.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
-                                          <Label fx:id="moveOpt" text="Move">
-                                             <font>
-                                                <Font name="System Bold" size="18.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
-                                          <Label fx:id="copyOpt" text="Copy">
-                                             <font>
-                                                <Font name="System Bold" size="18.0" />
-                                             </font>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Label>
                                           <Label fx:id="deleteOpt" text="Delete">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />

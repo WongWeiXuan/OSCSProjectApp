@@ -2,18 +2,19 @@ package fileStorage;
 
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.ArrayList;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class FileStorage {
 	private String username;
 	private String fileName;
 	private String fileType;
+	private String fileSize;
 	private String dateCreated;
 	private byte[] file;
 	private byte[] splitFile1;
@@ -28,12 +29,13 @@ public class FileStorage {
 		
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String dateCreated, byte[] splitFile1,
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, byte[] splitFile1,
 			byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
 		this.fileType = fileType;
+		this.fileSize = fileSize;
 		this.dateCreated = dateCreated;
 		this.splitFile1 = splitFile1;
 		this.splitFile2 = splitFile2;
@@ -44,11 +46,12 @@ public class FileStorage {
 		this.noOfFiles = noOfFiles;
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String dateCreated) {
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
 		this.fileType = fileType;
+		this.fileSize = fileSize;
 		this.dateCreated = dateCreated;
 	}
 
@@ -76,6 +79,14 @@ public class FileStorage {
 		this.fileType = fileType;
 	}
 	
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
 	public String getDateCreated() {
 		return dateCreated;
 	}
@@ -155,11 +166,24 @@ public class FileStorage {
 		return dateString;
 	}
 	
-	public static Timestamp convertDateString(String dateString) throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		Date parsedDate = format.parse(dateString);
-		Timestamp timeStamp = new Timestamp(parsedDate.getTime());
-		return timeStamp;
+	public static ArrayList<FileStorage> getUserFiles(String username) throws UnsupportedEncodingException {
+		ArrayList<FileStorage> userFileList = new ArrayList<FileStorage>();
+		JsonArray jsonArray = FileStorageDAO.getUserFiles(username);
+		for (JsonElement je : jsonArray) {
+			JsonObject jsonObject = je.getAsJsonObject();
+			FileStorage fs = new FileStorage();
+			fs.setUsername(jsonObject.get("username").getAsString());
+			fs.setFileName(jsonObject.get("fileName").getAsString());
+			fs.setFileSize(jsonObject.get("fileSize").getAsString());
+			fs.setFileType(jsonObject.get("fileType").getAsString());
+			fs.setDateCreated(jsonObject.get("dateCreated").getAsString());
+			userFileList.add(fs);
+		}
+		return userFileList;
+	}
+	
+	public static void uploadFile(FileStorage fs) {
+		FileStorageDAO.uploadFile(fs);
 	}
 	
 	public static FileStorage getSplitFiles(String username, String fileName) throws UnsupportedEncodingException {
@@ -177,6 +201,10 @@ public class FileStorage {
 		fs.setParBlock(jsonObject.get("parBlock").toString().getBytes("UTF-8"));
 		fs.setNoOfFiles(jsonObject.get("noOfFiles").getAsInt());
 		return fs;
+	}
+	
+	public static void writeMissingFile(FileStorage fs, int missingFileNo) {
+		FileStorageDAO.writeMissingFile(fs, missingFileNo);
 	}
 	
 	public static void main(String[] args) {

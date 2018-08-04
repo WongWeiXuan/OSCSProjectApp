@@ -9,7 +9,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import AbstergoREST.main.model.BluetoothDevice;
+import AbstergoREST.main.model.DisFileBackup;
 import AbstergoREST.main.model.Email;
+import AbstergoREST.main.model.FileBackup;
 import AbstergoREST.main.model.FileHash;
 import AbstergoREST.main.model.FileStorage;
 import AbstergoREST.main.model.KeyPair;
@@ -182,45 +184,55 @@ public class Database {
 		return executeUpdate(ppstmt);
 	}
 	
-	public ArrayList<FileStorage> getUserFiles(String username, String fileName) throws SQLException {
+	//FileStorage
+	public ArrayList<FileStorage> getUserFiles(String username) throws SQLException {
 		ArrayList<FileStorage> fileList = new ArrayList<FileStorage>();
-		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(FileType, DateCreated) WHERE Username = ? AND FileName = ?;");
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(Username, FileName, FileType, FileSize, DateCreated) WHERE Username = ?;");
 		ppstmt.setString(1, username);
-		ppstmt.setString(2, fileName);
 		
 		ResultSet rs = ppstmt.executeQuery();
 		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String fileName = rs.getString("FileName");
 			String fileType = rs.getString("FileType");
+			String fileSize = rs.getString("FileSize");
 			String dateCreated = rs.getString("DateCreated");
 			
-			fileList.add(new FileStorage(username, fileName, fileType, dateCreated));
+			fileList.add(new FileStorage(userName, fileName, fileType, fileSize, dateCreated));
 			
 			return fileList;
 		}
 		return null;
 	}
 	
-	public boolean uploadFile(byte[] splitFile1, byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) throws SQLException {
-		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileStorage(SplitFile1, SplitFile2, SplitFile3, SplitFile4, KeyBlock, ParBlock, NoOfFiles) VALUES(?,?,?,?,?,?,?);");
-		ppstmt.setBytes(1, splitFile1);
-		ppstmt.setBytes(2, splitFile2);
-		ppstmt.setBytes(3, splitFile3);
-		ppstmt.setBytes(4, splitFile4);
-		ppstmt.setBytes(5, keyBlock);
-		ppstmt.setBytes(6, parBlock);
-		ppstmt.setInt(7, noOfFiles);
+	public boolean uploadFile(String username, String fileName, String fileType, String dateCreated, byte[] splitFile1, byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileStorage(Username, FileName, FileType, DateCreated, SplitFile1, SplitFile2, SplitFile3, SplitFile4, KeyBlock, ParBlock, NoOfFiles) VALUES(?,?,?,?,?,?,?,?,?,?,?);");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		ppstmt.setString(3, fileType);
+		ppstmt.setString(4, dateCreated);
+		ppstmt.setBytes(5, splitFile1);
+		ppstmt.setBytes(6, splitFile2);
+		ppstmt.setBytes(7, splitFile3);
+		ppstmt.setBytes(8, splitFile4);
+		ppstmt.setBytes(9, keyBlock);
+		ppstmt.setBytes(10, parBlock);
+		ppstmt.setInt(11, noOfFiles);
 		
 		return executeUpdate(ppstmt);
 	}
 	
 	public FileStorage downloadFile(String username, String fileName) throws SQLException {
-		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(FileType, DateCreated, SplitFile1, SplitFile2, SplitFile3, SplitFile4, KeyBlock, ParBlock, NoOfFiles) WHERE Username = ? AND FileName = ?;");
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileStorage WHERE Username = ? AND FileName = ?;");
 		ppstmt.setString(1, username);
 		ppstmt.setString(2, fileName);
 		
 		ResultSet rs = ppstmt.executeQuery();
 		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String filename = rs.getString("FileName");
 			String fileType = rs.getString("FileType");
+			String fileSize = rs.getString("FileSize");
 			String dateCreated = rs.getString("DateCreated");
 			byte[] splitFile1 = rs.getBytes("SplitFile1");
 			byte[] splitFile2 = rs.getBytes("SplitFile2");
@@ -230,10 +242,147 @@ public class Database {
 			byte[] parBlock = rs.getBytes("ParBlock");
 			int noOfFiles = rs.getInt("NoOfFiles");
 			
-			FileStorage fs = new FileStorage(username, fileName, fileType, dateCreated, splitFile1, splitFile2, splitFile3, splitFile4, keyBlock, parBlock, noOfFiles);
+			FileStorage fs = new FileStorage(userName, filename, fileType, fileSize, dateCreated, splitFile1, splitFile2, splitFile3, splitFile4, keyBlock, parBlock, noOfFiles);
 			
 			return fs;
 		}
+		return null;
+	}
+	
+	public boolean writeMissingFile(String username, String fileName, byte[] missingFileData, int missingFileNo) throws SQLException {
+		PreparedStatement ppstmt = null;
+		if (missingFileNo == 1) {
+			ppstmt = conn.prepareStatement("UPDATE FileStorage SET SplitFile1 = ? WHERE Username = ? AND FileName = ?;");
+		}
+		else if (missingFileNo == 2) {
+			ppstmt = conn.prepareStatement("UPDATE FileStorage SET SplitFile2 = ? WHERE Username = ? AND FileName = ?;");
+		}
+		else if (missingFileNo == 3) {
+			ppstmt = conn.prepareStatement("UPDATE FileStorage SET SplitFile3 = ? WHERE Username = ? AND FileName = ?;");
+		}
+		else if (missingFileNo == 4) {
+			ppstmt = conn.prepareStatement("UPDATE FileStorage SET SplitFile4 = ? WHERE Username = ? AND FileName = ?;");
+		}
+		
+		ppstmt.setBytes(1, missingFileData);
+		ppstmt.setString(2, username);
+		ppstmt.setString(3, fileName);
+		
+		return executeUpdate(ppstmt);
+	}
+	
+	public boolean deleteFile(String username, String fileName) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("DELETE FROM FileStorage WHERE Username = ? AND FileName = ?;");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		
+		return executeUpdate(ppstmt);
+	}
+	
+	//DisFileBackup
+	public boolean insertDisFileBackup(String username, String fileName, String fileType) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO DisFileBackup(Username, FileName, FileType) VALUES(?,?,?);");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		ppstmt.setString(3, fileType);
+		
+		return executeUpdate(ppstmt);
+	}
+	
+	public DisFileBackup getDisFileBackup(String username) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM DisFileBackup WHERE Username = ?;");
+		ppstmt.setString(1, username);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String fileName = rs.getString("FileName");
+			String fileType = rs.getString("FileType");
+			String fileSize = rs.getString("FileSize");
+			
+			DisFileBackup dfb = new DisFileBackup(userName, fileName, fileType, fileSize);
+			
+			return dfb;
+		}
+		return null;
+	}
+	
+	//FileBackup
+	public ArrayList<FileBackup> getUserBackupFiles(String username) throws SQLException {
+		ArrayList<FileBackup> fileList = new ArrayList<FileBackup>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileBackup WHERE Username = ?;");
+		ppstmt.setString(1, username);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String fileName = rs.getString("FileName");
+			String fileType = rs.getString("FileType");
+			byte[] fileData = rs.getBytes("FileData");
+			String dateCreated = rs.getString("DateCreated");
+			String fileBackupIndex = rs.getString("FileBackupIndex");
+			
+			fileList.add(new FileBackup(userName, fileName, fileType, fileData, dateCreated, fileBackupIndex));
+			
+			return fileList;
+		}
+		return null;
+	}
+	
+	public ArrayList<FileBackup> getFileVerHist(String username, String fileBackupIndex) throws SQLException {
+		ArrayList<FileBackup> fileList = new ArrayList<FileBackup>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileBackup WHERE Username = ? AND FileBackupIndex = ?;");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileBackupIndex);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String fileName = rs.getString("FileName");
+			String fileType = rs.getString("FileType");
+			byte[] fileData = rs.getBytes("FileData");
+			String dateCreated = rs.getString("DateCreated");
+			String filebackupIndex = rs.getString("FileBackupIndex");
+			
+			fileList.add(new FileBackup(userName, fileName, fileType, fileData, dateCreated, filebackupIndex));
+			
+			return fileList;
+		}
+		return null;
+	}
+	
+	
+	public boolean backupFile(String username, String fileName, String fileType, byte[] fileData, String dateCreated, String fileBackupIndex) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileBackup(Username, FileName, FileType, FileData, DateCreated, FileBackupIndex) VALUES(?,?,?,?,?,?);");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		ppstmt.setString(3, fileType);
+		ppstmt.setBytes(4, fileData);
+		ppstmt.setString(5, dateCreated);
+		ppstmt.setString(6, fileBackupIndex);
+		
+		return executeUpdate(ppstmt);
+	}
+	
+	public FileBackup downloadBackupFile(String username, String fileName) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM FileBackup WHERE Username = ? AND FileName = ?;");
+		ppstmt.setString(1, username);
+		ppstmt.setString(2, fileName);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String userName = rs.getString("Username");
+			String filename = rs.getString("FileName");
+			String fileType = rs.getString("FileType");
+			byte[] fileData = rs.getBytes("FileData");
+			String dateCreated = rs.getString("DateCreated");
+			String fileBackupIndex = rs.getString("FileBackupIndex");
+			
+			FileBackup fb = new FileBackup(userName, filename, fileType, fileData, dateCreated, fileBackupIndex);
+			
+			return fb;
+		}
+		
 		return null;
 	}
 	
