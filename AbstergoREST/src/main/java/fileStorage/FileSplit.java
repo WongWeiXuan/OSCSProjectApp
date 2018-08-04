@@ -1,9 +1,7 @@
 package fileStorage;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,9 +33,7 @@ public class FileSplit {
 		return dest;
 	}
 
-	public static void splitFile(byte[] file, String fileName) throws Exception {
-		int partCounter = 0;
-
+	public static void splitFile(String username, String fileName, String fileType, String dateCreated, byte[] file) throws Exception {
 		byte[][] arrByteArr = splitBytes(file, file.length / 3);
 		
 		String encKey = FileSecure.generateEncKey();
@@ -48,7 +44,9 @@ public class FileSplit {
 
 		System.out.println("Encryption key: " + encKey);
 		
-		for (byte[] block : arrByteArr) {
+		for (byte[] b : arrByteArr) {
+			byte[] block = FileSecure.encrypt(b, encKey);
+			
 			if (b1 == null) {
 				b1 = FileSecure.hash(block);
 			}
@@ -78,28 +76,17 @@ public class FileSplit {
 
 		final Database DB = new Database();
 
-		// TODO: Write each split file to database
-
-		// TODO: Write noOfFiles to database
-
-		// XOR hash blocks with encryption key
 		byte[] encKeyBytes = encKey.getBytes("UTF-8");
 		byte[] keyBlock = FileSecure.getXORKeyBlock(b1, b2, b3, b4, encKeyBytes);
 
-		// TODO: Write keyBlock to database
-
-		// XOR to get parBlock
 		byte[] parBlock = FileSecure.getXORParBlock(alpha, beta, charlie, delta);
 
-		// TODO: Write keyBlock to database
-
-		DB.uploadFile(alpha, beta, charlie, delta, keyBlock, parBlock, partCounter);
+		DB.uploadFile(username, fileName, fileType, dateCreated, alpha, beta, charlie, delta, keyBlock, parBlock, arrByteArr.length);
 	}
 
 	public static List<File> listOfFilesToMerge(String username, String fileName) throws IOException, Exception {
 		final Database DB = new Database();
 
-		// Get split files, keyBlock, parBlock and noOfFiles from database
 		FileStorage fs = DB.downloadFile(username, fileName);
 		byte[] splitFile1 = fs.getSplitFile1();
 		byte[] splitFile2 = fs.getSplitFile2();
@@ -109,7 +96,6 @@ public class FileSplit {
 		byte[] parBlock = fs.getParBlock();
 		int noOfFiles = fs.getNoOfFiles();
 
-		// Check if any split files missing, get missing file if there is:
 		if (noOfFiles == 3) {
 			if (splitFile1 == null || splitFile2 == null || splitFile3 == null) {
 				if (splitFile1 == null) {
@@ -134,24 +120,20 @@ public class FileSplit {
 			}
 		}
 
-		// Calculate hash values of split files from database:
 		byte[] b1 = null, b2 = null, b3 = null, b4 = null;
 		b1 = FileSecure.hash(splitFile1);
 		b2 = FileSecure.hash(splitFile2);
 		b3 = FileSecure.hash(splitFile3);
 		b4 = FileSecure.hash(splitFile4);
 
-		// Get encryption key from keyBlock:
 		byte[] encKeyBytes = FileSecure.getEncKeyByXOR(b1, b2, b3, b4, keyBlock);
 		String encKey = new String(encKeyBytes, "UTF-8");
 
-		// Decrypt the split files:
 		byte[] decryptedFile1 = FileSecure.decrypt(splitFile1, encKey);
 		byte[] decryptedFile2 = FileSecure.decrypt(splitFile2, encKey);
 		byte[] decryptedFile3 = FileSecure.decrypt(splitFile3, encKey);
 		byte[] decryptedFile4 = FileSecure.decrypt(splitFile4, encKey);
 
-		// Write to temporary files:
 		File file1 = File.createTempFile("File1", ".tmp");
 		FileUtils.writeByteArrayToFile(file1, decryptedFile1);
 		File file2 = File.createTempFile("File2", ".tmp");
@@ -161,7 +143,6 @@ public class FileSplit {
 		File file4 = File.createTempFile("File4", ".tmp");
 		FileUtils.writeByteArrayToFile(file4, decryptedFile4);
 
-		// Store in a list of files:
 		List<File> listOfFiles = new ArrayList<File>();
 		listOfFiles.add(file1);
 		listOfFiles.add(file2);

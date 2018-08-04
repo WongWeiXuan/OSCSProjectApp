@@ -12,6 +12,7 @@ public class FileStorage {
 	private String username;
 	private String fileName;
 	private String fileType;
+	private String fileSize;
 	private String dateCreated;
 	private byte[] file;
 	private byte[] splitFile1;
@@ -26,12 +27,13 @@ public class FileStorage {
 		
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String dateCreated, byte[] splitFile1,
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, byte[] splitFile1,
 			byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
 		this.fileType = fileType;
+		this.fileSize = fileSize;
 		this.dateCreated = dateCreated;
 		this.splitFile1 = splitFile1;
 		this.splitFile2 = splitFile2;
@@ -42,11 +44,12 @@ public class FileStorage {
 		this.noOfFiles = noOfFiles;
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String dateCreated) {
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
 		this.fileType = fileType;
+		this.fileSize = fileSize;
 		this.dateCreated = dateCreated;
 	}
 
@@ -74,6 +77,14 @@ public class FileStorage {
 		this.fileType = fileType;
 	}
 	
+	public String getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize) {
+		this.fileSize = fileSize;
+	}
+
 	public String getDateCreated() {
 		return dateCreated;
 	}
@@ -151,12 +162,5 @@ public class FileStorage {
 		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
 		String dateString = datetime.format(format);
 		return dateString;
-	}
-	
-	public Timestamp convertDateString(String dateString) throws ParseException {
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		Date parsedDate = format.parse(dateString);
-		Timestamp timeStamp = new Timestamp(parsedDate.getTime());
-		return timeStamp;
 	}
 }
