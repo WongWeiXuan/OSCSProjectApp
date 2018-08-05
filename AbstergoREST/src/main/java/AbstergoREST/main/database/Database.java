@@ -187,7 +187,7 @@ public class Database {
 	//FileStorage
 	public ArrayList<FileStorage> getUserFiles(String username) throws SQLException {
 		ArrayList<FileStorage> fileList = new ArrayList<FileStorage>();
-		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(Username, FileName, FileType, FileSize, DateCreated) WHERE Username = ?;");
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT Username, FileName, FileType, FileSize, DateCreated FROM FileStorage WHERE Username = ?;");
 		ppstmt.setString(1, username);
 		
 		ResultSet rs = ppstmt.executeQuery();
