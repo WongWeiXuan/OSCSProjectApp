@@ -1,13 +1,5 @@
 package AbstergoREST.main.model;
 
-import java.io.File;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-
 public class FileStorage {
 	private String username;
 	private String fileName;
@@ -25,6 +17,11 @@ public class FileStorage {
 	
 	public FileStorage() {
 		
+	}
+	
+	public FileStorage(String fileName) {
+		super();
+		this.fileName = fileName;
 	}
 	
 	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, byte[] splitFile1,
@@ -155,12 +152,5 @@ public class FileStorage {
 
 	public void setNoOfFiles(int noOfFiles) {
 		this.noOfFiles = noOfFiles;
-	}
-
-	public String convertTimestamp(Timestamp timestamp) {
-		LocalDateTime datetime = timestamp.toLocalDateTime();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm a");
-		String dateString = datetime.format(format);
-		return dateString;
 	}
 }

@@ -279,6 +279,22 @@ public class Database {
 		return executeUpdate(ppstmt);
 	}
 	
+	public ArrayList<FileStorage> getFileNames(String username) throws SQLException {
+		ArrayList<FileStorage> fileList = new ArrayList<FileStorage>();
+		PreparedStatement ppstmt = conn.prepareStatement("SELECT FROM FileStorage(FileName) WHERE Username = ?;");
+		ppstmt.setString(1, username);
+		
+		ResultSet rs = ppstmt.executeQuery();
+		while (rs.next()) {
+			String fileName = rs.getString("FileName");
+			
+			fileList.add(new FileStorage(fileName));
+			
+			return fileList;
+		}
+		return null;
+	}
+	
 	//DisFileBackup
 	public boolean insertDisFileBackup(String username, String fileName, String fileType) throws SQLException {
 		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO DisFileBackup(Username, FileName, FileType) VALUES(?,?,?);");
@@ -289,7 +305,8 @@ public class Database {
 		return executeUpdate(ppstmt);
 	}
 	
-	public DisFileBackup getDisFileBackup(String username) throws SQLException {
+	public ArrayList<DisFileBackup> getDisFileBackup(String username) throws SQLException {
+		ArrayList<DisFileBackup> disFileBackupList = new ArrayList<DisFileBackup>();
 		PreparedStatement ppstmt = conn.prepareStatement("SELECT * FROM DisFileBackup WHERE Username = ?;");
 		ppstmt.setString(1, username);
 		
@@ -300,9 +317,9 @@ public class Database {
 			String fileType = rs.getString("FileType");
 			String fileSize = rs.getString("FileSize");
 			
-			DisFileBackup dfb = new DisFileBackup(userName, fileName, fileType, fileSize);
+			disFileBackupList.add(new DisFileBackup(userName, fileName, fileType, fileSize));
 			
-			return dfb;
+			return disFileBackupList;
 		}
 		return null;
 	}
@@ -319,10 +336,11 @@ public class Database {
 			String fileName = rs.getString("FileName");
 			String fileType = rs.getString("FileType");
 			byte[] fileData = rs.getBytes("FileData");
+			String encKey = rs.getString("EncKey");
 			String dateCreated = rs.getString("DateCreated");
 			String fileBackupIndex = rs.getString("FileBackupIndex");
 			
-			fileList.add(new FileBackup(userName, fileName, fileType, fileData, dateCreated, fileBackupIndex));
+			fileList.add(new FileBackup(userName, fileName, fileType, fileData, encKey, dateCreated, fileBackupIndex));
 			
 			return fileList;
 		}
@@ -341,10 +359,11 @@ public class Database {
 			String fileName = rs.getString("FileName");
 			String fileType = rs.getString("FileType");
 			byte[] fileData = rs.getBytes("FileData");
+			String encKey = rs.getString("EncKey");
 			String dateCreated = rs.getString("DateCreated");
 			String filebackupIndex = rs.getString("FileBackupIndex");
 			
-			fileList.add(new FileBackup(userName, fileName, fileType, fileData, dateCreated, filebackupIndex));
+			fileList.add(new FileBackup(userName, fileName, fileType, fileData, encKey, dateCreated, filebackupIndex));
 			
 			return fileList;
 		}
@@ -352,14 +371,15 @@ public class Database {
 	}
 	
 	
-	public boolean backupFile(String username, String fileName, String fileType, byte[] fileData, String dateCreated, String fileBackupIndex) throws SQLException {
-		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileBackup(Username, FileName, FileType, FileData, DateCreated, FileBackupIndex) VALUES(?,?,?,?,?,?);");
+	public boolean backupFile(String username, String fileName, String fileType, byte[] fileData, String encKey, String dateCreated, String fileBackupIndex) throws SQLException {
+		PreparedStatement ppstmt = conn.prepareStatement("INSERT INTO FileBackup(Username, FileName, FileType, FileData, EncKey, DateCreated, FileBackupIndex) VALUES(?,?,?,?,?,?,?);");
 		ppstmt.setString(1, username);
 		ppstmt.setString(2, fileName);
 		ppstmt.setString(3, fileType);
 		ppstmt.setBytes(4, fileData);
-		ppstmt.setString(5, dateCreated);
-		ppstmt.setString(6, fileBackupIndex);
+		ppstmt.setString(5, encKey);
+		ppstmt.setString(6, dateCreated);
+		ppstmt.setString(7, fileBackupIndex);
 		
 		return executeUpdate(ppstmt);
 	}
@@ -375,10 +395,11 @@ public class Database {
 			String filename = rs.getString("FileName");
 			String fileType = rs.getString("FileType");
 			byte[] fileData = rs.getBytes("FileData");
+			String encKey = rs.getString("EncKey");
 			String dateCreated = rs.getString("DateCreated");
 			String fileBackupIndex = rs.getString("FileBackupIndex");
 			
-			FileBackup fb = new FileBackup(userName, filename, fileType, fileData, dateCreated, fileBackupIndex);
+			FileBackup fb = new FileBackup(userName, filename, fileType, fileData, encKey, dateCreated, fileBackupIndex);
 			
 			return fb;
 		}

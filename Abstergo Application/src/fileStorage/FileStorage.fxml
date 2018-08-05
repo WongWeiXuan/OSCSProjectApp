@@ -22,7 +22,7 @@
                      <children>
                         <Label text="File Storage" textFill="WHITE">
                            <font>
-                              <Font size="36.0" />
+                              <Font name="System Bold" size="36.0" />
                            </font>
                            <padding>
                               <Insets left="25.0" />
@@ -70,7 +70,7 @@
                                     </TextFlow>
                                     <VBox maxWidth="200.0" spacing="5.0">
                                        <children>
-                                          <Label fx:id="deleteOpt" text="Delete">
+                                          <Label fx:id="deleteOpt" onMouseClicked="#deleteFile" text="Delete">
                                              <font>
                                                 <Font name="System Bold" size="18.0" />
                                              </font>

@@ -1,46 +1,44 @@
-package fileStorage;
+package fileBackup;
+
+import javafx.fxml.FXML;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
 import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
-import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+import fileStorage.FileSecure;
+import fileStorage.FileStorage;
+import fileStorage.FileStorageTreeModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import login.controller.LoginPageController;
 
-public class FileStorageController {
+public class FileBackupController {
+	@FXML
+	private VBox backupWrap;
+	@FXML
+	private JFXButton backupBtn;
 	@FXML
 	private JFXTreeTableView<FileStorageTreeModel> fileTable;
-	@FXML
-	private VBox newWrap;
-	@FXML
-	private JFXButton newBtn;
-	@FXML
-	private VBox downloadWrap;
-	@FXML
-	private JFXButton downloadBtn;
-	@FXML
-	private Label deleteOpt;
 	
-	private String fileToDownload;
+	private String fileToBackup;
 	
 	Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
 	private String username = userCache.get("User");
@@ -51,21 +49,17 @@ public class FileStorageController {
 			TreeTableRow<FileStorageTreeModel> row = new TreeTableRow<>();
 			row.setOnMouseClicked(event -> {
 				if (!row.isEmpty()) {
-					newWrap.setVisible(false);
-					newWrap.setDisable(true);
-					downloadWrap.setVisible(true);
-					downloadWrap.setDisable(false);
+					backupWrap.setVisible(true);
+					backupWrap.setDisable(false);
 				}
 				else {
-					newWrap.setVisible(true);
-					newWrap.setDisable(false);
-					downloadWrap.setVisible(false);
-					downloadWrap.setDisable(true);
+					backupWrap.setVisible(false);
+					backupWrap.setDisable(true);
 					fileTable.getSelectionModel().clearSelection();
 				}
 				
 				FileStorageTreeModel fileItem = row.getItem();
-				fileToDownload = fileItem.getFileName();
+				fileToBackup = fileItem.getFileName();
 			});
 			return row;
 		});
@@ -132,35 +126,19 @@ public class FileStorageController {
 		fileTable.getColumns().add(sizeCol);
 		fileTable.getColumns().add(dateCol);
 	}
-	
-	@FXML
-    void uploadFile(ActionEvent event) throws Exception {
-		FileChooser fc = new FileChooser();
-		fc.setInitialDirectory(new File("C:"));
-		File selectedFile = fc.showOpenDialog(null);
-		
-		if (selectedFile != null) {
-			FileStorage fs = new FileStorage();
-			FileSplit.splitFile(selectedFile, fs, username);
-			FileStorage.uploadFile(fs);
-		}
-    }
-	
-	@FXML
-    void downloadFile(ActionEvent event) throws IOException, Exception {
-		if (!fileToDownload.equals(null)) {
-			FileSplit.mergeFiles(FileSplit.listOfFilesToMerge(username, fileToDownload), new File(System.getProperty("user.home") + "/Downloads/" + fileToDownload));
-		}
-    }
-	
-	@FXML
-    void deleteFile(MouseEvent event) {
-		if (!fileToDownload.equals(null)) {
-			FileStorage fs = new FileStorage();
-			fs.setUsername(username);
-			fs.setFileName(fileToDownload);
-			FileStorage.deleteFile(fs);
-		}
-    }
 
+	@FXML
+	public void backupFile(ActionEvent event) throws IOException, Exception {
+		if (!fileToBackup.equals(null)) {
+			String encKey = FileSecure.generateEncKey();
+			FileBackup fb = BackupFile.mergeFiles(BackupFile.listOfFilesToMerge(username, fileToBackup), new File(System.getProperty("user.home") + "/Downloads/" + fileToBackup), username, encKey);
+			FileBackup.backupFile(fb);
+			
+			DisFileBackup dfb = new DisFileBackup();
+			dfb.setUsername(username);
+			dfb.setFileName(fileToBackup);
+			dfb.setFileSize(fb.getFileSize());
+			DisFileBackup.insertDisFileBackup(dfb);
+		}
+	}
 }
