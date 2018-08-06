@@ -36,6 +36,7 @@ public class PersistenceAcess {
 	@SuppressWarnings("unchecked")
 	public void loadFromPersistence(){
 		//check for account if saved in local app data
+		/*
 		String path = System.getenv("APPDATA") + "validAccounts.ser";
 		File filename2 = new File(path);
 		    
@@ -76,6 +77,7 @@ public class PersistenceAcess {
 		
 		}//end of if statement
 		else {
+		*/
 			//getting data from database
 			ArrayList<customEmail> em = new ArrayList<customEmail>();
 			JsonArray json = EmailDAO.getdetails("abstergoapp@gmail.com");
@@ -95,7 +97,7 @@ public class PersistenceAcess {
 				service.start();
 			}
 			
-		}
+		
 		
 	}
 	
@@ -104,6 +106,7 @@ public class PersistenceAcess {
 	 * Call on program exit
 	 */
 	//writing a valid account and saving it inside the appdata
+	/*
 	public void SavePersistence(){
 		try {
 			FileOutputStream fileOut = new FileOutputStream(System.getenv("APPDATA") + "validAccounts.ser");
@@ -119,5 +122,6 @@ public class PersistenceAcess {
 	public boolean validPersistencefound(){
 		return persistedList != null;
 	}
+	*/
 
 }
