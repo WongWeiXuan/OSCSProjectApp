@@ -52,6 +52,19 @@ spam.png;src/email/view/images/spam.png
 MainLayout.fxml;src/email/view/MainLayout.fxml
 style.css;src/email/view/style.css
 ViewFactory.java;src/email/view/ViewFactory.java
+BackupFile.java;src/fileBackup/BackupFile.java
+DisFileBackup.fxml;src/fileBackup/DisFileBackup.fxml
+DisFileBackup.java;src/fileBackup/DisFileBackup.java
+DisFileBackupController.java;src/fileBackup/DisFileBackupController.java
+DisFileBackupDAO.java;src/fileBackup/DisFileBackupDAO.java
+DisFileBackupTreeModel.java;src/fileBackup/DisFileBackupTreeModel.java
+FileBackup.fxml;src/fileBackup/FileBackup.fxml
+FileBackup.java;src/fileBackup/FileBackup.java
+FileBackupController.java;src/fileBackup/FileBackupController.java
+FileBackupDAO.java;src/fileBackup/FileBackupDAO.java
+FileBackupTreeModel.java;src/fileBackup/FileBackupTreeModel.java
+FileVerHist.fxml;src/fileBackup/FileVerHist.fxml
+FileVerHistController.java;src/fileBackup/FileVerHistController.java
 FileSecure.java;src/fileStorage/FileSecure.java
 FileSplit.java;src/fileStorage/FileSplit.java
 FileStorage.css;src/fileStorage/FileStorage.css
@@ -59,6 +72,7 @@ FileStorage.fxml;src/fileStorage/FileStorage.fxml
 FileStorage.java;src/fileStorage/FileStorage.java
 FileStorageController.java;src/fileStorage/FileStorageController.java
 FileStorageDAO.java;src/fileStorage/FileStorageDAO.java
+FileStorageTreeModel.java;src/fileStorage/FileStorageTreeModel.java
 AbstergoLogModel.java;src/log/AbstergoLogModel.java
 forCopyingController.java;src/log/controller/forCopyingController.java
 LogNetworkPageController.java;src/log/controller/LogNetworkPageController.java
