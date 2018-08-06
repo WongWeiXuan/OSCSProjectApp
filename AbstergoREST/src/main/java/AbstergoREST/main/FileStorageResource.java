@@ -2,6 +2,7 @@ package AbstergoREST.main;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,9 +34,9 @@ public class FileStorageResource {
 	@Path("/uploadfile")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response uploadFile(FileStorage fs) throws Exception {
-		FileSplit.splitFile(fs.getUsername(), fs.getFileName(), fs.getFileType(), fs.getDateCreated(), fs.getFile());
+		FileSplit.splitFile(fs.getUsername(), fs.getFileName(), fs.getFileType(), fs.getFileSize(), fs.getDateCreated(), Base64.getDecoder().decode(fs.getFile()));
 		String output = "Success!";
-		return Response.status(200).entity(output).build();
+		return Response.status(201).entity(output).build();
 	}
 	
 	@GET
@@ -64,7 +65,7 @@ public class FileStorageResource {
 			DB.writeMissingFile(fs.getUsername(), fs.getFileName(), fs.getSplitFile4(), missingFileNo);
 		}
 		String output = "Success!";
-		return Response.status(200).entity(output).build();
+		return Response.status(201).entity(output).build();
 	}
 	
 	@DELETE
@@ -74,14 +75,6 @@ public class FileStorageResource {
 		final Database DB = new Database();
 		DB.deleteFile(fs.getUsername(), fs.getFileName());
 		String output = "Success!";
-		return Response.status(200).entity(output).build();
+		return Response.status(201).entity(output).build();
 	}
-	
-	@GET
-	@Path("/getfilenames/{username}")
-	public ArrayList<FileStorage> getFileNames(@PathParam("username") String username) throws ClassNotFoundException, SQLException {
-		final Database DB = new Database();
-		return DB.getFileNames(username);
-	}
-	
 }

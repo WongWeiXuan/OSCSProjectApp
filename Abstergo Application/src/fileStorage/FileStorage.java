@@ -16,21 +16,26 @@ public class FileStorage {
 	private String fileType;
 	private String fileSize;
 	private String dateCreated;
-	private byte[] file;
-	private byte[] splitFile1;
-	private byte[] splitFile2;
-	private byte[] splitFile3;
-	private byte[] splitFile4;
-	private byte[] keyBlock;
-	private byte[] parBlock;
+	private String file;
+	private String splitFile1;
+	private String splitFile2;
+	private String splitFile3;
+	private String splitFile4;
+	private String keyBlock;
+	private String parBlock;
 	private int noOfFiles;
 	
 	public FileStorage() {
 		
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, byte[] splitFile1,
-			byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) {
+	public FileStorage(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+	
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, String splitFile1,
+			String splitFile2, String splitFile3, String splitFile4, String keyBlock, String parBlock, int noOfFiles) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
@@ -95,59 +100,59 @@ public class FileStorage {
 		this.dateCreated = dateCreated;
 	}
 	
-	public byte[] getFile() {
+	public String getFile() {
 		return file;
 	}
 
-	public void setFile(byte[] file) {
+	public void setFile(String file) {
 		this.file = file;
 	}
 
-	public byte[] getSplitFile1() {
+	public String getSplitFile1() {
 		return splitFile1;
 	}
 	
-	public void setSplitFile1(byte[] splitFile1) {
+	public void setSplitFile1(String splitFile1) {
 		this.splitFile1 = splitFile1;
 	}
 	
-	public byte[] getSplitFile2() {
+	public String getSplitFile2() {
 		return splitFile2;
 	}
 	
-	public void setSplitFile2(byte[] splitFile2) {
+	public void setSplitFile2(String splitFile2) {
 		this.splitFile2 = splitFile2;
 	}
 	
-	public byte[] getSplitFile3() {
+	public String getSplitFile3() {
 		return splitFile3;
 	}
 	
-	public void setSplitFile3(byte[] splitFile3) {
+	public void setSplitFile3(String splitFile3) {
 		this.splitFile3 = splitFile3;
 	}
 	
-	public byte[] getSplitFile4() {
+	public String getSplitFile4() {
 		return splitFile4;
 	}
 	
-	public void setSplitFile4(byte[] splitFile4) {
+	public void setSplitFile4(String splitFile4) {
 		this.splitFile4 = splitFile4;
 	}
 	
-	public byte[] getKeyBlock() {
+	public String getKeyBlock() {
 		return keyBlock;
 	}
 
-	public void setKeyBlock(byte[] keyBlock) {
+	public void setKeyBlock(String keyBlock) {
 		this.keyBlock = keyBlock;
 	}
 
-	public byte[] getParBlock() {
+	public String getParBlock() {
 		return parBlock;
 	}
 
-	public void setParBlock(byte[] parBlock) {
+	public void setParBlock(String parBlock) {
 		this.parBlock = parBlock;
 	}
 
@@ -195,13 +200,19 @@ public class FileStorage {
 		fs.setFileName(jsonObject.get("fileName").getAsString());
 		fs.setFileType(jsonObject.get("fileType").getAsString());
 		fs.setDateCreated(jsonObject.get("dateCreated").getAsString());
-		fs.setSplitFile1(jsonObject.get("splitFile1").toString().getBytes("UTF-8"));
-		fs.setSplitFile2(jsonObject.get("splitFile2").toString().getBytes("UTF-8"));
-		fs.setSplitFile3(jsonObject.get("splitFile3").toString().getBytes("UTF-8"));
-		fs.setSplitFile4(jsonObject.get("splitFile4").toString().getBytes("UTF-8"));
-		fs.setKeyBlock(jsonObject.get("keyBlock").toString().getBytes("UTF-8"));
-		fs.setParBlock(jsonObject.get("parBlock").toString().getBytes("UTF-8"));
+		fs.setSplitFile1(jsonObject.get("splitFile1").getAsString());
+		fs.setSplitFile2(jsonObject.get("splitFile2").getAsString());
+		fs.setSplitFile3(jsonObject.get("splitFile3").getAsString());
+		if (jsonObject.get("splitFile4").isJsonNull()) {
+			fs.setSplitFile4("Placeholder");
+		}
+		else {
+			fs.setSplitFile4(jsonObject.get("splitFile4").getAsString());
+		}
+		fs.setKeyBlock(jsonObject.get("keyBlock").getAsString());
+		fs.setParBlock(jsonObject.get("parBlock").getAsString());
 		fs.setNoOfFiles(jsonObject.get("noOfFiles").getAsInt());
+		
 		return fs;
 	}
 	
@@ -213,21 +224,7 @@ public class FileStorage {
 		FileStorageDAO.deleteFile(fs);
 	}
 	
-	public static ArrayList<FileStorage> getFileNames(String username) {
-		ArrayList<FileStorage> fileNameList = new ArrayList<FileStorage>();
-		JsonArray jsonArray = FileStorageDAO.getFileNames(username);
-		if (jsonArray != null) {
-			for (JsonElement je : jsonArray) {
-				JsonObject jsonObject = je.getAsJsonObject();
-				FileStorage fs = new FileStorage();
-				fs.setFileName(jsonObject.get("fileName").getAsString());
-				fileNameList.add(fs);
-			}
-		}
-		return fileNameList;
-	}
-	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedEncodingException {
 		
 	}
 

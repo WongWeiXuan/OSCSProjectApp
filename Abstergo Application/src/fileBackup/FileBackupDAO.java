@@ -9,8 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
@@ -19,11 +19,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class FileBackupDAO {
-
-	public static JsonArray getUserBackupFiles(String username) {
+	
+	public static JsonArray getBackupFileNames(String username) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://abstergorest.appspot.com/rest/FileBackup/getuserbackupfiles/" + username);
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileBackup/getbackupfilenames/" + username);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
@@ -115,7 +115,7 @@ public class FileBackupDAO {
 			OutputStream os = connection.getOutputStream();
 			os.write(jsonInString.getBytes(StandardCharsets.UTF_8));
 			os.flush();
-
+			
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
 				throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
 			}
@@ -163,6 +163,7 @@ public class FileBackupDAO {
 			br = new BufferedReader(input); // Getting the response from the webservice
 
 			String output = br.readLine();
+			System.out.println(output);
 			br.close();
 			input.close();
 			inputStream.close();

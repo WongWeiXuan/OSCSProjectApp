@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+
+<AnchorPane prefHeight="200.0" prefWidth="500.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.141" fx:controller="fileStorage.FileStorageConfirmController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox style="-fx-background-color: rgb(113,163,146);" VBox.vgrow="ALWAYS">
+               <children>
+                  <TextFlow prefHeight="170.0" textAlignment="CENTER">
+                     <children>
+                        <Label fx:id="confirmMsg" alignment="CENTER" prefHeight="125.0" prefWidth="500.0" text="Label" textAlignment="CENTER">
+                           <font>
+                              <Font size="36.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </TextFlow>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="120.0">
+               <children>
+                  <HBox alignment="CENTER" style="-fx-background-color: rgb(39,39,39);" VBox.vgrow="ALWAYS">
+                     <children>
+                        <HBox fx:id="confirmWrap" alignment="CENTER" onMouseClicked="#closePopup" spacing="10.0">
+                           <children>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resource/pictures/confirm.png" />
+                                 </image>
+                              </ImageView>
+                              <Label text="Confirm" textFill="WHITE">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
