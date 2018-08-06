@@ -60,6 +60,10 @@ DisFileBackupDAO.java;src/fileBackup/DisFileBackupDAO.java
 DisFileBackupTreeModel.java;src/fileBackup/DisFileBackupTreeModel.java
 FileBackup.fxml;src/fileBackup/FileBackup.fxml
 FileBackup.java;src/fileBackup/FileBackup.java
+FileBackupBegin.fxml;src/fileBackup/FileBackupBegin.fxml
+FileBackupBeginController.java;src/fileBackup/FileBackupBeginController.java
+FileBackupConfirm.fxml;src/fileBackup/FileBackupConfirm.fxml
+FileBackupConfirmController.java;src/fileBackup/FileBackupConfirmController.java
 FileBackupController.java;src/fileBackup/FileBackupController.java
 FileBackupDAO.java;src/fileBackup/FileBackupDAO.java
 FileBackupTreeModel.java;src/fileBackup/FileBackupTreeModel.java
@@ -70,6 +74,8 @@ FileSplit.java;src/fileStorage/FileSplit.java
 FileStorage.css;src/fileStorage/FileStorage.css
 FileStorage.fxml;src/fileStorage/FileStorage.fxml
 FileStorage.java;src/fileStorage/FileStorage.java
+FileStorageConfirm.fxml;src/fileStorage/FileStorageConfirm.fxml
+FileStorageConfirmController.java;src/fileStorage/FileStorageConfirmController.java
 FileStorageController.java;src/fileStorage/FileStorageController.java
 FileStorageDAO.java;src/fileStorage/FileStorageDAO.java
 FileStorageTreeModel.java;src/fileStorage/FileStorageTreeModel.java

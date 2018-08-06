@@ -1,5 +1,6 @@
 package email.controller;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,6 +35,15 @@ public class EmailDetailsController extends AbstractController implements Initia
 		
 		subjectLabel.setText("Subject: " + selectedMessage.getSubject());
 		SenderLabel.setText("Sender: " + selectedMessage.getSender());
+		
+		String nameoffile = selectedMessage.getAttachmentsNames();
+		System.out.println("hellokkkkkkkkkk");
+		System.out.println(nameoffile);
+		if(nameoffile.contains(".enc")) {
+			File f = new File("src/util/default.html");
+			webView.getEngine().load(f.toURI().toString());
+			System.out.println("here?");
+		}
 		
 		MessageRendererService messageRendererService = new MessageRendererService(webView.getEngine());
 		messageRendererService.setMessageToRender(selectedMessage);
