@@ -1,6 +1,7 @@
 package AbstergoREST.main;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -30,7 +31,7 @@ public class DisFileBackupResource {
 	@GET
 	@Path("/get/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public DisFileBackup getDisFileBackup(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
+	public ArrayList<DisFileBackup> getDisFileBackup(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
 		final Database DB = new Database();
 		return DB.getDisFileBackup(username);
 	}

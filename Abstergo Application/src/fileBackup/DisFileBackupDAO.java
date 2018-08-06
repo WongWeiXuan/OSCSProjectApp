@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -73,10 +74,10 @@ public class DisFileBackupDAO {
 		return null;
 	}
 	
-	public static JsonObject getDisFileBackup(String username) {
+	public static JsonArray getDisFileBackup(String username) {
 		BufferedReader br = null;
 		try {
-			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/get/" + username);
+			URL url = new URL("http://abstergorest.appspot.com/rest/DisFileBackup/get/" + username);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setInstanceFollowRedirects(false);
@@ -87,16 +88,15 @@ public class DisFileBackupDAO {
 			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
 			br = new BufferedReader(input); // Getting the response from the webservice
 
-			String output = br.readLine();
-			br.close();
-			input.close();
-			inputStream.close();
-			connection.disconnect();
-			if (output != null) {
+			String output;
+			while ((output = br.readLine()) != null) {
 				br.close();
+				input.close();
+				inputStream.close();
 				connection.disconnect();
+
 				JsonElement jelement = new JsonParser().parse(output);
-				return jelement.getAsJsonObject();
+				return jelement.getAsJsonArray();
 			}
 		} catch (IOException ex) {
 			ex.printStackTrace();

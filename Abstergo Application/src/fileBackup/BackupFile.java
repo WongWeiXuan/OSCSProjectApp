@@ -5,10 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import fileStorage.FileSecure;
 import fileStorage.FileStorage;
@@ -107,7 +110,7 @@ public class BackupFile {
 		 return listOfFiles;
 	}
 
-	public static byte[] mergeFiles(List<File> files, File into) throws Exception {
+	public static FileBackup mergeFiles(List<File> files, File into, String username, String encKey) throws Exception {
 		try (FileOutputStream fos = new FileOutputStream(into);
 				BufferedOutputStream mergingStream = new BufferedOutputStream(fos)) {
 			
@@ -116,10 +119,39 @@ public class BackupFile {
 				f.delete();
 			}
 		}
-		byte[] backupFileData = Files.readAllBytes(into.toPath());
+		
+		ArrayList<FileStorage> fsList = FileStorage.getFileNames(username);
+		int count = 2;
+		String finFileName = null;
+		
+		for (FileStorage fs : fsList) {
+			if (into.getName().equals(fs.getFileName())) {
+				count++;
+				finFileName = FilenameUtils.removeExtension(into.getName()) + "(" + count + ")" + FilenameUtils.getExtension(into.getName());
+			}
+			else {
+				finFileName = into.getName();
+			}
+		}
+		
+		FileBackup fb = new FileBackup();
+		fb.setUsername(username);
+		fb.setFileName(finFileName);
+		fb.setFileType(FilenameUtils.getExtension(into.getName()).toUpperCase());
+		fb.setFileSize(FileUtils.byteCountToDisplaySize(into.length()));
+		fb.setFileData(FileSecure.encrypt(Files.readAllBytes(into.toPath()), encKey));
+		fb.setEncKey(encKey);
+		fb.setDateCreated(FileBackup.convertTimestamp(Timestamp.from(Instant.now())));
+		fb.setFileBackupIndex(into.getName());
+		
 		into.delete();
 		
-		return backupFileData;
+		return fb;
+	}
+	
+	public static byte[] recoverFile(byte[] encryptedBackupFile, String encKey) throws Exception {
+		byte[] decryptedBackupFile = FileSecure.decrypt(encryptedBackupFile, encKey);
+		return decryptedBackupFile;
 	}
 
 	public static void main(String[] args) {

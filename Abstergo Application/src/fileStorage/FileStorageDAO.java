@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -74,7 +75,7 @@ public class FileStorageDAO {
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			String jsonInString = mapper.writeValueAsString(fs);
-			
+			System.out.println(jsonInString);
 			// Pass in the Json Object to REST Server
 			OutputStream os = connection.getOutputStream();
 			os.write(jsonInString.getBytes(StandardCharsets.UTF_8));
@@ -258,12 +259,49 @@ public class FileStorageDAO {
 		return null;
 	}
 	
+	public static JsonArray getFileNames(String username) {
+		BufferedReader br = null;
+		try {
+			URL url = new URL("http://abstergorest.appspot.com/rest/FileStorage/getfilenames/" + username);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setInstanceFollowRedirects(false);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("Content-Type", "application/json");
+
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			br = new BufferedReader(input); // Getting the response from the webservice
+
+			String output;
+			while ((output = br.readLine()) != null) {
+				br.close();
+				input.close();
+				inputStream.close();
+				connection.disconnect();
+
+				JsonElement jelement = new JsonParser().parse(output);
+				return jelement.getAsJsonArray();
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		FileStorage fs = new FileStorage();
 		FileSplit.splitFile(new File("D:\\HelloWorld.txt"), fs, "test@example.com");
 		
-		System.out.println(uploadFile(fs));
+		//System.out.println(uploadFile(fs));
 		//FileSplit.mergeFiles(FileSplit.listOfFilesToMerge("test@example.com", "HelloWorld.txt"), new File("D:\\FileTest\\HelloWorld.txt"));
-		//ArrayList<FileStorage> userFileList = FileStorage.getUserFiles("test@example.com", "HelloWorld.txt");
+		ArrayList<FileStorage> userFileList = FileStorage.getUserFiles("test@example.com");
 	}
 }
