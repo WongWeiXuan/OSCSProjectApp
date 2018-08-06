@@ -11,6 +11,11 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import email.controller.EmailDAO;
 import email.controller.ModelAccess;
 import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.model.customEmail;
@@ -72,13 +77,23 @@ public class PersistenceAcess {
 		}//end of if statement
 		else {
 			//getting data from database
-			//ArrayList<customEmail> ce = new ArrayList<customEmail>(); 
+			ArrayList<customEmail> em = new ArrayList<customEmail>();
+			JsonArray json = EmailDAO.getdetails("abstergoapp@gmail.com");
+			for(JsonElement e : json) {
+				JsonObject object = e.getAsJsonObject();
+				customEmail ce = new customEmail(object.get("address").getAsString(), object.get("password").getAsString());
+				em.add(ce);
+			}
 			System.out.println("reading from db");
-			customEmail c = new customEmail("abstergoapp1@gmail.com", "@bsterg0@pp");
+			//customEmail c = new customEmail("abstergoapp1@gmail.com", "@bsterg0@pp");
 			//ce.add(c);
-			CreateAndRegisterEmailAccountService service = 
-					new CreateAndRegisterEmailAccountService(c.getEmail1(), c.getPassword1(), modelAccess);
-			service.start();
+			//CreateAndRegisterEmailAccountService service = 
+			//		new CreateAndRegisterEmailAccountService(c.getEmail1(), c.getPassword1(), modelAccess);
+			for(customEmail acc: em){
+				CreateAndRegisterEmailAccountService service = 
+						new CreateAndRegisterEmailAccountService(acc.getEmail1(), acc.getPassword1(), modelAccess);
+				service.start();
+			}
 			
 		}
 		
