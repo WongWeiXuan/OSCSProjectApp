@@ -163,7 +163,6 @@ public class FileBackupDAO {
 			br = new BufferedReader(input); // Getting the response from the webservice
 
 			String output = br.readLine();
-			System.out.println(output);
 			br.close();
 			input.close();
 			inputStream.close();
