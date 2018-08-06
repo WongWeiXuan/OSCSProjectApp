@@ -71,6 +71,7 @@ public class DisFileBackup {
 				dfb.setFileName(jsonObject.get("fileName").getAsString());
 				dfb.setFileType(jsonObject.get("fileType").getAsString());
 				dfb.setFileSize(jsonObject.get("fileSize").getAsString());
+				disFileBackupList.add(dfb);
 			}
 		}
 		return disFileBackupList;

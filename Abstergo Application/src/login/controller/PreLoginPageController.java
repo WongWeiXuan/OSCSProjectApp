@@ -57,15 +57,15 @@ public class PreLoginPageController {
 	@FXML
 	private Label emailNav;
 	@FXML
-  private Label fileNav;
-  @FXML
-  private Label backupNav;
+	private Label fileNav;
+	@FXML
+	private Label backupNav;
 	@FXML
 	private Label logsNav;
 	@FXML
 	private Label settingsNav;
 	@FXML
-  private Label logoutNav;
+	private Label logoutNav;
 	@FXML
 	private VBox anchorPane;
 	private boolean toggle = false;
@@ -83,8 +83,8 @@ public class PreLoginPageController {
 	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view
 		if(BeepThread.isRunning())
-    		BeepThread.stop();
-		
+			BeepThread.stop();
+
 		String clicked = ((Label)event.getSource()).getId();
     	AnchorPane toBeChanged = null;
     	if("emailNav".equals(clicked)) {
@@ -110,7 +110,7 @@ public class PreLoginPageController {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("backupNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackup.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupBegin.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("logsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
@@ -141,7 +141,7 @@ public class PreLoginPageController {
     		toBeChanged.setOpacity(1);
 			stackPane.getChildren().add(0, toBeChanged);
 			navBar.setVisible(false);
-    	}
+		}
 	}
 
 	@FXML
