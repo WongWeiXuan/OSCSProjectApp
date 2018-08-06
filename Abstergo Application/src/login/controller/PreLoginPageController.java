@@ -110,7 +110,7 @@ public class PreLoginPageController {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("backupNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/NonexistentBackup.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackup.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("logsNav".equals(clicked)) {
     		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene

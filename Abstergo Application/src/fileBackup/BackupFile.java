@@ -1,94 +1,23 @@
-package fileStorage;
+package fileBackup;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-public class FileSplit {
+import fileStorage.FileSecure;
+import fileStorage.FileStorage;
+
+public class BackupFile {
 	
-	public static void splitFile(File f, FileStorage fs, String username) throws Exception {
-		int partCounter = 0;
-
-		int sizeOfFiles = (int) (f.length() / 3);
-		byte[] buffer = new byte[sizeOfFiles];
-
-		String encKey = FileSecure.generateEncKey();
-		
-		byte[] b1 = null, b2 = null, b3 = null, b4 = null;
-		byte[] alpha = null, beta = null, charlie = null, delta = null;
-		
-		try (FileInputStream fis = new FileInputStream(f);
-				BufferedInputStream bis = new BufferedInputStream(fis)) {
-
-			int bytesAmount = 0;
-
-			while ((bytesAmount = bis.read(buffer)) != -1) {
-				byte[] block = FileSecure.encrypt(Arrays.copyOfRange(buffer, 0, bytesAmount), encKey);
-				partCounter++;
-				
-				if (b1 == null) {
-					b1 = FileSecure.hash(block);
-				}
-				else if (b2 == null) {
-					b2 = FileSecure.hash(block);
-				}
-				else if (b3 == null) {
-					b3 = FileSecure.hash(block);
-				}
-				else if (b4 == null) {
-					b4 = FileSecure.hash(block);
-				}
-				
-				if (alpha == null) {
-					alpha = block;
-				}
-				else if (beta == null) {
-					beta = block;
-				}
-				else if (charlie == null) {
-					charlie = block;
-				}
-				else if (delta == null) {
-					delta = block;
-				}
-			}
-		}
-		
-		fs.setUsername(username);
-		fs.setFileName(f.getName());
-		fs.setFileType(FilenameUtils.getExtension(f.getName()).toUpperCase());
-		fs.setFileSize(FileUtils.byteCountToDisplaySize(f.length()));
-		fs.setDateCreated(FileStorage.convertTimestamp(Timestamp.from(Instant.now())));
-		fs.setFile(Files.readAllBytes(f.toPath()));
-		
-		fs.setSplitFile1(alpha);
-		fs.setSplitFile2(beta);
-		fs.setSplitFile3(charlie);
-		fs.setSplitFile4(delta);
-		
-		byte[] encKeyBytes = encKey.getBytes("UTF-8");
-		byte[] keyBlock = FileSecure.getXORKeyBlock(b1, b2, b3, b4, encKeyBytes);
-		
-		fs.setKeyBlock(keyBlock);
-		
-		byte[] parBlock = FileSecure.getXORParBlock(alpha, beta, charlie, delta);
-		fs.setParBlock(parBlock);
-		
-		fs.setNoOfFiles(partCounter);
-	}
-
 	public static List<File> listOfFilesToMerge(String username, String fileName) throws IOException, Exception {
 		FileStorage fs = FileStorage.getSplitFiles(username, fileName);
 		byte[] splitFile1 = fs.getSplitFile1();
@@ -181,7 +110,7 @@ public class FileSplit {
 		 return listOfFiles;
 	}
 
-	public static File mergeFiles(List<File> files, File into) throws Exception {
+	public static FileBackup mergeFiles(List<File> files, File into, String username, String encKey) throws Exception {
 		try (FileOutputStream fos = new FileOutputStream(into);
 				BufferedOutputStream mergingStream = new BufferedOutputStream(fos)) {
 			
@@ -191,10 +120,41 @@ public class FileSplit {
 			}
 		}
 		
-		return into;
+		ArrayList<FileStorage> fsList = FileStorage.getFileNames(username);
+		int count = 2;
+		String finFileName = null;
+		
+		for (FileStorage fs : fsList) {
+			if (into.getName().equals(fs.getFileName())) {
+				count++;
+				finFileName = FilenameUtils.removeExtension(into.getName()) + "(" + count + ")" + FilenameUtils.getExtension(into.getName());
+			}
+			else {
+				finFileName = into.getName();
+			}
+		}
+		
+		FileBackup fb = new FileBackup();
+		fb.setUsername(username);
+		fb.setFileName(finFileName);
+		fb.setFileType(FilenameUtils.getExtension(into.getName()).toUpperCase());
+		fb.setFileSize(FileUtils.byteCountToDisplaySize(into.length()));
+		fb.setFileData(FileSecure.encrypt(Files.readAllBytes(into.toPath()), encKey));
+		fb.setEncKey(encKey);
+		fb.setDateCreated(FileBackup.convertTimestamp(Timestamp.from(Instant.now())));
+		fb.setFileBackupIndex(into.getName());
+		
+		into.delete();
+		
+		return fb;
 	}
 	
-	public static void main(String[] args) throws Exception {
+	public static byte[] recoverFile(byte[] encryptedBackupFile, String encKey) throws Exception {
+		byte[] decryptedBackupFile = FileSecure.decrypt(encryptedBackupFile, encKey);
+		return decryptedBackupFile;
+	}
+
+	public static void main(String[] args) {
 		
 	}
 
