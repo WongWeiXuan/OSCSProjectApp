@@ -79,7 +79,9 @@ public class BackupFile {
 		 b1 = FileSecure.hash(splitFile1);
 		 b2 = FileSecure.hash(splitFile2);
 		 b3 = FileSecure.hash(splitFile3);
-		 b4 = FileSecure.hash(splitFile4);
+		 if (noOfFiles != 3) {
+			 b4 = FileSecure.hash(splitFile4);
+		 }
 		 
 		 //Get encryption key from keyBlock:
 		 byte[] encKeyBytes = FileSecure.getEncKeyByXOR(b1, b2, b3, b4, keyBlock);
@@ -89,7 +91,10 @@ public class BackupFile {
 		 byte[] decryptedFile1 = FileSecure.decrypt(splitFile1, encKey);
 		 byte[] decryptedFile2 = FileSecure.decrypt(splitFile2, encKey);
 		 byte[] decryptedFile3 = FileSecure.decrypt(splitFile3, encKey);
-		 byte[] decryptedFile4 = FileSecure.decrypt(splitFile4, encKey);
+		 byte[] decryptedFile4 = null;
+		 if (noOfFiles != 3) {
+			 decryptedFile4 = FileSecure.decrypt(splitFile4, encKey);
+		 }
 		 
 		 //Write to temporary files:
 		 File file1 = File.createTempFile("File1", ".tmp");
@@ -99,14 +104,18 @@ public class BackupFile {
 		 File file3 = File.createTempFile("File3", ".tmp");
 		 FileUtils.writeByteArrayToFile(file3, decryptedFile3);
 		 File file4 = File.createTempFile("File4", ".tmp");
-		 FileUtils.writeByteArrayToFile(file4, decryptedFile4);
+		 if (noOfFiles != 3) {
+			 FileUtils.writeByteArrayToFile(file4, decryptedFile4);
+		 }
 		 
 		 //Store in a list of files:
 		 List<File> listOfFiles = new ArrayList<File>();
 		 listOfFiles.add(file1);
 		 listOfFiles.add(file2);
 		 listOfFiles.add(file3);
-		 listOfFiles.add(file4);
+		 if (noOfFiles != 3) {
+			 listOfFiles.add(file4);
+		 }
 		 
 		 return listOfFiles;
 	}
@@ -130,8 +139,8 @@ public class BackupFile {
 		}
 		else {
 			for (FileBackup fb : fbList) {
+				count++;
 				if (into.getName().equals(fb.getFileName())) {
-					count++;
 					finFileName = FilenameUtils.removeExtension(into.getName()) + "(" + count + ")." + FilenameUtils.getExtension(into.getName());
 				}
 				else {
@@ -139,7 +148,6 @@ public class BackupFile {
 				}
 			}
 		}
-		
 		FileBackup fb = new FileBackup();
 		fb.setUsername(username);
 		fb.setFileName(finFileName);
