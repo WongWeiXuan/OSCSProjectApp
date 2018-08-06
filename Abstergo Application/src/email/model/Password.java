@@ -1,7 +1,13 @@
 package email.model;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import email.controller.MainController;
+import email.controller.ModelAccess;
 import email.model.AlertWindow;
 import email.model.EncryptionProgress;
 import email.model.Encryption;
@@ -29,6 +38,9 @@ public class Password extends Stage{
 
 	    private String path;
 	    private byte mode;
+	    
+	    
+	    
 
 	    public Password(String path, byte mode) {
 	        super();
@@ -40,6 +52,7 @@ public class Password extends Stage{
 	        createWindow();
 	        show();
 	    }
+	    
 
 	    private void createPasswordTextField() {
 	        passwordTextField = new PasswordField();
@@ -81,7 +94,8 @@ public class Password extends Stage{
 	            }
 	        });
 	    }
-
+	    
+	    
 	    private void createWindow() {
 	        VBox root = new VBox();
 	        Label label = new Label("Please enter your password\nMax: 16 chars");
