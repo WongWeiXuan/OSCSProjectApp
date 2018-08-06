@@ -115,6 +115,7 @@ public class ComposeEmailController extends AbstractController implements Initia
 		}
 		if(size > 25000000) {
 			errorLabel.setText("File too big, please reduce size");
+			errorLabel.setStyle("-fx-font-color: red;");
 		}
 		else {
 		errorLabel.setText("Processing.....");

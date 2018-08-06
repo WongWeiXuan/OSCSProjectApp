@@ -4,10 +4,15 @@ import java.io.IOException;
 
 import javax.naming.OperationNotSupportedException;
 
+import org.ehcache.Cache;
+
+import com.google.gson.JsonArray;
+import com.jfoenix.controls.JFXDecorator;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import bluetooth.BluetoothThreadModel;
+import email.controller.EmailDAO;
 import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -20,12 +25,15 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import log.LogModelThread;
 import log.controller.LogPageController;
@@ -33,6 +41,10 @@ import logExtra.BeepThread;
 import logExtra.HandshakeThread;
 
 public class PreLoginPageController {
+	public PreLoginPageController() {
+		
+	}
+	
 	// Navigation bar
 	@FXML
 	private StackPane navBar;
@@ -61,49 +73,72 @@ public class PreLoginPageController {
 	public static StackPane navBarClone;
 
 	@FXML
+	public void nextPage() throws OperationNotSupportedException {
+		AnchorPane toBeChangedd = null;
+		toBeChangedd = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
+		anchorPane.getChildren().setAll(toBeChangedd);
+	}
+	
+	@FXML
 	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view
 		if(BeepThread.isRunning())
 			BeepThread.stop();
 
 		String clicked = ((Label)event.getSource()).getId();
-		AnchorPane toBeChanged = null;
-		if("emailNav".equals(clicked)) {
-			toBeChanged = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
-			anchorPane.getChildren().setAll(toBeChanged);
-		} else if("fileNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
-			anchorPane.getChildren().setAll(toBeChanged);
-		} else if("backupNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupBegin.fxml")); // Change scene
-			anchorPane.getChildren().setAll(toBeChanged);
-		} else if("logsNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
-			anchorPane.getChildren().setAll(toBeChanged);
-		} else if("settingsNav".equals(clicked)) {
-			toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
-			anchorPane.getChildren().setAll(toBeChanged);
-		} else if("logoutNav".equals(clicked)) {
-			// Stopping some Threads
-			if(BluetoothThreadModel.isRunning())
-				BluetoothThreadModel.stopThread();
-			if(LogModelThread.isRunning()) {
-				LogModelThread.stop();
-				LogPageController.thread.stop();
-				LogPageController.logThread = null;
-				// Unlocking locks just in case
-				LogModelThread.lock.unlock();
-				HandshakeThread.lock.unlock();
-				HandshakeThread.lock2.unlock();
-			}
-
-			// Removing Cache
-			LoginPageController.cacheManager.getCacheManager().removeCache("user");
-
-			// Changing Scene
-			anchorPane.getChildren().clear();
-			toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
-			toBeChanged.setOpacity(1);
+    	AnchorPane toBeChanged = null;
+    	if("emailNav".equals(clicked)) {
+    		Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
+    	   	String username = userCache.get("User");
+    	   	JsonArray json = EmailDAO.getdetails(username);
+    	   	if(json.isJsonNull() || json.size() == 0) {
+    	   		Parent parent = ViewFactory.defaultFactory.getAddAccountScene();
+    	    	Stage stage = new Stage();
+    			JFXDecorator decorator = new JFXDecorator(stage, parent);
+    			decorator.setCustomMaximize(true);
+    			Scene scene = new Scene(decorator);
+    	    	stage.setScene(scene);
+    	    	stage.show();
+	    		System.out.println("nothing");
+    	   	}
+    	   	else {
+	    		toBeChanged = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
+	    		anchorPane.getChildren().setAll(toBeChanged);
+	    		System.out.println("something");
+    	   	}
+		  } else if("fileNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("backupNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupBegin.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("logsNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("settingsNav".equals(clicked)) {
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
+    		anchorPane.getChildren().setAll(toBeChanged);
+    	} else if("logoutNav".equals(clicked)) {
+    		// Stopping some Threads
+    		if(BluetoothThreadModel.isRunning())
+    			BluetoothThreadModel.stopThread();
+    		if(LogModelThread.isRunning()) {
+    			LogModelThread.stop();
+    			LogPageController.thread.stop();
+    			LogPageController.logThread = null;
+    			// Unlocking locks just in case
+    			LogModelThread.lock.unlock();
+    			HandshakeThread.lock.unlock();
+    			HandshakeThread.lock2.unlock();
+    		}
+    		
+    		// Removing Cache
+    		LoginPageController.cacheManager.getCacheManager().removeCache("user");
+    		
+    		// Changing Scene
+    		anchorPane.getChildren().clear();
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
+    		toBeChanged.setOpacity(1);
 			stackPane.getChildren().add(0, toBeChanged);
 			navBar.setVisible(false);
 		}
