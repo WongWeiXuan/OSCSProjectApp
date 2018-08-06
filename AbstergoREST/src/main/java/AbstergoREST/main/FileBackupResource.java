@@ -17,13 +17,13 @@ import AbstergoREST.main.model.FileBackup;
 
 @Path("/FileBackup")
 public class FileBackupResource {
-
+	
 	@GET
-	@Path("/getuserbackupfiles/{username}")
+	@Path("/getbackupfilenames/{username}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<FileBackup> getUserBackupFiles(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
+	public ArrayList<FileBackup> getBackupFiles(@PathParam("username") String username) throws SQLException, ClassNotFoundException {
 		final Database DB = new Database();
-		return DB.getUserBackupFiles(username);
+		return DB.getBackupFileNames(username);
 	}
 	
 	@GET
@@ -41,7 +41,7 @@ public class FileBackupResource {
 		final Database DB = new Database();
 		DB.backupFile(fb.getUsername(), fb.getFileName(), fb.getFileType(), fb.getFileData(), fb.getEncKey(), fb.getDateCreated(), fb.getFileBackupIndex());
 		String output = "Success!";
-		return Response.status(200).entity(output).build();
+		return Response.status(201).entity(output).build();
 	}
 	
 	@GET

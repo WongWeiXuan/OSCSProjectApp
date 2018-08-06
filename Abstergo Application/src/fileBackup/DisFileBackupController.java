@@ -1,18 +1,5 @@
 package fileBackup;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
-import javafx.stage.Stage;
-import login.controller.LoginPageController;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -22,6 +9,17 @@ import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableRow;
+import javafx.scene.layout.AnchorPane;
+import login.controller.LoginPageController;
+import login.controller.PreLoginPageController;
 
 public class DisFileBackupController {
 	@FXML
@@ -40,17 +38,14 @@ public class DisFileBackupController {
 				if (event.getClickCount() == 2) {
 					DisFileBackupTreeModel fileItem = row.getItem();
 					fileBackupIndex = fileItem.getFileName();
-					System.out.println(fileBackupIndex);
 					
-					Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-					Parent root = null;
+					AnchorPane toBeChanged = null;
 					try {
-						root = FXMLLoader.load(getClass().getResource("/fileBackup/FileVerHist.fxml"));
+						toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileVerHist.fxml"));
+						PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-					stage.setScene(new Scene(root));
-				    stage.show();
 				}
 			});
 			return row;

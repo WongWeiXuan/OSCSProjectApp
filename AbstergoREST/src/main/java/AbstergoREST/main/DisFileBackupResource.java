@@ -23,9 +23,9 @@ public class DisFileBackupResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response insertDisFileBackup(DisFileBackup dfb) throws SQLException, ClassNotFoundException {
 		final Database DB = new Database();
-		DB.insertDisFileBackup(dfb.getUsername(), dfb.getFileName(), dfb.getFileType());
+		DB.insertDisFileBackup(dfb.getUsername(), dfb.getFileName(), dfb.getFileType(), dfb.getFileSize());
 		String output = "Success!";
-		return Response.status(200).entity(output).build();
+		return Response.status(201).entity(output).build();
 	}
 	
 	@GET

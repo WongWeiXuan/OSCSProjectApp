@@ -6,13 +6,13 @@ public class FileStorage {
 	private String fileType;
 	private String fileSize;
 	private String dateCreated;
-	private byte[] file;
-	private byte[] splitFile1;
-	private byte[] splitFile2;
-	private byte[] splitFile3;
-	private byte[] splitFile4;
-	private byte[] keyBlock;
-	private byte[] parBlock;
+	private String file;
+	private String splitFile1;
+	private String splitFile2;
+	private String splitFile3;
+	private String splitFile4;
+	private String keyBlock;
+	private String parBlock;
 	private int noOfFiles;
 	
 	public FileStorage() {
@@ -24,8 +24,8 @@ public class FileStorage {
 		this.fileName = fileName;
 	}
 	
-	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, byte[] splitFile1,
-			byte[] splitFile2, byte[] splitFile3, byte[] splitFile4, byte[] keyBlock, byte[] parBlock, int noOfFiles) {
+	public FileStorage(String username, String fileName, String fileType, String fileSize, String dateCreated, String splitFile1,
+			String splitFile2, String splitFile3, String splitFile4, String keyBlock, String parBlock, int noOfFiles) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
@@ -90,59 +90,59 @@ public class FileStorage {
 		this.dateCreated = dateCreated;
 	}
 	
-	public byte[] getFile() {
+	public String getFile() {
 		return file;
 	}
 
-	public void setFile(byte[] file) {
+	public void setFile(String file) {
 		this.file = file;
 	}
 
-	public byte[] getSplitFile1() {
+	public String getSplitFile1() {
 		return splitFile1;
 	}
 	
-	public void setSplitFile1(byte[] splitFile1) {
+	public void setSplitFile1(String splitFile1) {
 		this.splitFile1 = splitFile1;
 	}
 	
-	public byte[] getSplitFile2() {
+	public String getSplitFile2() {
 		return splitFile2;
 	}
 	
-	public void setSplitFile2(byte[] splitFile2) {
+	public void setSplitFile2(String splitFile2) {
 		this.splitFile2 = splitFile2;
 	}
 	
-	public byte[] getSplitFile3() {
+	public String getSplitFile3() {
 		return splitFile3;
 	}
 	
-	public void setSplitFile3(byte[] splitFile3) {
+	public void setSplitFile3(String splitFile3) {
 		this.splitFile3 = splitFile3;
 	}
 	
-	public byte[] getSplitFile4() {
+	public String getSplitFile4() {
 		return splitFile4;
 	}
 	
-	public void setSplitFile4(byte[] splitFile4) {
+	public void setSplitFile4(String splitFile4) {
 		this.splitFile4 = splitFile4;
 	}
 	
-	public byte[] getKeyBlock() {
+	public String getKeyBlock() {
 		return keyBlock;
 	}
 
-	public void setKeyBlock(byte[] keyBlock) {
+	public void setKeyBlock(String keyBlock) {
 		this.keyBlock = keyBlock;
 	}
 
-	public byte[] getParBlock() {
+	public String getParBlock() {
 		return parBlock;
 	}
 
-	public void setParBlock(byte[] parBlock) {
+	public void setParBlock(String parBlock) {
 		this.parBlock = parBlock;
 	}
 

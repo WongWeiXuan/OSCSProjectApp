@@ -14,7 +14,7 @@ public class FileBackup {
 	private String fileName;
 	private String fileType;
 	private String fileSize;
-	private byte[] fileData;
+	private String fileData;
 	private String encKey;
 	private String dateCreated;
 	private String fileBackupIndex;
@@ -22,8 +22,16 @@ public class FileBackup {
 	public FileBackup() {
 		super();
 	}
+	
+	public FileBackup(String username, String fileName, String fileType, String dateCreated) {
+		super();
+		this.username = username;
+		this.fileName = fileName;
+		this.fileType = fileType;
+		this.dateCreated = dateCreated;
+	}
 
-	public FileBackup(String username, String fileName, String fileType, byte[] fileData, String encKey, String dateCreated, String fileBackupIndex) {
+	public FileBackup(String username, String fileName, String fileType, String fileData, String encKey, String dateCreated, String fileBackupIndex) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
@@ -66,11 +74,11 @@ public class FileBackup {
 		this.fileSize = fileSize;
 	}
 
-	public byte[] getFileData() {
+	public String getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(byte[] fileData) {
+	public void setFileData(String fileData) {
 		this.fileData = fileData;
 	}
 
@@ -105,18 +113,14 @@ public class FileBackup {
 		return dateString;
 	}
 	
-	public static ArrayList<FileBackup> getUserBackupFiles(String username) {
+	public static ArrayList<FileBackup> getBackupFileNames(String username) {
 		ArrayList<FileBackup> backupFileList = new ArrayList<FileBackup>();
-		JsonArray jsonArray = FileBackupDAO.getUserBackupFiles(username);
-		if (jsonArray != null ) {
+		JsonArray jsonArray = FileBackupDAO.getBackupFileNames(username);
+		if (jsonArray != null) {
 			for (JsonElement je : jsonArray) {
 				JsonObject jsonObject = je.getAsJsonObject();
 				FileBackup fb = new FileBackup();
-				fb.setUsername(jsonObject.get("username").getAsString());
 				fb.setFileName(jsonObject.get("fileName").getAsString());
-				fb.setFileType(jsonObject.get("fileType").getAsString());
-				fb.setDateCreated(jsonObject.get("dateCreated").getAsString());
-				fb.setFileBackupIndex(jsonObject.get("fileBackupIndex").getAsString());
 				backupFileList.add(fb);
 			}
 		}
@@ -125,7 +129,7 @@ public class FileBackup {
 	
 	public static ArrayList<FileBackup> getFileVerHist(String username, String fileBackupIndex) {
 		ArrayList<FileBackup> backupFileList = new ArrayList<FileBackup>();
-		JsonArray jsonArray = FileBackupDAO.getUserBackupFiles(username);
+		JsonArray jsonArray = FileBackupDAO.getFileVerHist(username, fileBackupIndex);
 		if (jsonArray != null) {
 			for (JsonElement je : jsonArray) {
 				JsonObject jsonObject = je.getAsJsonObject();
@@ -134,7 +138,6 @@ public class FileBackup {
 				fb.setFileName(jsonObject.get("fileName").getAsString());
 				fb.setFileType(jsonObject.get("fileType").getAsString());
 				fb.setDateCreated(jsonObject.get("dateCreated").getAsString());
-				fb.setFileBackupIndex(jsonObject.get("fileBackupIndex").getAsString());
 				backupFileList.add(fb);
 			}
 		}
@@ -151,6 +154,8 @@ public class FileBackup {
 		fb.setUsername(jsonObject.get("username").getAsString());
 		fb.setFileName(jsonObject.get("fileName").getAsString());
 		fb.setFileType(jsonObject.get("fileType").getAsString());
+		fb.setEncKey(jsonObject.get("encKey").getAsString());
+		fb.setFileData(jsonObject.get("fileData").getAsString());
 		fb.setDateCreated(jsonObject.get("dateCreated").getAsString());
 		fb.setFileBackupIndex(jsonObject.get("fileBackupIndex").getAsString());
 		return fb;

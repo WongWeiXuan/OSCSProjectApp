@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fileBackup.FileBackupBeginController">
+   <children>
+      <VBox layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox style="-fx-background-color: rgb(113,163,146);">
+               <children>
+                  <TextFlow HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="File Backup" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="36.0" />
+                           </font>
+                           <padding>
+                              <Insets left="25.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </TextFlow>
+               </children>
+            </HBox>
+            <HBox VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="CENTER" prefWidth="500.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="70.0" />
+                     </HBox.margin>
+                     <children>
+                        <VBox fx:id="recoverWrap" onMouseClicked="#changePage" prefHeight="300.0" style="-fx-background-color: rgb(113,163,146); -fx-background-radius: 10;">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <children>
+                              <TextFlow textAlignment="CENTER">
+                                 <children>
+                                    <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resource/pictures/cloud-computing.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </TextFlow>
+                              <TextFlow textAlignment="CENTER">
+                                 <children>
+                                    <Label alignment="CENTER" text="Recover File" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="36.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="30.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </TextFlow>
+                           </children>
+                        </VBox>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </VBox>
+                  <VBox alignment="CENTER" prefWidth="500.0" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets left="20.0" right="70.0" />
+                     </HBox.margin>
+                     <children>
+                        <VBox fx:id="backupWrap" onMouseClicked="#changePage" prefHeight="300.0" style="-fx-background-color: rgb(113,163,146); -fx-background-radius: 10;">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <children>
+                              <TextFlow textAlignment="CENTER">
+                                 <children>
+                                    <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../resource/pictures/server.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="30.0" />
+                                 </VBox.margin>
+                              </TextFlow>
+                              <TextFlow textAlignment="CENTER" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Label text="Backup File" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="36.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets top="30.0" />
+                                       </padding>
+                                    </Label>
+                                 </children>
+                              </TextFlow>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
