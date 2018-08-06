@@ -17,6 +17,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
@@ -24,6 +28,8 @@ import javafx.scene.control.TreeTableRow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import login.controller.LoginPageController;
 
 public class FileStorageController {
@@ -41,6 +47,8 @@ public class FileStorageController {
 	private Label deleteOpt;
 	
 	private String fileToDownload;
+	
+	public static String confirmMsg;
 	
 	Cache<String, String> userCache = LoginPageController.cacheManager.getCacheManager().getCache("user", String.class, String.class);
 	private String username = userCache.get("User");
@@ -144,22 +152,58 @@ public class FileStorageController {
 			FileSplit.splitFile(selectedFile, fs, username);
 			FileStorage.uploadFile(fs);
 		}
+		
+		confirmMsg = "File uploaded successfully!";
+		
+		Dialog dialog = new Dialog();
+		Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
+		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+		stage.initStyle(StageStyle.TRANSPARENT);
+		Scene scene = new Scene(root);
+		stage.setX(800);
+		stage.setY(400);
+		stage.setScene(scene);
+		stage.showAndWait();
     }
 	
 	@FXML
     void downloadFile(ActionEvent event) throws IOException, Exception {
 		if (!fileToDownload.equals(null)) {
 			FileSplit.mergeFiles(FileSplit.listOfFilesToMerge(username, fileToDownload), new File(System.getProperty("user.home") + "/Downloads/" + fileToDownload));
+			
+			confirmMsg = "File downloaded successfully!";
+			
+			Dialog dialog = new Dialog();
+			Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			stage.initStyle(StageStyle.TRANSPARENT);
+			Scene scene = new Scene(root);
+			stage.setX(800);
+			stage.setY(400);
+			stage.setScene(scene);
+			stage.showAndWait();
 		}
     }
 	
 	@FXML
-    void deleteFile(MouseEvent event) {
+    void deleteFile(MouseEvent event) throws IOException {
 		if (!fileToDownload.equals(null)) {
 			FileStorage fs = new FileStorage();
 			fs.setUsername(username);
 			fs.setFileName(fileToDownload);
 			FileStorage.deleteFile(fs);
+			
+			confirmMsg = "File deleted successfully!";
+			
+			Dialog dialog = new Dialog();
+			Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
+			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+			stage.initStyle(StageStyle.TRANSPARENT);
+			Scene scene = new Scene(root);
+			stage.setX(800);
+			stage.setY(400);
+			stage.setScene(scene);
+			stage.showAndWait();
 		}
     }
 

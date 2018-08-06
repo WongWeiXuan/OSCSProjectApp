@@ -5,7 +5,7 @@ public class FileBackup {
 	private String fileName;
 	private String fileType;
 	private String fileSize;
-	private byte[] fileData;
+	private String fileData;
 	private String encKey;
 	private String dateCreated;
 	private String fileBackupIndex;
@@ -13,8 +13,21 @@ public class FileBackup {
 	public FileBackup() {
 		super();
 	}
+	
+	public FileBackup(String fileName) {
+		super();
+		this.fileName = fileName;
+	}
+	
+	public FileBackup(String username, String fileName, String fileType, String dateCreated) {
+		super();
+		this.username = username;
+		this.fileName = fileName;
+		this.fileType = fileType;
+		this.dateCreated = dateCreated;
+	}
 
-	public FileBackup(String username, String fileName, String fileType, byte[] fileData, String encKey, String dateCreated, String fileBackupIndex) {
+	public FileBackup(String username, String fileName, String fileType, String fileData, String encKey, String dateCreated, String fileBackupIndex) {
 		super();
 		this.username = username;
 		this.fileName = fileName;
@@ -57,11 +70,11 @@ public class FileBackup {
 		this.fileSize = fileSize;
 	}
 
-	public byte[] getFileData() {
+	public String getFileData() {
 		return fileData;
 	}
 
-	public void setFileData(byte[] fileData) {
+	public void setFileData(String fileData) {
 		this.fileData = fileData;
 	}
 
