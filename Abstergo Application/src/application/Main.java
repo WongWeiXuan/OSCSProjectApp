@@ -3,6 +3,8 @@ package application;
 import com.jfoenix.controls.JFXDecorator;
 
 import bluetooth.BluetoothThreadModel;
+import email.controller.services.CreateAndRegisterEmailAccountService;
+import email.controller.services.FolderUpdaterService;
 import email.view.ViewFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -59,6 +61,10 @@ public class Main extends Application {
 			    		LogNetworkPageController.t.stop();
 			    	if(LogNetworkPageController.beepThread != null && LogNetworkPageController.beepThread.isAlive())
 			    		LogNetworkPageController.beepThread.stop();
+			    	if(FolderUpdaterService.isitRunning()) {
+			    		FolderUpdaterService.stop();
+			    		System.out.println("successful stop thread");
+			    	}
 			    	Platform.exit();
 			    }
 			});

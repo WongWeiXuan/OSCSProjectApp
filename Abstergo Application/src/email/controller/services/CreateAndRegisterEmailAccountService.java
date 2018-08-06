@@ -9,7 +9,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
 public class CreateAndRegisterEmailAccountService extends Service<Integer>{
-	
 	private String emailAddress;
 	private String password;
 	private ModelAccess modelAccess;
@@ -21,6 +20,8 @@ public class CreateAndRegisterEmailAccountService extends Service<Integer>{
 		this.modelAccess = modelAccess;
 	}
 
+	
+	
 	@Override
 	protected Task<Integer> createTask() {
 		return new Task<Integer>(){
@@ -35,6 +36,7 @@ public class CreateAndRegisterEmailAccountService extends Service<Integer>{
 						FetchFoldersService fetchFoldersService = new FetchFoldersService(emailFolderBean,
 								emailAccount, modelAccess);
 						fetchFoldersService.restart();
+						
 					}
 				
 				return emailAccount.getLoginState();
@@ -42,5 +44,7 @@ public class CreateAndRegisterEmailAccountService extends Service<Integer>{
 			
 		};
 	}
+	
+
 
 }

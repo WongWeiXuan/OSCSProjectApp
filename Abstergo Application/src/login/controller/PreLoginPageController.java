@@ -13,6 +13,8 @@ import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import bluetooth.BluetoothThreadModel;
 import email.controller.EmailDAO;
+import email.controller.services.CreateAndRegisterEmailAccountService;
+import email.controller.services.FolderUpdaterService;
 import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
@@ -131,6 +133,11 @@ public class PreLoginPageController {
     			HandshakeThread.lock.unlock();
     			HandshakeThread.lock2.unlock();
     		}
+    		
+    		//xz part
+	    	if(FolderUpdaterService.isitRunning()) {
+	    		FolderUpdaterService.stop();
+	    	}
     		
     		// Removing Cache
     		LoginPageController.cacheManager.getCacheManager().removeCache("user");
