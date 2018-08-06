@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.ehcache.Cache;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTreeTableColumn;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
@@ -12,16 +13,22 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import login.controller.LoginPageController;
 import login.controller.PreLoginPageController;
 
 public class DisFileBackupController {
+	@FXML
+    private VBox histWrap;
+    @FXML
+    private JFXButton histBtn;
 	@FXML
 	private JFXTreeTableView<DisFileBackupTreeModel> fileTable;
 	
@@ -35,24 +42,24 @@ public class DisFileBackupController {
 		fileTable.setRowFactory(tv -> {
 			TreeTableRow<DisFileBackupTreeModel> row = new TreeTableRow<>();
 			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 2) {
-					DisFileBackupTreeModel fileItem = row.getItem();
-					fileBackupIndex = fileItem.getFileName();
-					
-					AnchorPane toBeChanged = null;
-					try {
-						toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileVerHist.fxml"));
-						PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				if (!row.isEmpty()) {
+					histWrap.setVisible(true);
+					histWrap.setDisable(false);
 				}
+				else {
+					histWrap.setVisible(false);
+					histWrap.setDisable(true);
+					fileTable.getSelectionModel().clearSelection();
+				}
+				
+				DisFileBackupTreeModel fileItem = row.getItem();
+				fileBackupIndex = fileItem.getFileName();
 			});
 			return row;
 		});
 		
 		JFXTreeTableColumn<DisFileBackupTreeModel, String> nameCol = new JFXTreeTableColumn<>("Name");
-		nameCol.prefWidthProperty().bind(fileTable.widthProperty().divide(4));
+		nameCol.prefWidthProperty().bind(fileTable.widthProperty().divide(2));
 		nameCol.setCellValueFactory((TreeTableColumn.CellDataFeatures<DisFileBackupTreeModel, String> param) -> {
 			if (nameCol.validateValue(param)) {
 				return param.getValue().getValue().fileNameProperty();
@@ -100,5 +107,16 @@ public class DisFileBackupController {
 		fileTable.getColumns().add(typeCol);
 		fileTable.getColumns().add(sizeCol);
 	}
+	
+	@FXML
+    void goToRecover(ActionEvent event) {
+		AnchorPane toBeChanged = null;
+		try {
+			toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileVerHist.fxml"));
+			PreLoginPageController.anchorPaneClone.getChildren().setAll(toBeChanged);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
 }
