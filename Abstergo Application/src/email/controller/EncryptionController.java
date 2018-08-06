@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import email.model.Encryption;
 import email.model.Password;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

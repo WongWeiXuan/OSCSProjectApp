@@ -10,11 +10,6 @@ import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 import bluetooth.BluetoothThreadModel;
 import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.ScaleTransition;
-import javafx.animation.Timeline;
-import javafx.beans.value.WritableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -45,21 +40,22 @@ public class PreLoginPageController {
 	@FXML
 	private Label emailNav;
 	@FXML
-  private Label fileNav;
-  @FXML
-  private Label backupNav;
+	private Label fileNav;
+	@FXML
+	private Label backupNav;
 	@FXML
 	private Label logsNav;
 	@FXML
 	private Label settingsNav;
 	@FXML
-  private Label logoutNav;
+	private Label logoutNav;
 	@FXML
 	private VBox anchorPane;
 	private boolean toggle = false;
 	public static VBox anchorPaneClone;
 	public static StackPane navBarClone;
 
+	@SuppressWarnings("deprecation")
 	@FXML
 	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view

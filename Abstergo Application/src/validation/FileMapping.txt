@@ -52,6 +52,11 @@ spam.png;src/email/view/images/spam.png
 MainLayout.fxml;src/email/view/MainLayout.fxml
 style.css;src/email/view/style.css
 ViewFactory.java;src/email/view/ViewFactory.java
+BackupFile.java;src/fileBackup/BackupFile.java
+DisFileBackup.java;src/fileBackup/DisFileBackup.java
+DisFileBackupDAO.java;src/fileBackup/DisFileBackupDAO.java
+FileBackup.java;src/fileBackup/FileBackup.java
+FileBackupDAO.java;src/fileBackup/FileBackupDAO.java
 FileSecure.java;src/fileStorage/FileSecure.java
 FileSplit.java;src/fileStorage/FileSplit.java
 FileStorage.css;src/fileStorage/FileStorage.css

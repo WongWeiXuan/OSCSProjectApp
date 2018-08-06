@@ -25,7 +25,8 @@ public class AbstergoLogModel {
 	private String fileName;
 	private byte[] key;
 
-	public AbstergoLogModel(String key) {
+	public AbstergoLogModel(String fileName, String key) {
+		this.fileName = fileName;
 		this.key = Base64.getDecoder().decode(key.getBytes(StandardCharsets.UTF_8));
 	}
 
@@ -38,6 +39,7 @@ public class AbstergoLogModel {
 	}
 
 	// encrypt
+	@SuppressWarnings("unused")
 	private File encryptFile(File file) {
 		AESEncryption aes = new AESEncryption(key);
 		return aes.encryptFile(file);
@@ -80,6 +82,7 @@ public class AbstergoLogModel {
 	}
 
 	// write
+	@SuppressWarnings("unused")
 	private File writeToFile(ArrayList<ArrayList<String>> stringArray) {
 		try {
 			File temp = File.createTempFile(fileName, ".txt");

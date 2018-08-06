@@ -1,7 +1,6 @@
 package log.controller;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -455,12 +454,16 @@ public class LogPageController {
 				map1Week = LogModelModel.processAndGetSummary1Week(model.getLogsDetailsModel(2), 2);
 			}
 			
-			for(Map.Entry<String, Integer> e : map24Hours.entrySet()) {
-				mapping24Hours.merge(e.getKey(), e.getValue(), Integer::sum);
+			if(map24Hours != null) {
+				for(Map.Entry<String, Integer> e : map24Hours.entrySet()) {
+					mapping24Hours.merge(e.getKey(), e.getValue(), Integer::sum);
+				}
 			}
 			
-			for(Map.Entry<String, Integer> e : map1Week.entrySet()) {
-				mapping1Week.merge(e.getKey(), e.getValue(), Integer::sum);
+			if(map1Week != null) {
+				for(Map.Entry<String, Integer> e : map1Week.entrySet()) {
+					mapping1Week.merge(e.getKey(), e.getValue(), Integer::sum);
+				}
 			}
 		}
 		

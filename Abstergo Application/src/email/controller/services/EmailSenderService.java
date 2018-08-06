@@ -18,7 +18,6 @@ import javax.mail.internet.MimeMultipart;
 
 import email.model.EmailAccountBean;
 import email.model.EmailConstants;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

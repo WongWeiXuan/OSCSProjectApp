@@ -22,7 +22,6 @@ import bluetooth.BluetoothDevice;
 import bluetooth.BluetoothThreadModel;
 import bluetooth.LoginBluetoothModel;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;

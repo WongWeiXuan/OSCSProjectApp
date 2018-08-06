@@ -298,13 +298,14 @@ public class ApplicationValidationDAO {
 			mapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
 			String jsonInString = mapper.writeValueAsString(fileHashMap);
 
+			System.out.println(jsonInString);
 			// Pass in the Json Object to REST Server
 			OutputStream os = connection.getOutputStream();
 			os.write(jsonInString.getBytes(StandardCharsets.UTF_8));
 			os.flush();
 
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
-				throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+				throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode() + " " + connection.getResponseMessage());
 			}
 
 			// Get Response from the REST Server

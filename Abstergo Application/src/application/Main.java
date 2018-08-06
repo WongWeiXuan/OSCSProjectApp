@@ -3,7 +3,6 @@ package application;
 import com.jfoenix.controls.JFXDecorator;
 
 import bluetooth.BluetoothThreadModel;
-import email.view.ViewFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;

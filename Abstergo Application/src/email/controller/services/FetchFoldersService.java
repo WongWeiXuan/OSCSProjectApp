@@ -9,7 +9,6 @@ import javax.mail.event.MessageCountEvent;
 import email.controller.ModelAccess;
 import email.model.EmailAccountBean;
 import email.model.folder.EmailFolderBean;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

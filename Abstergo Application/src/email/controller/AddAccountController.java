@@ -8,8 +8,6 @@ import javax.naming.OperationNotSupportedException;
 import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.model.EmailConstants;
 import email.view.ViewFactory;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;

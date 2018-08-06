@@ -20,6 +20,7 @@ public class BluetoothThreadModel {
 		running = true;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void stopThread() {
 		bluetoothThread.stop();
 		t.stop();

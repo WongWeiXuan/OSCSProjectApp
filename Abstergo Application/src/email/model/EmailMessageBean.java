@@ -10,7 +10,6 @@ import javax.mail.internet.MimeBodyPart;
 
 import email.model.table.AbstractTableItem;
 import email.model.table.FormatableInteger;
-
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 

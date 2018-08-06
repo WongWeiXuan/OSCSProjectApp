@@ -14,7 +14,6 @@ import org.ehcache.Cache;
 
 import com.jfoenix.controls.JFXDecorator;
 
-import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.controller.services.FolderUpdaterService;
 import email.controller.services.MessageRendererService;
 import email.controller.services.SaveAttachmentsService;
@@ -24,16 +23,13 @@ import email.model.folder.EmailFolderBean;
 import email.model.table.BoldableRowFactory;
 import email.model.table.FormatableInteger;
 import email.view.ViewFactory;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 //import DONOTCOMMIT.DONOTCOMMIT;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -50,7 +46,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import login.controller.LoginPageController;
-import util.LastVisitedDirectory;
 
 public class MainController extends AbstractController implements Initializable{
 	

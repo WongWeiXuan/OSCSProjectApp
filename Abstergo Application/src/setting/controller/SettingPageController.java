@@ -27,7 +27,6 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import login.CacheMan;
 import login.controller.LoginPageController;
@@ -214,7 +213,6 @@ public class SettingPageController {
 		}
 
 		long value = settingModel.getIncomingMaximum();
-		long maximum = root.getFreeSpace() / 1024 / 1024; // MB
 		incomingSlider.setValue(value);
 
 		SpinnerValueFactory<Integer> valueFactory = new IntegerSpinnerValueFactory(0, 2048, (int) value);

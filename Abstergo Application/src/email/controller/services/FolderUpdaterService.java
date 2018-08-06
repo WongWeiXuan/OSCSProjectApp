@@ -3,7 +3,6 @@ package email.controller.services;
 import javax.mail.Folder;
 
 import email.controller.ModelAccess;
-
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

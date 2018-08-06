@@ -7,11 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Base64;
 
 import log.LogDAO;
-import log.LogModelThread;
-import login.controller.LoginPageController;
 
 public class FileTransferThread implements Runnable{
 	private volatile boolean running;
@@ -38,7 +35,7 @@ public class FileTransferThread implements Runnable{
 			do {
 				socket = serverSocket.accept();
 				System.out.println("ADDRESS: " + socket.getInetAddress().getHostAddress());
-			} while(socket.getInetAddress().getHostAddress() == c.getAddress().getHostAddress() && running);
+			} while(socket.getInetAddress().getHostAddress().equals(c.getAddress().getHostAddress()) && running);
 			
 			System.out.println("Accepted connection : " + socket);
 			byte[] fileBuffer = new byte[10000000];
