@@ -78,6 +78,29 @@ public class EmailDAO {
 			os.write(jsonInString.getBytes(StandardCharsets.UTF_8));
 			os.flush();
 
+			/*
+			if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+				throw new RuntimeException("Failed : HTTP error code : " + connection.getResponseCode());
+			}
+			*/
+
+			// Get Response from the REST Server
+			InputStream inputStream = connection.getInputStream();
+			InputStreamReader input = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+			br = new BufferedReader(input);
+
+			// Return Value
+			String output;
+			while ((output = br.readLine()) != null) {
+				continue;
+			}
+			br.close();
+			input.close();
+			inputStream.close();
+			connection.disconnect();
+			return output;
+			
+			
 			
 		} catch (IOException ex) {
 			ex.printStackTrace();

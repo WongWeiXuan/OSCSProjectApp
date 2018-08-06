@@ -77,4 +77,11 @@ public class FileStorageResource {
 		return Response.status(200).entity(output).build();
 	}
 	
+	@GET
+	@Path("/getfilenames/{username}")
+	public ArrayList<FileStorage> getFileNames(@PathParam("username") String username) throws ClassNotFoundException, SQLException {
+		final Database DB = new Database();
+		return DB.getFileNames(username);
+	}
+	
 }

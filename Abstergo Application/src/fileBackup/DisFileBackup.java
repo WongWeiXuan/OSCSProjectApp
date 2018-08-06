@@ -1,5 +1,9 @@
 package fileBackup;
 
+import java.util.ArrayList;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class DisFileBackup {
@@ -56,13 +60,19 @@ public class DisFileBackup {
 		DisFileBackupDAO.insertDisFileBackup(dfb);
 	}
 	
-	public static DisFileBackup getDisFileBackup(String username) {
-		JsonObject jsonObject = DisFileBackupDAO.getDisFileBackup(username);
-		DisFileBackup dfb = new DisFileBackup();
-		dfb.setUsername(jsonObject.get("username").getAsString());
-		dfb.setFileName(jsonObject.get("fileName").getAsString());
-		dfb.setFileType(jsonObject.get("fileType").getAsString());
-		dfb.setFileSize(jsonObject.get("fileSize").getAsString());
-		return dfb;
+	public static ArrayList<DisFileBackup> getDisFileBackup(String username) {
+		ArrayList<DisFileBackup> disFileBackupList = new ArrayList<DisFileBackup>();
+		JsonArray jsonArray = DisFileBackupDAO.getDisFileBackup(username);
+		if (jsonArray != null ) {
+			for (JsonElement je : jsonArray) {
+				JsonObject jsonObject = je.getAsJsonObject();
+				DisFileBackup dfb = new DisFileBackup();
+				dfb.setUsername(jsonObject.get("username").getAsString());
+				dfb.setFileName(jsonObject.get("fileName").getAsString());
+				dfb.setFileType(jsonObject.get("fileType").getAsString());
+				dfb.setFileSize(jsonObject.get("fileSize").getAsString());
+			}
+		}
+		return disFileBackupList;
 	}
 }

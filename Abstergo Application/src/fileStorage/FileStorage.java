@@ -169,15 +169,17 @@ public class FileStorage {
 	public static ArrayList<FileStorage> getUserFiles(String username) throws UnsupportedEncodingException {
 		ArrayList<FileStorage> userFileList = new ArrayList<FileStorage>();
 		JsonArray jsonArray = FileStorageDAO.getUserFiles(username);
-		for (JsonElement je : jsonArray) {
-			JsonObject jsonObject = je.getAsJsonObject();
-			FileStorage fs = new FileStorage();
-			fs.setUsername(jsonObject.get("username").getAsString());
-			fs.setFileName(jsonObject.get("fileName").getAsString());
-			fs.setFileSize(jsonObject.get("fileSize").getAsString());
-			fs.setFileType(jsonObject.get("fileType").getAsString());
-			fs.setDateCreated(jsonObject.get("dateCreated").getAsString());
-			userFileList.add(fs);
+		if (jsonArray != null) {
+			for (JsonElement je : jsonArray) {
+				JsonObject jsonObject = je.getAsJsonObject();
+				FileStorage fs = new FileStorage();
+				fs.setUsername(jsonObject.get("username").getAsString());
+				fs.setFileName(jsonObject.get("fileName").getAsString());
+				fs.setFileSize(jsonObject.get("fileSize").getAsString());
+				fs.setFileType(jsonObject.get("fileType").getAsString());
+				fs.setDateCreated(jsonObject.get("dateCreated").getAsString());
+				userFileList.add(fs);
+			}
 		}
 		return userFileList;
 	}
@@ -205,6 +207,24 @@ public class FileStorage {
 	
 	public static void writeMissingFile(FileStorage fs, int missingFileNo) {
 		FileStorageDAO.writeMissingFile(fs, missingFileNo);
+	}
+	
+	public static void deleteFile(FileStorage fs) {
+		FileStorageDAO.deleteFile(fs);
+	}
+	
+	public static ArrayList<FileStorage> getFileNames(String username) {
+		ArrayList<FileStorage> fileNameList = new ArrayList<FileStorage>();
+		JsonArray jsonArray = FileStorageDAO.getFileNames(username);
+		if (jsonArray != null) {
+			for (JsonElement je : jsonArray) {
+				JsonObject jsonObject = je.getAsJsonObject();
+				FileStorage fs = new FileStorage();
+				fs.setFileName(jsonObject.get("fileName").getAsString());
+				fileNameList.add(fs);
+			}
+		}
+		return fileNameList;
 	}
 	
 	public static void main(String[] args) {

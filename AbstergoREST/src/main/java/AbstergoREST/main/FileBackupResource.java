@@ -39,7 +39,7 @@ public class FileBackupResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response backupFile(FileBackup fb) throws ClassNotFoundException, SQLException {
 		final Database DB = new Database();
-		DB.backupFile(fb.getUsername(), fb.getFileName(), fb.getFileType(), fb.getFileData(), fb.getDateCreated(), fb.getFileBackupIndex());
+		DB.backupFile(fb.getUsername(), fb.getFileName(), fb.getFileType(), fb.getFileData(), fb.getEncKey(), fb.getDateCreated(), fb.getFileBackupIndex());
 		String output = "Success!";
 		return Response.status(200).entity(output).build();
 	}
