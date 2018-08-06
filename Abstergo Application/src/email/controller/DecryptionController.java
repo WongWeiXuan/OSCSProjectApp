@@ -66,6 +66,10 @@ public class DecryptionController extends AbstractController implements Initiali
     });
     */
 	
+	public void close() {
+		stage.close();
+	}
+	
 	public void decrypt(ActionEvent e) throws IOException {
 		String filename = text.getText();
 		filename = filename.replace(";","");
