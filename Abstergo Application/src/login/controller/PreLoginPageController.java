@@ -78,7 +78,7 @@ public class PreLoginPageController {
 	public void nextPage() throws OperationNotSupportedException {
 		AnchorPane toBeChangedd = null;
 		toBeChangedd = (AnchorPane) ViewFactory.defaultFactory.getMainScene(); // Change scene
-		anchorPane.getChildren().setAll(toBeChangedd);
+		anchorPaneClone.getChildren().setAll(toBeChangedd);
 	}
 	
 	@FXML
