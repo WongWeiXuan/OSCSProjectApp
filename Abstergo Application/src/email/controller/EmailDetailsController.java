@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import email.controller.services.MessageRendererService;
 import email.model.EmailMessageBean;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;

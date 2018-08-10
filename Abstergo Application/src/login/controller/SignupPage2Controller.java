@@ -27,6 +27,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -81,9 +82,9 @@ public class SignupPage2Controller {
 	private Service<Map<RemoteDevice, String>> backgroundService;
 	private Service<Boolean> backgroundService2;
 
-	final private String PPATH = "/src/resource/pictures/PhoneIcon.png";
-	final private String WPATH = "/src/resource/pictures/WatchIcon.png";
-	final private String UPATH = "/src/resource/pictures/UnidentifiedIcon.png";
+	final private String PPATH = "resource/pictures/PhoneIcon.png";
+	final private String WPATH = "resource/pictures/WatchIcon.png";
+	final private String UPATH = "resource/pictures/UnidentifiedIcon.png";
 
 	private void changeScene() throws IOException {
 		Cache<String, String> cache = SignupPageController.cacheManager.getCacheManager().getCache("deviceRegistration",
@@ -108,7 +109,7 @@ public class SignupPage2Controller {
 		transition2.stop();
 		transition3.stop();
 
-		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("/src/login/view/SignupPage3.fxml")); // Change scene
+		Parent toBeChanged = (Parent) FXMLLoader.load(getClass().getResource("../view/SignupPage3.fxml")); // Change scene
 		PreLoginPageController.stackPaneClone.getChildren().remove(0);
 		PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 	}

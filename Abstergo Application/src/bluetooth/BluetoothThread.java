@@ -46,7 +46,7 @@ public class BluetoothThread implements Runnable {
 						Thread.sleep(3000);
 						exist = LoginBluetoothModel.scanForPairedBluetoothDevice();
 						if(!exist) {
-							BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
+//							BluetoothThreadModel.logoutNotFound(); // Disabling it until presentation // TODO
 							System.out.println("Device not found! - Final pass");
 
 							Setting setting = new Setting(); // Getting time set

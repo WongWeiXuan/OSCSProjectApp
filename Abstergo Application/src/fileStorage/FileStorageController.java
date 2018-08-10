@@ -155,7 +155,7 @@ public class FileStorageController {
 		
 		confirmMsg = "File uploaded successfully!";
 		
-		Dialog<?> dialog = new Dialog<Object>();
+		Dialog dialog = new Dialog();
 		Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
 		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 		stage.initStyle(StageStyle.TRANSPARENT);
@@ -173,7 +173,7 @@ public class FileStorageController {
 			
 			confirmMsg = "File downloaded successfully!";
 			
-			Dialog<?> dialog = new Dialog<Object>();
+			Dialog dialog = new Dialog();
 			Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
 			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 			stage.initStyle(StageStyle.TRANSPARENT);
@@ -195,7 +195,7 @@ public class FileStorageController {
 			
 			confirmMsg = "File deleted successfully!";
 			
-			Dialog<?> dialog = new Dialog<Object>();
+			Dialog dialog = new Dialog();
 			Parent root = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorageConfirm.fxml"));
 			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 			stage.initStyle(StageStyle.TRANSPARENT);

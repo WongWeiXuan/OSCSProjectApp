@@ -4,6 +4,7 @@ import email.controller.ModelAccess;
 import email.model.EmailAccountBean;
 import email.model.EmailConstants;
 import email.model.folder.EmailFolderBean;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

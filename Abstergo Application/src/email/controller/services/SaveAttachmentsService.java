@@ -3,10 +3,14 @@ package email.controller.services;
 import javax.mail.internet.MimeBodyPart;
 
 import email.model.EmailMessageBean;
+import email.view.ViewFactory;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
+import javafx.stage.Stage;
 
 public class SaveAttachmentsService extends Service<Void>{
 	

@@ -13,9 +13,15 @@ import com.jfoenix.controls.JFXDrawer.DrawerDirection;
 
 import bluetooth.BluetoothThreadModel;
 import email.controller.EmailDAO;
+import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.controller.services.FolderUpdaterService;
 import email.view.ViewFactory;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.beans.value.WritableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +43,10 @@ import logExtra.BeepThread;
 import logExtra.HandshakeThread;
 
 public class PreLoginPageController {
+	public PreLoginPageController() {
+		
+	}
+	
 	// Navigation bar
 	@FXML
 	private StackPane navBar;
@@ -71,7 +81,6 @@ public class PreLoginPageController {
 		anchorPaneClone.getChildren().setAll(toBeChangedd);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@FXML
 	void changePage(MouseEvent event) throws IOException, OperationNotSupportedException {
 		// Stop beep after changing view
@@ -100,16 +109,16 @@ public class PreLoginPageController {
 	    		System.out.println("something");
     	   	}
 		  } else if("fileNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/src/fileStorage/FileStorage.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileStorage/FileStorage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("backupNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/src/fileBackup/FileBackupBegin.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupBegin.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("logsNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/src/log/view/LogPage.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/log/view/LogPage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("settingsNav".equals(clicked)) {
-    		toBeChanged = FXMLLoader.load(getClass().getResource("/src/setting/view/SettingPage.fxml")); // Change scene
+    		toBeChanged = FXMLLoader.load(getClass().getResource("/setting/view/SettingPage.fxml")); // Change scene
     		anchorPane.getChildren().setAll(toBeChanged);
     	} else if("logoutNav".equals(clicked)) {
     		// Stopping some Threads
@@ -186,8 +195,8 @@ public class PreLoginPageController {
 		stackPaneClone = stackPane;
 		anchorPaneClone = anchorPane;
 		navBarClone = navBar;
-		AnchorPane vali = FXMLLoader.load(getClass().getResource("/src/validation/view/ValidationPage.fxml"));
-		AnchorPane login = FXMLLoader.load(getClass().getResource("/src/login/view/LoginPage.fxml"));
+		AnchorPane vali = FXMLLoader.load(getClass().getResource("../../validation/view/ValidationPage.fxml"));
+		AnchorPane login = FXMLLoader.load(getClass().getResource("../../login/view/LoginPage.fxml"));
 		stackPane.getChildren().add(0, vali);
 		stackPane.getChildren().add(0, login);
 

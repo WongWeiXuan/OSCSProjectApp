@@ -4,6 +4,7 @@ import javax.mail.Folder;
 import javax.mail.Message;
 
 import email.model.folder.EmailFolderBean;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 

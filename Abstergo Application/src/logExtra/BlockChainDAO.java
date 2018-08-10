@@ -13,6 +13,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import log.LogDetailsModel;
+
 public class BlockChainDAO {
 	public static ArrayList<Block> readBlocks(File file, String address) {
 		try {

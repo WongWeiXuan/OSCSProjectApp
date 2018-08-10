@@ -120,7 +120,7 @@ public class FileVerHistController {
 		
 		FileBackupController.confirmMsg = "File recovered successfully!";
 		
-		Dialog<?> dialog = new Dialog<Object>();
+		Dialog dialog = new Dialog();
 		Parent root = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupConfirm.fxml"));
 		Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 		stage.initStyle(StageStyle.TRANSPARENT);

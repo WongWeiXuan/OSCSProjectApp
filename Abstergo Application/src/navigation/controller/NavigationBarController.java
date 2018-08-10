@@ -11,6 +11,7 @@ import bluetooth.BluetoothThreadModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +20,7 @@ import javafx.scene.layout.VBox;
 import log.LogModelThread;
 import login.controller.LoginPageController;
 import login.controller.PreLoginPageController;
+import login.controller.SignupPageController;
 
 public class NavigationBarController {
 	@FXML

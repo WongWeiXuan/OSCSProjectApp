@@ -24,7 +24,6 @@ public class Client {
 		handshake.requestFileTransferRequest(logName);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void close() {
 		handshake.stop();
 		thread.stop();

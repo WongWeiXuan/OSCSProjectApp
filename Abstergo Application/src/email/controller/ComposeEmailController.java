@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import email.controller.services.EmailSenderService;
 import email.model.EmailConstants;
 import email.model.EmailMessageBean;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

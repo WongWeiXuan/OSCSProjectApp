@@ -20,7 +20,6 @@ public class BluetoothThreadModel {
 		running = true;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void stopThread() {
 		bluetoothThread.stop();
 		t.stop();
@@ -37,7 +36,7 @@ public class BluetoothThreadModel {
 			public void run() {
 				try {
 					LoginPageController.setDeviceNotFound(true);
-					AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/src/login/view/LoginPage.fxml")); // Change scene
+					AnchorPane toBeChanged = FXMLLoader.load(getClass().getResource("/login/view/LoginPage.fxml")); // Change scene
 					toBeChanged.setOpacity(1);
 					PreLoginPageController.stackPaneClone.getChildren().add(0, toBeChanged);
 					PreLoginPageController.anchorPaneClone.getChildren().clear();

@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Base64;
 
 import log.LogDAO;
+import log.LogModelThread;
+import login.controller.LoginPageController;
 
 public class FileTransferThread implements Runnable{
 	private volatile boolean running;

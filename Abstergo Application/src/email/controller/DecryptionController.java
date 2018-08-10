@@ -9,17 +9,23 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import email.model.EmailMessageBean;
-import email.model.Encryption;
-import email.model.Password;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import email.model.Password;
+import email.model.EmailMessageBean;
+import email.model.Encryption;
 
 public class DecryptionController extends AbstractController implements Initializable{
 	

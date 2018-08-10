@@ -6,6 +6,7 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 
 import email.model.EmailMessageBean;
+
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.scene.web.WebEngine;
