@@ -1,30 +1,14 @@
 package email.model;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-import email.controller.MainController;
-import email.controller.ModelAccess;
-import email.model.AlertWindow;
-import email.model.EncryptionProgress;
-import email.model.Encryption;
-import email.model.FileEncryptionException;
 
 
 public class Password extends Stage{

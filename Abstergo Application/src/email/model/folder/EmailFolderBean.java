@@ -7,7 +7,6 @@ import javax.mail.internet.MimeMessage.RecipientType;
 
 import email.model.EmailMessageBean;
 import email.view.ViewFactory;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;

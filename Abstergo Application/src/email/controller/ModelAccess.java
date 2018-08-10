@@ -11,7 +11,6 @@ import email.controller.persistence.ValidAccount;
 import email.model.EmailAccountBean;
 import email.model.EmailMessageBean;
 import email.model.folder.EmailFolderBean;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.ImageView;

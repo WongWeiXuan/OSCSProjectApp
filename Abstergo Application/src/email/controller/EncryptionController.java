@@ -8,16 +8,13 @@ import java.util.ResourceBundle;
 
 import email.model.Encryption;
 import email.model.Password;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 
 public class EncryptionController extends AbstractController implements Initializable{
@@ -37,7 +34,6 @@ public class EncryptionController extends AbstractController implements Initiali
 	private Label labell;
 	
 	 public void file(ActionEvent event) {
-		Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
 		FileChooser fc = new FileChooser();
 		File selectedDirectory = fc.showOpenDialog(null);
 

@@ -12,11 +12,9 @@ import email.controller.MainController;
 import email.controller.ModelAccess;
 import email.controller.persistence.PersistenceAcess;
 import email.model.EmailMessageBean;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -26,7 +24,6 @@ public class ViewFactory {
 	
 	public static boolean mainViewInitialized = false;
 
-	private final String DEFAULT_CSS = "style.css";
 	private final String EMAIL_DETAILS_FXML = "EmailDetailsLayout.fxml";
 	private final String MAIN_SCREEN_FXML = "MainLayout.fxml";
 	private final String COMPOSE_EMAIL_FXML = "ComposeEmailLayout.fxml";

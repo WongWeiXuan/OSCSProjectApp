@@ -1,7 +1,6 @@
 package email.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javax.naming.OperationNotSupportedException;
@@ -9,23 +8,15 @@ import javax.naming.OperationNotSupportedException;
 import org.ehcache.Cache;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.model.Email;
 import email.model.EmailConstants;
-import email.model.customEmail;
-import email.view.ViewFactory;
-
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import login.controller.LoginPageController;
 import login.controller.PreLoginPageController;

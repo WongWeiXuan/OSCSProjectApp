@@ -67,7 +67,7 @@ public class ValidationPageController {
 							});
 							Thread.sleep(1000);
 							for (String s : array) {
-								// ApplicationValidationDAO.getFile(s); // Disabling it until presentation // TODO
+								ApplicationValidationDAO.getFile(s); // Disabling it until presentation // TODO
 								Platform.runLater(new Runnable() {
 									public void run() {
 										additionalLbl.setText(s + " downloaded.");

@@ -1,6 +1,5 @@
 package email.model;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -10,13 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
-import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import email.model.Encryption;
 
 public class EncryptionProgress extends Stage implements Runnable{
 	public final static int GENERAL_SPACING = 15;

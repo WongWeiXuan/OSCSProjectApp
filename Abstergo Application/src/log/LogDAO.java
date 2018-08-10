@@ -18,18 +18,17 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import logExtra.KeyPair;
 
 public class LogDAO {
-	private static String logFolderPath = "src/resource/logs";
+	private static String logFolderPath = "/src/resource/logs";
 
 	protected static ArrayList<File> getAllFile() {
 		ArrayList<File> logFiles = new ArrayList<File>();

@@ -3,9 +3,7 @@ package application;
 import com.jfoenix.controls.JFXDecorator;
 
 import bluetooth.BluetoothThreadModel;
-import email.controller.services.CreateAndRegisterEmailAccountService;
 import email.controller.services.FolderUpdaterService;
-import email.view.ViewFactory;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -31,7 +29,7 @@ public class Main extends Application {
 		try {
 			stage = primaryStage;
 //			Parent root = ViewFactory.defaultFactory.getMainScene();
-			Parent root = FXMLLoader.load(getClass().getResource("/login/view/PreLoginPage.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/src/login/view/PreLoginPage.fxml"));
 			JFXDecorator decorator = new JFXDecorator(stage, root);
 			decorator.setCustomMaximize(true);
 			Scene scene = new Scene(decorator);

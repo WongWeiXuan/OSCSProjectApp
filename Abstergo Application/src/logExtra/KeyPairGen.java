@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
-import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -12,9 +11,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 
 import org.apache.commons.io.FileUtils;
@@ -139,8 +136,6 @@ public class KeyPairGen {
 	
 	public static void main(String[] arg0) throws InvalidKeySpecException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		File file = new File("src/resource/logs/ApplicationLog.txt");
-		File file2 = new File("src/resource/logs/Application/192.168.56.2.txt");
-		
 		byte[] signature = KeyPairGen.signFile(file, LogDAO.getPrivateKey("Wolf"));
 		System.out.println(Base64.getEncoder().encodeToString(signature));
 		if(KeyPairGen.verify(file, LogDAO.getPublicKey("Wolf"), Base64.getDecoder().decode("eY7dsLWON4jjwdhfDK9ApHwT79M9a/cEvGfcRcNH+1v7EQNmBydx9SnveeI4WSAQUvc3uzK/Mx4SNijhhrw+p4FgZYWAoy0Rivppu64aEfiqtmjK7lzA5BnEz+yDU1dLYBYxa4bCnyBXzg6UDOwW0cbCqd4av+yDnyy+7I61aHHUwvzK6KBB3Nv8SdlJTf8RFB1qYJ0oPRg4p/V+sNAScAjl7VB3MoPNLwqST0nRqmaQ0scr9t/cISeaDcNGiHgwFEBslvW0zSXKKsKS+HU0TEVTcGPAANBGUyXDVh2gRg3Noht495zanLx+kr0Z4yE0VDmcuqUfojEfwg9AQ3o2xw=="))) {

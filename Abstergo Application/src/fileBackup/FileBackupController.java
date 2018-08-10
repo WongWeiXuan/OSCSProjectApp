@@ -147,7 +147,7 @@ public class FileBackupController {
 			
 			confirmMsg = "File backed up successfully!";
 			
-			Dialog dialog = new Dialog();
+			Dialog<?> dialog = new Dialog<Object>();
 			Parent root = FXMLLoader.load(getClass().getResource("/fileBackup/FileBackupConfirm.fxml"));
 			Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
 			stage.initStyle(StageStyle.TRANSPARENT);

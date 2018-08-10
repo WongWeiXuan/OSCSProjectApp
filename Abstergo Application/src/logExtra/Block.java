@@ -2,8 +2,6 @@ package logExtra;
 
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Random;
 
 public class Block {
 	private String hash;

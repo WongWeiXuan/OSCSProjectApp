@@ -1,15 +1,6 @@
 package email.controller.persistence;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -22,7 +13,6 @@ import email.model.customEmail;
 
 public class PersistenceAcess {
 	
-	private List<ValidAccount> persistedList = null;
 	public PersistenceAcess(ModelAccess modelAccess) {
 		this.modelAccess = modelAccess;
 		loadFromPersistence();
@@ -33,7 +23,6 @@ public class PersistenceAcess {
 	/**
 	 * Call on program start
 	 */
-	@SuppressWarnings("unchecked")
 	public void loadFromPersistence(){
 		//check for account if saved in local app data
 		/*

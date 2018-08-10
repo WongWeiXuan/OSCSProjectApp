@@ -1,22 +1,15 @@
 package log;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Scanner;
 
-import org.ehcache.Cache;
-
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
 import log.controller.LogPageController;
 import logExtra.Client;
 import logExtra.HandshakeThread;
 import logExtra.KeyPairGen;
 import logExtra.Lock;
 import login.controller.LoginPageController;
-import login.controller.PreLoginPageController;
 import setting.Setting;
 
 public class LogModelThread implements Runnable{

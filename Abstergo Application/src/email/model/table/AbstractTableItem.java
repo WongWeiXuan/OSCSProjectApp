@@ -5,8 +5,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 public abstract class AbstractTableItem {
 	
 	private final SimpleBooleanProperty read = new SimpleBooleanProperty();
-	private final SimpleBooleanProperty encrypt = new SimpleBooleanProperty();
-	
 	public AbstractTableItem (boolean isRead){
 		this.setRead(isRead);
 		//this.setRead(encryptt);
